@@ -120,9 +120,10 @@ publishing {
             from components.java
         }
     }
+
     repositories {
         maven {
-            name = "localRepo"
+            name = 'localRepo'
             url = sharedDir
         }
     }
@@ -148,6 +149,7 @@ artifactory {
         }
     }
 }
+
 
 
 compileJava.dependsOn.add('generateProto')
