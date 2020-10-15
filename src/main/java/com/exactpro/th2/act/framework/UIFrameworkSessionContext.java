@@ -16,7 +16,6 @@
 
 package com.exactpro.th2.act.framework;
 
-import com.exactpro.th2.act.framework.ui.UIElement;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
 
 public class UIFrameworkSessionContext {

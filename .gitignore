@@ -1,9 +1,9 @@
 .gradle
 
-build
-shared
-bin
-src/gen
+/build
+/shared
+/bin
+/src/gen
 *.log
 
 #IntelliJ IDEA files

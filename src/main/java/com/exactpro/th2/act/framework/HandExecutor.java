@@ -18,7 +18,6 @@ package com.exactpro.th2.act.framework;
 
 import com.exactpro.th2.act.events.EventDetails;
 import com.exactpro.th2.act.events.EventStoreHandler;
-import com.exactpro.th2.act.events.verification.ExpectedField;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
 import com.exactpro.th2.act.grpc.hand.RhActionsList;
 import com.exactpro.th2.act.grpc.hand.RhBatchGrpc;

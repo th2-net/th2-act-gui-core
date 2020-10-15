@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-//todo rename???
 public class UIElement {
 	protected final BuilderManager builders;
 	protected final Map<String, WinLocator> cachedElements;

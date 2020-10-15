@@ -19,7 +19,6 @@ package com.exactpro.th2.act.framework;
 import com.exactpro.th2.act.ActConnections;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkIsBusyException;
-import com.exactpro.th2.act.framework.ui.UIElement;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import com.exactpro.th2.infra.grpc.EventID;
 import org.apache.commons.lang3.tuple.ImmutablePair;
