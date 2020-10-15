@@ -20,13 +20,17 @@ package com.exactpro.th2.act.framework.ui.utils;
 import com.exactpro.th2.act.framework.ui.constants.SendTextExtraButtons;
 
 public class UIUtils {
-	
+
 	public static String modPlus(String mod, String c) {
 		return String.format("#%s+%s+%s#", mod, c, mod);
 	}
 
 	public static String ctrlPlus(String c) {
 		return modPlus(SendTextExtraButtons.CTRL_NO_HASH, c);
+	}
+
+	public static String altPlus(String c) {
+		return modPlus(SendTextExtraButtons.ALT_NO_HASH, c);
 	}
 	
 }

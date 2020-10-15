@@ -65,6 +65,14 @@ public class BuilderManager {
 	public ToggleCheckBoxBuilder toggleCheckbox() {
 		return new ToggleCheckBoxBuilder(context);
 	}
+	
+	public ScrollUsingTextBuilder scrollUsingTextBuilder() {
+		return new ScrollUsingTextBuilder(context);
+	}
+	
+	public GetElementAttributeBuilder getElAttribute() {
+		return new GetElementAttributeBuilder(context);
+	}
 
 	public UIFrameworkContext getContext() {
 		return context;

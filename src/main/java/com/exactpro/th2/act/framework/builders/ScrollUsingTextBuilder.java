@@ -54,6 +54,11 @@ public class ScrollUsingTextBuilder extends DefaultBuilder<ScrollUsingTextBuilde
 		return getBuilder();
 	}
 
+	public ScrollUsingTextBuilder maxIterations(int maxIterations) {
+		this.maxIterations = String.valueOf(maxIterations);
+		return getBuilder();
+	}
+
 	public ScrollUsingTextBuilder textToSend(String textToSend) {
 		this.textToSend = textToSend;
 		return getBuilder();

@@ -39,6 +39,7 @@ public class UIFrameworkContext {
 
 	private List<RhAction> buffer;
 	private Map<String, RhBatchResponse> rhResponses;
+	private Map<String, ContextInfoData> contextInfo;
 
 	private MainWindowWrapper<? extends UIElement> mainWindowWrapper;
 
@@ -47,6 +48,7 @@ public class UIFrameworkContext {
 		this.handExecutor = handExecutor;
 		this.buffer = new ArrayList<>();
 		this.rhResponses = new LinkedHashMap<>();
+		this.contextInfo = new LinkedHashMap<>();
 	}
 
 	public RhBatchResponse submit(String eventName) {
@@ -58,6 +60,9 @@ public class UIFrameworkContext {
 	}
 
 	public RhBatchResponse submit(boolean clear, String eventName, Map<String, String> eventParamList) {
+		if (buffer.isEmpty())
+			return null;
+		
 		RhActionsList.Builder builder = RhActionsList.newBuilder();
 		builder.setSessionId(sessionID);
 		for (RhAction rhAction : buffer) {
@@ -98,5 +103,13 @@ public class UIFrameworkContext {
 
 	public void setMainWindow(MainWindowWrapper<? extends UIElement> mainWindowWrapper) {
 		this.mainWindowWrapper = mainWindowWrapper;
+	}
+	
+	public void addContextInfo(String name, ContextInfoData infoData) {
+		this.contextInfo.put(name, infoData);
+	}
+
+	public ContextInfoData getContextInfo(String methodName) {
+		return contextInfo.get(methodName);
 	}
 }

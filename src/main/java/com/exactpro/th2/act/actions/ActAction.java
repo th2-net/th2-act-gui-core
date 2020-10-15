@@ -101,7 +101,7 @@ public abstract class ActAction<T> {
 
 	protected void submitActions(T request, UIFrameworkContext frameworkContext, ActResponse.Builder respBuild) {
 		RhBatchResponse response = frameworkContext.submit(getName(), convertRequestParams(request));
-		if (response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS) {
+		if (response == null || response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS) {
 			respBuild.setStatusInfo(getStatusInfo());
 			respBuild.setScriptStatus(ActResponse.ExecutionStatus.SUCCESS);
 		} else {

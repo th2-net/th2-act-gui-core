@@ -40,9 +40,8 @@ public class WinLocator {
 		return this.byLocator(WinLocatorType.ACCESSIBILITY_ID, id);
 	}
 
-	public WinLocator byCachedId(String cachedId) {
-		//TODO probably parent = ROOT not this...
-		return this.byLocator(WinLocatorType.CACHED_ELEMENT, cachedId);
+	public static WinLocator byCachedId(String cachedId) {
+		return root().byLocator(WinLocatorType.CACHED_ELEMENT, cachedId);
 	}
 	
 	public boolean isRoot() {
@@ -59,6 +58,10 @@ public class WinLocator {
 
 	public String getMatcher() {
 		return matcher;
+	}
+	
+	public boolean isCached() {
+		return this.locatorType == WinLocatorType.CACHED_ELEMENT;
 	}
 	
 	public static WinLocator root() {

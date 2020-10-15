@@ -14,13 +14,31 @@
  * limitations under the License.
  */
 
-package com.exactpro.th2.act.framework.ui.constants;
+package com.exactpro.th2.act.framework;
 
-public class SendTextExtraButtons {
-	public static final String CTRL_NO_HASH = "ctrl";
-	public static final String ALT_NO_HASH = "alt";
-	public static final String NUM_PLUS = "#add#";
-	public static final String RETURN_BUTTON = "#return#";
-	public static final String RIGHT_BUTTON = "#right#";
-	public static final String HOME_BUTTON = "#home#";
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class ContextInfoData {
+	
+	private Map<String, String> data;
+
+	public ContextInfoData(Map<String, String> data) {
+		this.data = data;
+	}
+
+	public ContextInfoData() {
+		this.data = null;
+	}
+	
+	public void merge(Map<String, String> data) {
+		if (data == null) {
+			data = new LinkedHashMap<>();
+		}
+		this.data.putAll(data);
+	}
+
+	public Map<String, String> getData() {
+		return data;
+	}
 }
