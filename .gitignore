@@ -1,0 +1,13 @@
+.gradle
+
+build
+shared
+bin
+src/gen
+*.log
+
+#IntelliJ IDEA files
+*.iml
+*.iws
+.idea
+out
