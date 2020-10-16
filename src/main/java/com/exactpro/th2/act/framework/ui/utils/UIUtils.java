@@ -22,7 +22,7 @@ import com.exactpro.th2.act.framework.ui.constants.SendTextExtraButtons;
 public class UIUtils {
 
 	public static String modPlus(String mod, String c) {
-		return String.format("#%s+%s+%s#", mod, c, mod);
+		return String.format("#%s+%s#", mod, c);
 	}
 
 	public static String ctrlPlus(String c) {
