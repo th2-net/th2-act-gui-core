@@ -9,7 +9,7 @@ ARG nexus_user
 ARG nexus_password
 
 COPY ./ .
-RUN gradle --no-daemon clean build artifactoryPublish \
+RUN gradle --no-daemon clean build publish artifactoryPublish \
     -Prelease_version=${release_version} \
     -Partifactory_user=${artifactory_user} \
     -Partifactory_password=${artifactory_password} \
