@@ -69,9 +69,13 @@ public class BuilderManager {
 	public ScrollUsingTextBuilder scrollUsingTextBuilder() {
 		return new ScrollUsingTextBuilder(context);
 	}
-	
+
 	public GetElementAttributeBuilder getElAttribute() {
 		return new GetElementAttributeBuilder(context);
+	}
+
+	public TableClickBuilder getWinTableClick() {
+		return new TableClickBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {
