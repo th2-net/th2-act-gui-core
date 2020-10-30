@@ -16,7 +16,7 @@ group = 'com.exactpro.th2'
 version = release_version
 
 ext {
-    sharedDir           = file("${project.rootDir}/shared")
+    sharedDir = file("${project.rootDir}/shared")
 
     genDir = file("${projectDir}/build/generated")
     mainRsrcDir = 'src/main/resources'
