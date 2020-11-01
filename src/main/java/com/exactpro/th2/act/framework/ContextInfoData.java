@@ -33,7 +33,10 @@ public class ContextInfoData {
 	
 	public void merge(Map<String, String> data) {
 		if (data == null) {
-			data = new LinkedHashMap<>();
+			return;
+		}
+		if (this.data == null) {
+			this.data = new LinkedHashMap<>();
 		}
 		this.data.putAll(data);
 	}

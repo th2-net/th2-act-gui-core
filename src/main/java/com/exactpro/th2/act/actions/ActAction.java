@@ -28,6 +28,8 @@ import org.slf4j.Logger;
 
 import java.util.Map;
 
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
+
 public abstract class ActAction<T> {
 	
 	protected final UIFramework framework;
@@ -108,5 +110,10 @@ public abstract class ActAction<T> {
 			respBuild.setErrorInfo(response.getErrorMessage());
 			respBuild.setScriptStatus(this.convertStatusFromRh(response.getScriptStatus()));
 		}
+	}
+
+	protected void putIfNotEmpty(String key, String value, Map<String, String> params) {
+		if (isNotEmpty(value))
+			params.put(key, value);
 	}
 }

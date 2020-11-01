@@ -104,9 +104,21 @@ public class UIFrameworkContext {
 	public void setMainWindow(MainWindowWrapper<? extends UIElement> mainWindowWrapper) {
 		this.mainWindowWrapper = mainWindowWrapper;
 	}
-	
+
 	public void addContextInfo(String name, ContextInfoData infoData) {
-		this.contextInfo.put(name, infoData);
+		ContextInfoData contextInfoData = this.contextInfo.get(name);
+		if (contextInfoData != null)
+			contextInfoData.merge(infoData.getData());
+		else
+			this.contextInfo.put(name, infoData);
+	}
+
+	public void addContextData(String name, Map<String, String> data) {
+		ContextInfoData contextInfoData = this.contextInfo.get(name);
+		if (contextInfoData == null)
+			addContextInfo(name, new ContextInfoData(data));
+		else
+			contextInfoData.merge(data);
 	}
 
 	public ContextInfoData getContextInfo(String methodName) {

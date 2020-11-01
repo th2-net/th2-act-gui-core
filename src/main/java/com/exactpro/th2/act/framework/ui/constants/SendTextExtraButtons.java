@@ -23,4 +23,8 @@ public class SendTextExtraButtons {
 	public static final String RETURN_BUTTON = "#return#";
 	public static final String RIGHT_BUTTON = "#right#";
 	public static final String HOME_BUTTON = "#home#";
+	public static final String ENTER_BUTTON = "#enter#";
+	public static final String PAGE_UP_BUTTON = "#pageup#";
+	public static final String PAGE_DOWN_BUTTON = "#pagedown#";
+	public static final String DOWN_BUTTON = "#down#";
 }
