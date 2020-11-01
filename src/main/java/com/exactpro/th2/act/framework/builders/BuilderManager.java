@@ -78,6 +78,10 @@ public class BuilderManager {
 		return new TableClickBuilder(context);
 	}
 
+	public CheckElementBuilder checkElement() {
+		return new CheckElementBuilder(context);
+	}
+
 	public UIFrameworkContext getContext() {
 		return context;
 	}
