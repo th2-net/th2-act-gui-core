@@ -16,8 +16,8 @@
 
 package com.exactpro.th2.act.events;
 
-import com.exactpro.th2.infra.grpc.EventID;
-import com.exactpro.th2.infra.grpc.MessageID;
+import com.exactpro.th2.common.grpc.EventID;
+import com.exactpro.th2.common.grpc.MessageID;
 import com.google.protobuf.ByteString;
 
 import java.time.Instant;

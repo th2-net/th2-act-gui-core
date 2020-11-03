@@ -22,7 +22,7 @@ import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.RhActionsList;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
-import com.exactpro.th2.infra.grpc.EventID;
+import com.exactpro.th2.common.grpc.EventID;
 
 import java.util.ArrayList;
 import java.util.Collections;

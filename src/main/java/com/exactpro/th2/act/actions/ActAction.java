@@ -16,14 +16,13 @@
 
 package com.exactpro.th2.act.actions;
 
+import com.exactpro.th2.act.ActResult;
 import com.exactpro.th2.act.framework.UIFramework;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
-import com.exactpro.th2.act.grpc.ActResponse;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
-import com.exactpro.th2.infra.grpc.EventID;
-import io.grpc.stub.StreamObserver;
+import com.exactpro.th2.common.grpc.EventID;
 import org.slf4j.Logger;
 
 import java.util.Map;
@@ -36,13 +35,10 @@ public abstract class ActAction<T> {
 	protected final String name;
 	protected final Logger logger;
 
-	private StreamObserver<ActResponse> responseObserver;
-
-	public ActAction(UIFramework framework, StreamObserver<ActResponse> responseObserver) {
+	public ActAction(UIFramework framework) {
 		this.framework = framework;
 		this.name = getName();
 		this.logger = getLogger();
-		this.responseObserver = responseObserver;
 	}
 	
 	protected abstract String getName();
@@ -51,7 +47,8 @@ public abstract class ActAction<T> {
 	protected abstract RhSessionID getSessionID(T details);
 	protected abstract EventID getParentEventId(T details);
 	protected abstract Logger getLogger();
-	protected abstract void collectActions(T details, UIFrameworkContext context, ActResponse.Builder respBuild) throws UIFrameworkException;
+	protected abstract void collectActions(T details, UIFrameworkContext context, ActResult result) throws UIFrameworkException;
+	protected abstract void processResult(ActResult result) throws UIFrameworkException;
 	protected abstract String getStatusInfo();
 	protected boolean storeParentEvent() {
 		return true;
@@ -61,7 +58,7 @@ public abstract class ActAction<T> {
 
 		RhSessionID sessionID = getSessionID(details);
 
-		ActResponse.Builder respBuild = ActResponse.newBuilder();
+		ActResult actResult = new ActResult();
 		UIFrameworkContext frameworkContext = null;
 		try {
 			frameworkContext = framework.newExecution(sessionID);
@@ -74,38 +71,41 @@ public abstract class ActAction<T> {
 				frameworkContext.setParentEventId(parentEventId);
 			}
 
-			this.collectActions(details, frameworkContext, respBuild);
-			this.submitActions(details, frameworkContext, respBuild);
-			respBuild.setSessionID(sessionID);
+			this.collectActions(details, frameworkContext, actResult);
+			this.submitActions(details, frameworkContext, actResult);
+			actResult.setSessionID(sessionID);
 
 		} catch (UIFrameworkException e) {
 			logger.error("Cannot execute", e);
-			respBuild.setScriptStatus(ActResponse.ExecutionStatus.ACT_ERROR);
-			respBuild.setErrorInfo("Cannot unregister framework session:" + e.getMessage());
+			actResult.setScriptStatus(ActResult.ActExecutionStatus.ACT_ERROR);
+			actResult.setErrorInfo("Cannot unregister framework session:" + e.getMessage());
 		} finally {
 			if (frameworkContext != null) {
 				framework.onExecutionFinished(frameworkContext);
 			}
 		}
 
-		responseObserver.onNext(respBuild.build());
-		responseObserver.onCompleted();
-	}
-
-	protected ActResponse.ExecutionStatus convertStatusFromRh(RhBatchResponse.ScriptExecutionStatus status) {
-		switch (status) {
-			case EXECUTION_ERROR: return ActResponse.ExecutionStatus.EXECUTION_ERROR;
-			case SUCCESS: return ActResponse.ExecutionStatus.SUCCESS;
-			case COMPILE_ERROR: return ActResponse.ExecutionStatus.COMPILE_ERROR;
-			default: return ActResponse.ExecutionStatus.UNRECOGNIZED;
+		try {
+			this.processResult(actResult);
+		} catch (UIFrameworkException e) {
+			logger.error("Cannot process act result", e);
 		}
 	}
 
-	protected void submitActions(T request, UIFrameworkContext frameworkContext, ActResponse.Builder respBuild) {
+	protected ActResult.ActExecutionStatus convertStatusFromRh(RhBatchResponse.ScriptExecutionStatus status) {
+		switch (status) {
+			case EXECUTION_ERROR: return ActResult.ActExecutionStatus.EXECUTION_ERROR;
+			case SUCCESS: return ActResult.ActExecutionStatus.SUCCESS;
+			case COMPILE_ERROR: return ActResult.ActExecutionStatus.COMPILE_ERROR;
+			default: return ActResult.ActExecutionStatus.UNKNOWN_ERROR;
+		}
+	}
+
+	protected void submitActions(T request, UIFrameworkContext frameworkContext, ActResult respBuild) {
 		RhBatchResponse response = frameworkContext.submit(getName(), convertRequestParams(request));
 		if (response == null || response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS) {
 			respBuild.setStatusInfo(getStatusInfo());
-			respBuild.setScriptStatus(ActResponse.ExecutionStatus.SUCCESS);
+			respBuild.setScriptStatus(ActResult.ActExecutionStatus.SUCCESS);
 		} else {
 			respBuild.setErrorInfo(response.getErrorMessage());
 			respBuild.setScriptStatus(this.convertStatusFromRh(response.getScriptStatus()));

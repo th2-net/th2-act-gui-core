@@ -20,11 +20,11 @@ import com.exactpro.th2.act.events.EventDetails;
 import com.exactpro.th2.act.events.EventStoreHandler;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
 import com.exactpro.th2.act.grpc.hand.RhActionsList;
-import com.exactpro.th2.act.grpc.hand.RhBatchGrpc;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
+import com.exactpro.th2.act.grpc.hand.RhBatchService;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import com.exactpro.th2.act.grpc.hand.RhTargetServer;
-import com.exactpro.th2.infra.grpc.EventID;
+import com.exactpro.th2.common.grpc.EventID;
 
 import java.time.Instant;
 
@@ -34,10 +34,10 @@ import java.util.UUID;
 
 public class HandExecutor {
 
-	private final RhBatchGrpc.RhBatchBlockingStub handConnector;
+	private final RhBatchService handConnector;
 	private final EventStoreHandler eventStoreHandler;
 
-	public HandExecutor(RhBatchGrpc.RhBatchBlockingStub handConnector, EventStoreHandler eventStoreHandler) {
+	public HandExecutor(RhBatchService handConnector, EventStoreHandler eventStoreHandler) {
 		this.handConnector = handConnector;
 		this.eventStoreHandler = eventStoreHandler;
 	}
@@ -47,7 +47,6 @@ public class HandExecutor {
 	}
 
 	public void unregister(RhSessionID sessionID) {
-		//noinspection ResultOfMethodCallIgnored
 		this.handConnector.unregister(sessionID);
 	}
 

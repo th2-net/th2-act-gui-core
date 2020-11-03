@@ -16,6 +16,7 @@
 
 package com.exactpro.th2.act.framework;
 
+import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import org.slf4j.Logger;
@@ -30,12 +31,24 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SessionWatcher extends Thread {
 	private static final Logger logger = LoggerFactory.getLogger(SessionWatcher.class);
+	
+	public static final Long DEFAULT_EXPIRATION_TIME = 30L; 
 
 	private final UIFramework framework;
 	private final Map<RhSessionID, Long> sessions;
 
 	private final long sessionExpirationMs;
 	private final AtomicBoolean run;
+	
+	public static SessionWatcher create(UIFramework framework, CustomConfiguration customConfiguration) {
+		long timeout;
+		if (customConfiguration != null && customConfiguration.getSessionExpirationTime() != null) {
+			timeout = customConfiguration.getSessionExpirationTime();
+		} else {
+			timeout = DEFAULT_EXPIRATION_TIME;
+		}		
+		return new SessionWatcher(framework, timeout);
+	}
 
 	public SessionWatcher(UIFramework framework, long sessionTimeoutMin) {
 		super("SESSION-WATCHER");

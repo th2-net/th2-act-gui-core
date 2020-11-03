@@ -20,7 +20,7 @@ import com.exactpro.th2.act.ActConnections;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkIsBusyException;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
-import com.exactpro.th2.infra.grpc.EventID;
+import com.exactpro.th2.common.grpc.EventID;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class UIFramework implements AutoCloseable {
 		this.connections = connections;
 		this.handExecutor = new HandExecutor(connections.getHandConnector(), connections.getEventStoreHandler());
 		this.contexts = new ConcurrentHashMap<>();
-		this.sessionWatcher = new SessionWatcher(this, connections.getTh2Configuration().getSessionExpiration());
+		this.sessionWatcher = SessionWatcher.create(this, connections.getCustomConfiguration());
 		this.sessionWatcher.start();
 	}
 

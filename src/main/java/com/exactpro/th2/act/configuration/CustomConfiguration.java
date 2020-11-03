@@ -14,27 +14,21 @@
  * limitations under the License.
  */
 
-package com.exactpro.th2.act;
+package com.exactpro.th2.act.configuration;
 
-import com.exactpro.th2.configuration.MicroserviceConfiguration;
-import com.exactpro.th2.configuration.Th2Configuration;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.io.IOException;
-import java.io.InputStream;
+public class CustomConfiguration {
 
-public class Configuration extends MicroserviceConfiguration {
-
-	public static Configuration load(InputStream inputStream) throws IOException {
-		return YAML_READER.readValue(inputStream, Configuration.class);
+	private Long sessionExpirationTime;
+	
+	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+	public CustomConfiguration(@JsonProperty("sessionExpirationTime") Long sessionExpirationTime) {
+		this.sessionExpirationTime = sessionExpirationTime;
 	}
 
-	private Th2Configuration th2 = new Th2Configuration();
-
-	public Th2Configuration getTh2() {
-		return th2;
-	}
-
-	public void setTh2(Th2Configuration th2) {
-		this.th2 = th2;
+	public Long getSessionExpirationTime() {
+		return sessionExpirationTime;
 	}
 }
