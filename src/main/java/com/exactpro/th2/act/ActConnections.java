@@ -32,14 +32,19 @@ public class ActConnections {
 	private final EventStoreServiceGrpc.EventStoreServiceBlockingStub eventStoreConnector;
 	private final RhBatchGrpc.RhBatchBlockingStub handConnector;
 	private final EventStoreHandler eventStoreHandler;
+	private final ActTh2Configuration th2Configuration;
 
 	public ActConnections(MicroserviceConfiguration configuration) {
-		ActTh2Configuration th2Configuration = (ActTh2Configuration) configuration.getTh2();
+		this.th2Configuration = (ActTh2Configuration) configuration.getTh2();
 		this.eventChannel = forAddress(th2Configuration.getTh2EventStorageGRPCHost(), th2Configuration.getTh2EventStorageGRPCPort()).usePlaintext().build();
 		this.eventStoreConnector = EventStoreServiceGrpc.newBlockingStub(eventChannel);
 		this.handChannel = forAddress(th2Configuration.getHandGRPCHost(), th2Configuration.getHandGRPCPort()).usePlaintext().build();
 		this.handConnector = RhBatchGrpc.newBlockingStub(handChannel);
 		this.eventStoreHandler = new EventStoreHandler(eventStoreConnector);
+	}
+
+	public ActTh2Configuration getTh2Configuration() {
+		return th2Configuration;
 	}
 
 	public RhBatchGrpc.RhBatchBlockingStub getHandConnector() {

@@ -36,13 +36,16 @@ public class UIFramework implements AutoCloseable {
 	
 	private final Map<RhSessionID, UIFrameworkSessionContext> contexts;
 	private final ActConnections connections;
-	private HandExecutor handExecutor;
+	private final HandExecutor handExecutor;
+	private final SessionWatcher sessionWatcher;
 
 
 	public UIFramework(ActConnections connections) {
 		this.connections = connections;
 		this.handExecutor = new HandExecutor(connections.getHandConnector(), connections.getEventStoreHandler());
 		this.contexts = new ConcurrentHashMap<>();
+		this.sessionWatcher = new SessionWatcher(this, connections.getTh2Configuration().getSessionExpiration());
+		this.sessionWatcher.start();
 	}
 
 
@@ -54,6 +57,7 @@ public class UIFramework implements AutoCloseable {
 				frameworkSessionContext = new UIFrameworkSessionContext(sessionID, this.handExecutor);
 				contexts.put(sessionID, frameworkSessionContext);
 				created = true;
+				sessionWatcher.updateSessionTime(sessionID);
 			}
 			return new ImmutablePair<>(frameworkSessionContext, created);
 		}
@@ -115,26 +119,28 @@ public class UIFramework implements AutoCloseable {
 		if (!this.checkBusy(sessionContext)) {
 			throw new UIFrameworkIsBusyException(sessionID);
 		}
-		
+		sessionWatcher.updateSessionTime(sessionID);
+
 		return sessionContext.getContext();
 	}
 	
 	public void onExecutionFinished(UIFrameworkContext context) {
 		RhSessionID sessionID = context.getSessionID();
 		this.releaseExecution(this.contexts.get(sessionID));
+		this.sessionWatcher.updateSessionTime(sessionID);
 	}
-	
-	public void unregisterSession(RhSessionID sessionID) throws UIFrameworkException {
 
+	public void unregisterSession(RhSessionID sessionID) throws UIFrameworkException {
 		UIFrameworkSessionContext sessionContext = this.contexts.get(sessionID);
 		if (sessionContext == null) {
 			throw new UIFrameworkException("Session is not created properly: " + sessionID.getId());
 		}
-		
+
 		if (!this.invalidate(sessionContext)) {
 			throw new UIFrameworkIsBusyException(sessionID);
 		}
-		
+		sessionWatcher.removeSession(sessionID);
+
 		this.contexts.remove(sessionID);
 	}
 
@@ -154,5 +160,6 @@ public class UIFramework implements AutoCloseable {
 	@Override
 	public void close() {
 		connections.close();
+		sessionWatcher.close();
 	}
 }
