@@ -25,49 +25,60 @@ import java.io.InputStream;
 import static java.lang.System.getenv;
 import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
 import static org.apache.commons.lang3.math.NumberUtils.toInt;
+import static org.apache.commons.lang3.math.NumberUtils.toLong;
 
-public class ActTh2Configuration extends Th2Configuration
-{
+public class ActTh2Configuration extends Th2Configuration {
 	public static final String ENV_HAND_GRPC_HOST = "HAND_GRPC_HOST";
 	public static final String DEFAULT_HAND_GRPC_HOST = "localhost";
+	private String handGrpcHost = getEnvHandGrpcHost();
+
+	public static final String ENV_HAND_GRPC_PORT = "HAND_GRPC_PORT";
+	public static final int DEFAULT_HAND_GRPC_PORT = 8080;
+	private int handGrpcPort = getEnvHandGrpcPort();
+
+	public static final String ENV_SESSION_EXPIRE_DURATION = "SESSION_EXPIRATION";
+	public static final int DEFAULT_SESSION_EXPIRATION = 30;
+	private long sessionExpiration = getEnvSessionExpiration();
+
 
 	public static String getEnvHandGrpcHost() {
 		return defaultIfNull(getenv(ENV_HAND_GRPC_HOST), DEFAULT_HAND_GRPC_HOST);
 	}
 
-	public static final String ENV_HAND_GRPC_PORT = "HAND_GRPC_PORT";
-	public static final int DEFAULT_HAND_GRPC_PORT = 8080;
-
 	public static int getEnvHandGrpcPort() {
 		return toInt(getenv(ENV_HAND_GRPC_PORT), DEFAULT_HAND_GRPC_PORT);
 	}
 
-	private String handGrpcHost = getEnvHandGrpcHost();
-	private int handGrpcPort = getEnvHandGrpcPort();
-
-	public static Th2Configuration load(InputStream inputStream) throws IOException
-	{
+	public static Th2Configuration load(InputStream inputStream) throws IOException {
 		return Configuration.YAML_READER.readValue(inputStream, ActTh2Configuration.class);
 	}
 
-	public String getHandGRPCHost()
-	{
+	public static long getEnvSessionExpiration() {
+		return toLong(getenv(ENV_SESSION_EXPIRE_DURATION), DEFAULT_SESSION_EXPIRATION);
+	}
+
+	public String getHandGRPCHost() {
 		return handGrpcHost;
 	}
 
-	public void setHandGRPCHost(String handGRPCHost)
-	{
+	public void setHandGRPCHost(String handGRPCHost) {
 		this.handGrpcHost = handGRPCHost;
 	}
 
-	public int getHandGRPCPort()
-	{
+	public int getHandGRPCPort() {
 		return handGrpcPort;
 	}
 
-	public void setHandGRPCPort(int handGRPCPort)
-	{
+	public void setHandGRPCPort(int handGRPCPort) {
 		this.handGrpcPort = handGRPCPort;
+	}
+
+	public long getSessionExpiration() {
+		return sessionExpiration;
+	}
+
+	public void setSessionExpiration(int sessionExpiration) {
+		this.sessionExpiration = sessionExpiration;
 	}
 
 	@Override
@@ -78,6 +89,7 @@ public class ActTh2Configuration extends Th2Configuration
 				", th2EventStorageGRPCPort=" + getTh2EventStorageGRPCPort() +
 				", handGRPCHost='" + handGrpcHost + '\'' +
 				", handGRPCPort=" + handGrpcPort +
+				", sessionExpiration=" + sessionExpiration +
 				'}';
 	}
 }
