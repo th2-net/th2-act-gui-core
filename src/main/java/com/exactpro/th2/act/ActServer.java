@@ -16,10 +16,7 @@
 
 package com.exactpro.th2.act;
 
-import com.exactpro.th2.configuration.MicroserviceConfiguration;
-import io.grpc.BindableService;
 import io.grpc.Server;
-import io.grpc.ServerBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,15 +26,11 @@ import java.util.concurrent.TimeUnit;
 public abstract class ActServer {
 	private final Logger logger = LoggerFactory.getLogger(getClass().getName() + "@" + hashCode());
 	private final Server server;
-	private final BindableService service;
 
-	public ActServer(MicroserviceConfiguration configuration) throws IOException {
-		service = createService(configuration);
-		this.server = ServerBuilder.forPort(configuration.getPort())
-				.addService(service)
-				.build()
-				.start();
-		logger.info("'{}' started, listening on port '{}'", ActServer.class.getSimpleName(), configuration.getPort());
+	public ActServer(Server server) throws IOException {
+		this.server = server;
+		this.server.start();
+		logger.info("'{}' started", ActServer.class.getSimpleName());
 	}
 
 	public void stop() throws InterruptedException {
@@ -55,10 +48,4 @@ public abstract class ActServer {
 			server.awaitTermination();
 		}
 	}
-
-	public BindableService getService() {
-		return service;
-	}
-
-	public abstract BindableService createService(MicroserviceConfiguration configuration);
 }

@@ -19,12 +19,12 @@ package com.exactpro.th2.act.events;
 import com.exactpro.th2.act.events.verification.FieldsVerifier;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
-import com.exactpro.th2.eventstore.grpc.EventStoreServiceGrpc.EventStoreServiceBlockingStub;
-import com.exactpro.th2.eventstore.grpc.Response;
-import com.exactpro.th2.eventstore.grpc.StoreEventRequest;
-import com.exactpro.th2.infra.grpc.Event;
-import com.exactpro.th2.infra.grpc.EventID;
-import com.exactpro.th2.infra.grpc.EventStatus;
+import com.exactpro.th2.common.grpc.Event;
+import com.exactpro.th2.common.grpc.EventBatch;
+import com.exactpro.th2.common.grpc.EventID;
+import com.exactpro.th2.common.grpc.EventStatus;
+import com.exactpro.th2.common.schema.factory.CommonFactory;
+import com.exactpro.th2.common.schema.message.MessageRouter;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
@@ -33,6 +33,7 @@ import org.apache.commons.collections4.MapUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.time.Instant;
 import java.util.*;
@@ -41,11 +42,11 @@ public class EventStoreHandler
 {
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static final ObjectMapper mapper = new ObjectMapper();
-	private final EventStoreServiceBlockingStub eventStoreConnector;
+	private final MessageRouter<EventBatch> eventBatchRouter;
 
-	public EventStoreHandler(EventStoreServiceBlockingStub eventStoreConnector)
+	public EventStoreHandler(CommonFactory commonFactory)
 	{
-		this.eventStoreConnector = eventStoreConnector;
+		this.eventBatchRouter = commonFactory.getEventBatchRouter();
 	}
 
 	private static List<Object> createPayloadFromRequestParams(Map<String, String> requestParams) {
@@ -141,15 +142,13 @@ public class EventStoreHandler
 	private EventID storeEvent(EventDetails eventDetails)
 	{
 		Event event = createEvent(eventDetails);
-		Response response = eventStoreConnector.storeEvent(StoreEventRequest.newBuilder()
-				.setEvent(event)
-				.build());
-		if (response.hasError())
-		{
-			logger.warn("Could not store event: " + response.getError().getValue());
-			throw new RuntimeException(response.getError().getValue());
+		try {
+			eventBatchRouter.send(EventBatch.newBuilder().addEvents(event).build(), "publish", "event");
+			logger.info("Event ID = " + event.getId());
+		} catch (IOException e) {
+			logger.warn("Could not store event", e);
+			throw new RuntimeException("Could not store event", e);
 		}
-		logger.info("Event ID = " + event.getId());
 
 		return event.getId();
 	}

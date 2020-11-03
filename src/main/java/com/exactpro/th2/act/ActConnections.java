@@ -16,38 +16,28 @@
 
 package com.exactpro.th2.act;
 
-import com.exactpro.th2.act.configuration.ActTh2Configuration;
+import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.events.EventStoreHandler;
-import com.exactpro.th2.act.grpc.hand.RhBatchGrpc;
-import com.exactpro.th2.configuration.MicroserviceConfiguration;
-import com.exactpro.th2.eventstore.grpc.EventStoreServiceGrpc;
-import io.grpc.ManagedChannel;
-
-import static io.grpc.ManagedChannelBuilder.forAddress;
+import com.exactpro.th2.act.grpc.hand.RhBatchService;
+import com.exactpro.th2.common.schema.factory.CommonFactory;
 
 public class ActConnections {
 
-	private final ManagedChannel eventChannel;
-	private final ManagedChannel handChannel;
-	private final EventStoreServiceGrpc.EventStoreServiceBlockingStub eventStoreConnector;
-	private final RhBatchGrpc.RhBatchBlockingStub handConnector;
+	private final RhBatchService handConnector;
 	private final EventStoreHandler eventStoreHandler;
-	private final ActTh2Configuration th2Configuration;
+	
+	private final CommonFactory commonFactory;
+	private final CustomConfiguration customConfiguration;
 
-	public ActConnections(MicroserviceConfiguration configuration) {
-		this.th2Configuration = (ActTh2Configuration) configuration.getTh2();
-		this.eventChannel = forAddress(th2Configuration.getTh2EventStorageGRPCHost(), th2Configuration.getTh2EventStorageGRPCPort()).usePlaintext().build();
-		this.eventStoreConnector = EventStoreServiceGrpc.newBlockingStub(eventChannel);
-		this.handChannel = forAddress(th2Configuration.getHandGRPCHost(), th2Configuration.getHandGRPCPort()).usePlaintext().build();
-		this.handConnector = RhBatchGrpc.newBlockingStub(handChannel);
-		this.eventStoreHandler = new EventStoreHandler(eventStoreConnector);
+	public ActConnections(CommonFactory commonFactory) throws Exception {
+		this.commonFactory = commonFactory;
+		this.handConnector = commonFactory.getGrpcRouter().getService(RhBatchService.class);
+		this.eventStoreHandler = new EventStoreHandler(commonFactory);
+
+		this.customConfiguration = commonFactory.getCustomConfiguration(CustomConfiguration.class);
 	}
 
-	public ActTh2Configuration getTh2Configuration() {
-		return th2Configuration;
-	}
-
-	public RhBatchGrpc.RhBatchBlockingStub getHandConnector() {
+	public RhBatchService getHandConnector() {
 		return handConnector;
 	}
 
@@ -55,12 +45,11 @@ public class ActConnections {
 		return eventStoreHandler;
 	}
 
+	public CustomConfiguration getCustomConfiguration() {
+		return customConfiguration;
+	}
+
 	public void close() {
-		if (eventChannel != null) {
-			eventChannel.shutdownNow();
-		}
-		if (handChannel != null) {
-			handChannel.shutdownNow();
-		}
+		commonFactory.close();
 	}
 }
