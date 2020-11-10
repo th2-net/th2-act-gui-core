@@ -24,19 +24,25 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public abstract class ActServer {
 	private final Logger logger = LoggerFactory.getLogger(getClass().getName() + "@" + hashCode());
 	private final Server server;
-	private final BindableService service;
+	private final List<BindableService> services;
 
 	public ActServer(MicroserviceConfiguration configuration) throws IOException {
-		service = createService(configuration);
-		this.server = ServerBuilder.forPort(configuration.getPort())
-				.addService(service)
-				.build()
-				.start();
+		services = createService(configuration);
+
+		ServerBuilder<?> serverBuilder = ServerBuilder.forPort(configuration.getPort());
+		for (BindableService service : services) {
+			serverBuilder.addService(service);
+		}
+		
+		this.server = serverBuilder.build();
+		this.server.start();
+				
 		logger.info("'{}' started, listening on port '{}'", ActServer.class.getSimpleName(), configuration.getPort());
 	}
 
@@ -56,9 +62,9 @@ public abstract class ActServer {
 		}
 	}
 
-	public BindableService getService() {
-		return service;
+	public List<BindableService> getServices() {
+		return services;
 	}
 
-	public abstract BindableService createService(MicroserviceConfiguration configuration);
+	public abstract List<BindableService> createService(MicroserviceConfiguration configuration);
 }
