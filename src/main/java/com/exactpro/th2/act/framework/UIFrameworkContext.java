@@ -41,8 +41,6 @@ public class UIFrameworkContext {
 	private Map<String, RhBatchResponse> rhResponses;
 	private Map<String, ContextInfoData> contextInfo;
 
-	private MainWindowWrapper<? extends UIElement> mainWindowWrapper;
-
 	public UIFrameworkContext(RhSessionID sessionID, HandExecutor handExecutor) {
 		this.sessionID = sessionID;
 		this.handExecutor = handExecutor;
@@ -95,14 +93,6 @@ public class UIFrameworkContext {
 
 	public BuilderManager createBuilderManager() {
 		return new BuilderManager(this);
-	}
-
-	public MainWindowWrapper<? extends UIElement> getMainWindowWrapper() {
-		return mainWindowWrapper;
-	}
-
-	public void setMainWindow(MainWindowWrapper<? extends UIElement> mainWindowWrapper) {
-		this.mainWindowWrapper = mainWindowWrapper;
 	}
 
 	public void addContextInfo(String name, ContextInfoData infoData) {

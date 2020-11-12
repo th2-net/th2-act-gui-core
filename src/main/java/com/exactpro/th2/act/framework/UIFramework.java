@@ -45,13 +45,16 @@ public class UIFramework implements AutoCloseable {
 		this.contexts = new ConcurrentHashMap<>();
 	}
 
+	protected UIFrameworkContext createContext(RhSessionID sessionID, HandExecutor executor) {
+		return new UIFrameworkContext(sessionID, executor);
+	}
 
 	private Pair<UIFrameworkSessionContext, Boolean> createContext(RhSessionID sessionID) {
 		synchronized (this) {
 			boolean created = false;
 			UIFrameworkSessionContext frameworkSessionContext = contexts.get(sessionID);
 			if (frameworkSessionContext == null) {
-				frameworkSessionContext = new UIFrameworkSessionContext(sessionID, this.handExecutor);
+				frameworkSessionContext = new UIFrameworkSessionContext(createContext(sessionID, this.handExecutor));
 				contexts.put(sessionID, frameworkSessionContext);
 				created = true;
 			}
