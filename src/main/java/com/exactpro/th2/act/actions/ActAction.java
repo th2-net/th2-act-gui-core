@@ -33,14 +33,12 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public abstract class ActAction<T> {
 	
 	protected final UIFramework framework;
-	protected final String name;
 	protected final Logger logger;
 
 	private StreamObserver<ActResponse> responseObserver;
 
 	public ActAction(UIFramework framework, StreamObserver<ActResponse> responseObserver) {
 		this.framework = framework;
-		this.name = getName();
 		this.logger = getLogger();
 		this.responseObserver = responseObserver;
 	}
@@ -68,7 +66,7 @@ public abstract class ActAction<T> {
 			EventID parentEventId = getParentEventId(details);
 			if (storeParentEvent()) {
 				Map<String, String> requestParams = convertRequestParams(details);
-				EventID loginEvent = framework.createParentEvent(parentEventId, this.name, requestParams);
+				EventID loginEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
 				frameworkContext.setParentEventId(loginEvent);
 			} else {
 				frameworkContext.setParentEventId(parentEventId);
