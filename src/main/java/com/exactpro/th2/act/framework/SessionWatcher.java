@@ -46,11 +46,11 @@ public class SessionWatcher extends Thread {
 			timeout = customConfiguration.getSessionExpirationTime();
 		} else {
 			timeout = DEFAULT_EXPIRATION_TIME;
-		}		
+		}
 		return new SessionWatcher(framework, timeout);
 	}
 
-	public SessionWatcher(UIFramework framework, long sessionTimeoutMin) {
+	private SessionWatcher(UIFramework framework, long sessionTimeoutMin) {
 		super("SESSION-WATCHER");
 		this.framework = framework;
 		this.sessionExpirationMs = TimeUnit.MINUTES.toMillis(sessionTimeoutMin);

@@ -17,6 +17,7 @@
 package com.exactpro.th2.act.framework;
 
 import com.exactpro.th2.act.ActConnections;
+import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkIsBusyException;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
@@ -30,21 +31,23 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public class UIFramework implements AutoCloseable {
+public abstract class UIFramework implements AutoCloseable {
 
 	private static final Logger logger = LoggerFactory.getLogger(UIFramework.class);
 	
-	private final Map<RhSessionID, UIFrameworkSessionContext> contexts;
-	private final ActConnections connections;
-	private final HandExecutor handExecutor;
-	private final SessionWatcher sessionWatcher;
+	protected final Map<RhSessionID, UIFrameworkSessionContext> contexts;
+	protected final ActConnections<? extends CustomConfiguration> connections;
+	protected final CustomConfiguration configuration;
+	protected final HandExecutor handExecutor;
+	protected final SessionWatcher sessionWatcher;
 
 
-	public UIFramework(ActConnections connections) {
+	public UIFramework(ActConnections<? extends CustomConfiguration> connections) {
 		this.connections = connections;
+		this.configuration = connections.getCustomConfiguration();
 		this.handExecutor = new HandExecutor(connections.getHandConnector(), connections.getEventStoreHandler());
 		this.contexts = new ConcurrentHashMap<>();
-		this.sessionWatcher = SessionWatcher.create(this, connections.getCustomConfiguration());
+		this.sessionWatcher = SessionWatcher.create(this, configuration);
 		this.sessionWatcher.start();
 	}
 
@@ -156,10 +159,13 @@ public class UIFramework implements AutoCloseable {
 		return this.handExecutor.logParentEvent(parentEventId, name, requested);
 	}
 
-
 	@Override
 	public void close() {
 		connections.close();
 		sessionWatcher.close();
+	}
+
+	public CustomConfiguration getConfiguration() {
+		return configuration;
 	}
 }

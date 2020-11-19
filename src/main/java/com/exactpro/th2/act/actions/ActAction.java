@@ -17,6 +17,7 @@
 package com.exactpro.th2.act.actions;
 
 import com.exactpro.th2.act.ActResult;
+import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.framework.UIFramework;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
