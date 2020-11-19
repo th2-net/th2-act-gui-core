@@ -21,20 +21,19 @@ import com.exactpro.th2.act.events.EventStoreHandler;
 import com.exactpro.th2.act.grpc.hand.RhBatchService;
 import com.exactpro.th2.common.schema.factory.CommonFactory;
 
-public class ActConnections {
+public abstract class ActConnections<C extends CustomConfiguration> {
 
-	private final RhBatchService handConnector;
-	private final EventStoreHandler eventStoreHandler;
-	
-	private final CommonFactory commonFactory;
-	private final CustomConfiguration customConfiguration;
+	protected final RhBatchService handConnector;
+	protected final EventStoreHandler eventStoreHandler;
+
+	protected final CommonFactory commonFactory;
+	protected final C customConfiguration;
 
 	public ActConnections(CommonFactory commonFactory) throws Exception {
 		this.commonFactory = commonFactory;
 		this.handConnector = commonFactory.getGrpcRouter().getService(RhBatchService.class);
 		this.eventStoreHandler = new EventStoreHandler(commonFactory);
-
-		this.customConfiguration = commonFactory.getCustomConfiguration(CustomConfiguration.class);
+		this.customConfiguration = createCustomConfiguration(commonFactory);
 	}
 
 	public RhBatchService getHandConnector() {
@@ -45,11 +44,14 @@ public class ActConnections {
 		return eventStoreHandler;
 	}
 
-	public CustomConfiguration getCustomConfiguration() {
+	public C getCustomConfiguration() {
 		return customConfiguration;
 	}
 
 	public void close() {
 		commonFactory.close();
 	}
+
+
+	protected abstract C createCustomConfiguration(CommonFactory commonFactory);
 }

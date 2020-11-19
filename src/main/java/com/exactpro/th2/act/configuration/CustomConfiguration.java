@@ -16,17 +16,12 @@
 
 package com.exactpro.th2.act.configuration;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class CustomConfiguration {
 
+	@JsonProperty(value="sessionExpirationTime")
 	private Long sessionExpirationTime;
-	
-	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-	public CustomConfiguration(@JsonProperty("sessionExpirationTime") Long sessionExpirationTime) {
-		this.sessionExpirationTime = sessionExpirationTime;
-	}
 
 	public Long getSessionExpirationTime() {
 		return sessionExpirationTime;
