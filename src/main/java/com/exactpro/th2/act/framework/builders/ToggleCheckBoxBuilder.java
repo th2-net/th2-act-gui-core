@@ -50,6 +50,8 @@ public class ToggleCheckBoxBuilder extends DefaultBuilder<ToggleCheckBoxBuilder>
 		RhWinActionsMessages.WinToggleCheckBox.Builder checkboxBuilder = RhWinActionsMessages.WinToggleCheckBox.newBuilder();
 		checkboxBuilder.addAllLocators(buildWinLocator(winLocator));
 		checkboxBuilder.setExpectedState(getCheckboxStatus());
+		addIfNotEmpty(id, checkboxBuilder::setId);
+		addIfNotEmpty(execute, checkboxBuilder::setExecute);
 
 		return RhAction.newBuilder().setWinToggleCheckBox(checkboxBuilder).build();
 	}
