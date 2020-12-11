@@ -53,7 +53,7 @@ public class EventStoreHandler
 		{
 			List<Object> payload = new ArrayList<>(2);
 			payload.add(new EventPayloadMessage("Request parameters"));
-			payload.add(new EventPayloadTable(requestParams));
+			payload.add(new EventPayloadTable(requestParams, false));
 			return payload;
 		} else {
 			return Collections.emptyList();
