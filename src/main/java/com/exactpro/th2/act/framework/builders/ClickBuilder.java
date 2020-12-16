@@ -28,6 +28,7 @@ public class ClickBuilder extends DefaultBuilder<ClickBuilder> {
 	private Integer yOffset;
 	
 	private MouseClickButton button;
+	private ClickBorder border;
 
 	public ClickBuilder(UIFrameworkContext context) {
 		super(context);
@@ -54,6 +55,11 @@ public class ClickBuilder extends DefaultBuilder<ClickBuilder> {
 		return getBuilder();
 	}
 
+	public ClickBuilder border(ClickBorder border) {
+		this.border = border;
+		return getBuilder();
+	}
+
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
@@ -64,6 +70,10 @@ public class ClickBuilder extends DefaultBuilder<ClickBuilder> {
 		
 		if (button != null) {
 			clickBuilder.setButton(button.grpcButton);
+		}
+
+		if (border != null) {
+			clickBuilder.setAttachedBorder(border.grpcBorder);
 		}
 
 		if (xOffset != null && yOffset != null) {
@@ -85,7 +95,20 @@ public class ClickBuilder extends DefaultBuilder<ClickBuilder> {
 		MouseClickButton(RhWinActionsMessages.WinClick.Button grpcButton) {
 			this.grpcButton = grpcButton;
 		}
+	}
 
+	public enum ClickBorder {
+
+		LEFT_TOP(RhWinActionsMessages.WinClick.AttachedBorder.LEFT_TOP),
+		LEFT_BOTTOM(RhWinActionsMessages.WinClick.AttachedBorder.LEFT_BOTTOM),
+		RIGHT_TOP(RhWinActionsMessages.WinClick.AttachedBorder.RIGHT_TOP),
+		RIGHT_BOTTOM(RhWinActionsMessages.WinClick.AttachedBorder.RIGHT_BOTTOM);
+
+		private final RhWinActionsMessages.WinClick.AttachedBorder grpcBorder;
+
+		ClickBorder(RhWinActionsMessages.WinClick.AttachedBorder grpcBorder) {
+			this.grpcBorder = grpcBorder;
+		}
 	}
 	
 }
