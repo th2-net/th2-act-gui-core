@@ -153,6 +153,9 @@ public class UIFramework implements AutoCloseable {
 		return this.handExecutor.logParentEvent(parentEventId, name, requested);
 	}
 
+	public EventID createErrorEvent(EventID parentEventId, String name, Map<String, String> requested, String error, Throwable t) {
+		return this.handExecutor.logErrorEvent(parentEventId, name, requested, error, t);
+	}
 
 	@Override
 	public void close() {

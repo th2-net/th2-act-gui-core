@@ -88,5 +88,16 @@ public class HandExecutor {
 		eventStoreHandler.storeEvent(info, requestParams);
 		return newEventId;
 	}
+
+	public EventID logErrorEvent(EventID parentId, String eventName, Map<String, String> requestParams,
+								 String errorDescription, Throwable throwable) {
+		EventID newEventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
+		EventDetails.EventInfo info = new EventDetails.EventInfo();
+		info.setEventId(newEventId);
+		info.setParentEventId(parentId);
+		info.setEventName(eventName);
+		eventStoreHandler.storeErrorEvent(info, requestParams, errorDescription, throwable);
+		return newEventId;
+	}
 	
 }

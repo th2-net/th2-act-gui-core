@@ -26,6 +26,7 @@ import com.exactpro.th2.infra.grpc.EventID;
 import io.grpc.stub.StreamObserver;
 import org.slf4j.Logger;
 
+import java.util.Collections;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -61,13 +62,16 @@ public abstract class ActAction<T> {
 
 		ActResponse.Builder respBuild = ActResponse.newBuilder();
 		UIFrameworkContext frameworkContext = null;
+		EventID parentEventId = null;
+		EventID actionEvent = null;
+		
 		try {
 			frameworkContext = framework.newExecution(sessionID);
-			EventID parentEventId = getParentEventId(details);
+			parentEventId = getParentEventId(details);
 			if (storeParentEvent()) {
 				Map<String, String> requestParams = convertRequestParams(details);
-				EventID loginEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
-				frameworkContext.setParentEventId(loginEvent);
+				actionEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
+				frameworkContext.setParentEventId(actionEvent);
 			} else {
 				frameworkContext.setParentEventId(parentEventId);
 			}
@@ -78,6 +82,8 @@ public abstract class ActAction<T> {
 
 		} catch (UIFrameworkException e) {
 			logger.error("Cannot execute", e);
+			framework.createErrorEvent(actionEvent != null ? actionEvent : parentEventId,
+					"Error: " + getName(), Collections.emptyMap(), null, e);
 			respBuild.setScriptStatus(ActResponse.ExecutionStatus.ACT_ERROR);
 			respBuild.setErrorInfo("Cannot unregister framework session:" + e.getMessage());
 		} finally {
