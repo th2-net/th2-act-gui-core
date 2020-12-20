@@ -21,6 +21,7 @@ public class WinLocator {
 	private final WinLocator parent;
 	private final WinLocatorType locatorType;
 	private final String matcher;
+	private Integer matcherIndex;
 
 	private WinLocator(WinLocator parent, WinLocatorType locatorType, String matcher) {
 		this.parent = parent;
@@ -28,16 +29,37 @@ public class WinLocator {
 		this.matcher = matcher;
 	}
 
+	private WinLocator(WinLocator parent, WinLocatorType locatorType, String matcher, Integer matcherIndex) {
+		this(parent, locatorType, matcher);
+		this.matcherIndex = matcherIndex;
+	}
+
+	protected WinLocator byLocator(WinLocatorType locator, String matcher, Integer index) {
+		return new WinLocator(this, locator, matcher, index);
+	}
+
 	protected WinLocator byLocator(WinLocatorType locator, String matcher) {
 		return new WinLocator(this, locator, matcher);
 	}
 
 	public WinLocator byName(String name) {
-		return this.byLocator(WinLocatorType.NAME, name);
+		return byName(name, null);
+	}
+
+	public WinLocator byName(String name, Integer index) {
+		return this.byLocator(WinLocatorType.NAME, name, index);
 	}
 
 	public WinLocator byId(String id) {
-		return this.byLocator(WinLocatorType.ACCESSIBILITY_ID, id);
+		return byId(id, null);
+	}
+
+	public WinLocator byId(String id, Integer index) {
+		return this.byLocator(WinLocatorType.ACCESSIBILITY_ID, id, index);
+	}
+
+	public WinLocator byXpath(String xpath) {
+		return this.byLocator(WinLocatorType.XPATH, xpath);
 	}
 
 	public static WinLocator byCachedId(String cachedId) {
@@ -59,7 +81,11 @@ public class WinLocator {
 	public String getMatcher() {
 		return matcher;
 	}
-	
+
+	public Integer getMatcherIndex() {
+		return matcherIndex;
+	}
+
 	public boolean isCached() {
 		return this.locatorType == WinLocatorType.CACHED_ELEMENT;
 	}
@@ -72,7 +98,8 @@ public class WinLocator {
 		
 		CACHED_ELEMENT("cachedId"),
 		ACCESSIBILITY_ID("accessibilityId"),
-		NAME("name");
+		NAME("name"),
+		XPATH("xpath");
 		
 		private final String name;
 

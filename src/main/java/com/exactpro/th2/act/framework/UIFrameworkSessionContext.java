@@ -16,16 +16,14 @@
 
 package com.exactpro.th2.act.framework;
 
-import com.exactpro.th2.act.grpc.hand.RhSessionID;
-
 public class UIFrameworkSessionContext {
 	
 	private final UIFrameworkContext context;
 	private volatile boolean busy;
 	private volatile boolean invalidated;
 
-	public UIFrameworkSessionContext(RhSessionID sessionID, HandExecutor executor) {
-		this.context = new UIFrameworkContext(sessionID, executor);
+	public UIFrameworkSessionContext(UIFrameworkContext context) {
+		this.context = context;
 		this.busy = false;
 		this.invalidated = false;
 	}

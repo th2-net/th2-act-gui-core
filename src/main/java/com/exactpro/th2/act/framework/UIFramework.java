@@ -51,13 +51,16 @@ public abstract class UIFramework implements AutoCloseable {
 		this.sessionWatcher.start();
 	}
 
+	protected UIFrameworkContext createContext(RhSessionID sessionID, HandExecutor executor) {
+		return new UIFrameworkContext(sessionID, executor);
+	}
 
 	private Pair<UIFrameworkSessionContext, Boolean> createContext(RhSessionID sessionID) {
 		synchronized (this) {
 			boolean created = false;
 			UIFrameworkSessionContext frameworkSessionContext = contexts.get(sessionID);
 			if (frameworkSessionContext == null) {
-				frameworkSessionContext = new UIFrameworkSessionContext(sessionID, this.handExecutor);
+				frameworkSessionContext = new UIFrameworkSessionContext(createContext(sessionID, this.handExecutor));
 				contexts.put(sessionID, frameworkSessionContext);
 				created = true;
 				sessionWatcher.updateSessionTime(sessionID);
@@ -157,6 +160,10 @@ public abstract class UIFramework implements AutoCloseable {
 
 	public EventID createParentEvent(EventID parentEventId, String name, Map<String, String> requested) {
 		return this.handExecutor.logParentEvent(parentEventId, name, requested);
+	}
+
+	public EventID createErrorEvent(EventID parentEventId, String name, Map<String, String> requested, String error, Throwable t) {
+		return this.handExecutor.logErrorEvent(parentEventId, name, requested, error, t);
 	}
 
 	@Override

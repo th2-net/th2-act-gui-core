@@ -20,6 +20,7 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.google.protobuf.Int32Value;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -75,6 +76,8 @@ public abstract class DefaultBuilder<T extends DefaultBuilder<T>> {
 			RhWinActionsMessages.WinLocator.Builder builder = RhWinActionsMessages.WinLocator.newBuilder();
 			builder.setLocator(currentLocator.getLocatorType().getName());
 			builder.setMatcher(currentLocator.getMatcher());
+			if (currentLocator.getMatcherIndex() != null)
+				builder.setMatcherIndex(Int32Value.of(currentLocator.getMatcherIndex()));
 			builtLocators.add(builder.build());
 			currentLocator = currentLocator.getParent();
 

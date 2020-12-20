@@ -54,6 +54,10 @@ public class BuilderManager {
 		return new GetActiveWindowBuilder(context);
 	}
 
+	public GetWindowBuilder getWindow() {
+		return new GetWindowBuilder(context);
+	}
+
 	public OpenBuilder openWindow() {
 		return new OpenBuilder(context);
 	}
