@@ -26,6 +26,7 @@ import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import com.exactpro.th2.common.grpc.EventID;
 import org.slf4j.Logger;
 
+import java.util.Collections;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -33,12 +34,10 @@ import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 public abstract class ActAction<T> {
 	
 	protected final UIFramework framework;
-	protected final String name;
 	protected final Logger logger;
 
 	public ActAction(UIFramework framework) {
 		this.framework = framework;
-		this.name = getName();
 		this.logger = getLogger();
 	}
 	
@@ -61,13 +60,16 @@ public abstract class ActAction<T> {
 
 		ActResult actResult = new ActResult();
 		UIFrameworkContext frameworkContext = null;
+		EventID parentEventId = null;
+		EventID actionEvent = null;
+		
 		try {
 			frameworkContext = framework.newExecution(sessionID);
-			EventID parentEventId = getParentEventId(details);
+			parentEventId = getParentEventId(details);
 			if (storeParentEvent()) {
 				Map<String, String> requestParams = convertRequestParams(details);
-				EventID loginEvent = framework.createParentEvent(parentEventId, this.name, requestParams);
-				frameworkContext.setParentEventId(loginEvent);
+				actionEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
+				frameworkContext.setParentEventId(actionEvent);
 			} else {
 				frameworkContext.setParentEventId(parentEventId);
 			}
@@ -78,6 +80,8 @@ public abstract class ActAction<T> {
 
 		} catch (UIFrameworkException e) {
 			logger.error("Cannot execute", e);
+			framework.createErrorEvent(actionEvent != null ? actionEvent : parentEventId,
+					"Error: " + getName(), Collections.emptyMap(), null, e);
 			actResult.setScriptStatus(ActResult.ActExecutionStatus.ACT_ERROR);
 			actResult.setErrorInfo("Cannot unregister framework session:" + e.getMessage());
 		} finally {

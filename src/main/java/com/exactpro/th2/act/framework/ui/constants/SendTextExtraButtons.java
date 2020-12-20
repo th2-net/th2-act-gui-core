@@ -27,4 +27,5 @@ public class SendTextExtraButtons {
 	public static final String PAGE_UP_BUTTON = "#pageup#";
 	public static final String PAGE_DOWN_BUTTON = "#pagedown#";
 	public static final String DOWN_BUTTON = "#down#";
+	public static final String SPACE_BUTTON = "#space#";
 }

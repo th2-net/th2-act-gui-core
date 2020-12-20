@@ -30,6 +30,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +55,28 @@ public class EventStoreHandler
 		{
 			List<Object> payload = new ArrayList<>(2);
 			payload.add(new EventPayloadMessage("Request parameters"));
-			payload.add(new EventPayloadTable(requestParams));
+			payload.add(new EventPayloadTable(requestParams, false));
+			return payload;
+		} else {
+			return Collections.emptyList();
+		}
+	}
+
+	private static List<Object> createPayloadFromErrorParams(String text, Throwable t) {
+		Map<String, String> obj = new LinkedHashMap<>();
+		if (text != null && text.isEmpty()) {
+			obj.put("Error text", text);
+		}
+		if (t != null) {
+			obj.put("Exception message", ExceptionUtils.getMessage(t));
+			obj.put("Stack trace", ExceptionUtils.getStackTrace(t));
+		}
+		
+		if (MapUtils.isNotEmpty(obj))
+		{
+			List<Object> payload = new ArrayList<>(2);
+			payload.add(new EventPayloadMessage("Error details"));
+			payload.add(new EventPayloadTable(obj, false));
 			return payload;
 		} else {
 			return Collections.emptyList();
@@ -113,6 +135,26 @@ public class EventStoreHandler
 		details.setStatus(true);
 		if (MapUtils.isNotEmpty(requestParams)) {
 			details.setBuffer(this.byteStringFromPayload(createPayloadFromRequestParams(requestParams), info.getEventId()));
+		}
+		this.storeEvent(details);
+	}
+
+	public void storeErrorEvent(EventDetails.EventInfo info, Map<String, String> requestParams, String text, Throwable t)
+	{
+		logger.debug("Storing parent event");
+		// Create main event with request and response information
+		EventDetails details = new EventDetails(info);
+		details.setStatus(false);
+		List<Object> buffer = new ArrayList<>();
+		if (MapUtils.isNotEmpty(requestParams)) {
+			buffer.addAll(createPayloadFromRequestParams(requestParams));
+		}
+		if (text != null || t != null) {
+			buffer.addAll(createPayloadFromErrorParams(text, t));
+		}
+		
+		if (!buffer.isEmpty()) {
+			details.setBuffer(this.byteStringFromPayload(buffer, info.getEventId()));
 		}
 		this.storeEvent(details);
 	}

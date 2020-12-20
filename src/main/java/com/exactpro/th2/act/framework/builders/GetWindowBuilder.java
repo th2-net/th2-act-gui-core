@@ -21,43 +21,38 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class ToggleCheckBoxBuilder extends DefaultBuilder<ToggleCheckBoxBuilder> {
-	private boolean enabled = false;
+public class GetWindowBuilder extends DefaultBuilder<GetWindowBuilder> {
+	
+	public static final String WINDOW_NAME_FIELD_NAME = "windowName";
 
+	private String windowName;
 
-	public ToggleCheckBoxBuilder(UIFrameworkContext context) {
+	public GetWindowBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
-
-	public ToggleCheckBoxBuilder setExpectedStatus(boolean enabled) {
-		this.enabled = enabled;
+	public GetWindowBuilder windowName(String windowName) {
+		this.windowName = windowName;
 		return this;
 	}
 
 	@Override
-	protected ToggleCheckBoxBuilder getBuilder() {
+	protected GetWindowBuilder getBuilder() {
 		return this;
 	}
 
 	@Override
 	protected String getActionName() {
-		return "ToggleCheckBox";
+		return "WinGetWindow";
 	}
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		RhWinActionsMessages.WinToggleCheckBox.Builder checkboxBuilder = RhWinActionsMessages.WinToggleCheckBox.newBuilder();
-		checkboxBuilder.addAllLocators(buildWinLocator(winLocator));
-		checkboxBuilder.setExpectedState(getCheckboxStatus());
-		addIfNotEmpty(id, checkboxBuilder::setId);
-		addIfNotEmpty(execute, checkboxBuilder::setExecute);
-
-		return RhAction.newBuilder().setWinToggleCheckBox(checkboxBuilder).build();
-	}
-
-
-	private String getCheckboxStatus() {
-		return enabled ? "checked" : "unchecked";
+		this.checkRequiredFields(windowName, WINDOW_NAME_FIELD_NAME);
+		RhWinActionsMessages.WinGetWindow.Builder builder = RhWinActionsMessages.WinGetWindow.newBuilder();
+		addIfNotEmpty(id, builder::setId);
+		addIfNotEmpty(execute, builder::setExecute);
+		builder.setWindowName(windowName);
+		return RhAction.newBuilder().setWinGetWindow(builder).build();
 	}
 }
