@@ -45,9 +45,9 @@ public class EventStoreHandler
 	private static final ObjectMapper mapper = new ObjectMapper();
 	private final MessageRouter<EventBatch> eventBatchRouter;
 
-	public EventStoreHandler(CommonFactory commonFactory)
+	public EventStoreHandler(MessageRouter<EventBatch> eventBatchRouter)
 	{
-		this.eventBatchRouter = commonFactory.getEventBatchRouter();
+		this.eventBatchRouter = eventBatchRouter;
 	}
 
 	private static List<Object> createPayloadFromRequestParams(Map<String, String> requestParams) {

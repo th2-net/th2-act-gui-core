@@ -18,6 +18,7 @@ package com.exactpro.th2.act;
 
 import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.events.EventStoreHandler;
+import com.exactpro.th2.act.events.StubEventStoreHandler;
 import com.exactpro.th2.act.grpc.hand.RhBatchService;
 import com.exactpro.th2.common.schema.factory.CommonFactory;
 
@@ -32,7 +33,7 @@ public abstract class ActConnections<C extends CustomConfiguration> {
 	public ActConnections(CommonFactory commonFactory) throws Exception {
 		this.commonFactory = commonFactory;
 		this.handConnector = commonFactory.getGrpcRouter().getService(RhBatchService.class);
-		this.eventStoreHandler = new EventStoreHandler(commonFactory);
+		this.eventStoreHandler = new StubEventStoreHandler(commonFactory);
 		this.customConfiguration = createCustomConfiguration(commonFactory);
 	}
 
