@@ -23,9 +23,10 @@ import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
 public class GetWindowBuilder extends DefaultBuilder<GetWindowBuilder> {
 	
-	public static final String WINDOW_NAME_FIELD_NAME = "windowName";
+	public static final String WINDOW_NAME_FIELD_NAME = "windowName",
+			ACCESSIBILITY_ID_FILED_NAME = "accessibilityId";
 
-	private String windowName;
+	private String windowName, accessibilityId;
 
 	public GetWindowBuilder(UIFrameworkContext context) {
 		super(context);
@@ -36,6 +37,11 @@ public class GetWindowBuilder extends DefaultBuilder<GetWindowBuilder> {
 		return this;
 	}
 
+	public GetWindowBuilder accessibilityId(String accessibilityId) {
+		this.accessibilityId = accessibilityId;
+		return this;
+	}
+	
 	@Override
 	protected GetWindowBuilder getBuilder() {
 		return this;
@@ -48,11 +54,19 @@ public class GetWindowBuilder extends DefaultBuilder<GetWindowBuilder> {
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(windowName, WINDOW_NAME_FIELD_NAME);
+		try
+		{
+			checkRequiredFields(accessibilityId, ACCESSIBILITY_ID_FILED_NAME);
+		}
+		catch (UIFrameworkBuildingException e)
+		{
+			checkRequiredFields(windowName, WINDOW_NAME_FIELD_NAME);
+		}
 		RhWinActionsMessages.WinGetWindow.Builder builder = RhWinActionsMessages.WinGetWindow.newBuilder();
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
-		builder.setWindowName(windowName);
+		addIfNotEmpty(windowName, builder::setWindowName);
+		addIfNotEmpty(accessibilityId, builder::setAccessibilityId);
 		return RhAction.newBuilder().setWinGetWindow(builder).build();
 	}
 }
