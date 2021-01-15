@@ -20,6 +20,7 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import org.apache.commons.lang3.StringUtils;
 
 public class GetWindowBuilder extends DefaultBuilder<GetWindowBuilder> {
 	
@@ -54,14 +55,11 @@ public class GetWindowBuilder extends DefaultBuilder<GetWindowBuilder> {
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		try
-		{
-			checkRequiredFields(accessibilityId, ACCESSIBILITY_ID_FILED_NAME);
-		}
-		catch (UIFrameworkBuildingException e)
-		{
-			checkRequiredFields(windowName, WINDOW_NAME_FIELD_NAME);
-		}
+		if (StringUtils.isBlank(accessibilityId) && StringUtils.isBlank(windowName))
+			throw new UIFrameworkBuildingException( 
+					String.format("Fields %s and %s cannot be empty at the same time for action %s", 
+							WINDOW_NAME_FIELD_NAME, ACCESSIBILITY_ID_FILED_NAME, getActionName()));
+		
 		RhWinActionsMessages.WinGetWindow.Builder builder = RhWinActionsMessages.WinGetWindow.newBuilder();
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
