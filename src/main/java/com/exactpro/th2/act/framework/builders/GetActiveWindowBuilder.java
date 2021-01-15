@@ -20,20 +20,12 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import org.apache.commons.lang3.StringUtils;
 
-public class GetActiveWindowBuilder extends DefaultBuilder<GetActiveWindowBuilder> {
-	
-	public static final String WINDOW_NAME_FIELD_NAME = "windowName";
-	
-	private String windowName;
+public class GetActiveWindowBuilder extends WindowBuilder<GetActiveWindowBuilder> {
 	
 	public GetActiveWindowBuilder(UIFrameworkContext context) {
 		super(context);
-	}
-
-	public GetActiveWindowBuilder windowName(String windowName) {
-		this.windowName = windowName;
-		return this;
 	}
 
 	@Override
@@ -48,11 +40,12 @@ public class GetActiveWindowBuilder extends DefaultBuilder<GetActiveWindowBuilde
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(windowName, WINDOW_NAME_FIELD_NAME);
+		checkWindowIds();
 		RhWinActionsMessages.WinGetActiveWindow.Builder builder = RhWinActionsMessages.WinGetActiveWindow.newBuilder();
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
-		builder.setWindowName(windowName);
+		addIfNotEmpty(windowName, builder::setWindowName);
+		addIfNotEmpty(accessibilityId, builder::setAccessibilityId);
 		return RhAction.newBuilder().setWinGetActiveWindow(builder).build();
 	}
 }
