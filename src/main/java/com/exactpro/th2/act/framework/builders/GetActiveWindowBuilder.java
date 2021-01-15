@@ -22,25 +22,10 @@ import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 import org.apache.commons.lang3.StringUtils;
 
-public class GetActiveWindowBuilder extends DefaultBuilder<GetActiveWindowBuilder> {
-	
-	public static final String WINDOW_NAME_FIELD_NAME = "windowName",
-			ACCESSIBILITY_ID_FILED_NAME = "accessibilityId";
-	
-	private String windowName, accessibilityId;
+public class GetActiveWindowBuilder extends WindowBuilder<GetActiveWindowBuilder> {
 	
 	public GetActiveWindowBuilder(UIFrameworkContext context) {
 		super(context);
-	}
-
-	public GetActiveWindowBuilder windowName(String windowName) {
-		this.windowName = windowName;
-		return this;
-	}
-
-	public GetActiveWindowBuilder accessibilityId(String accessibilityId) {
-		this.accessibilityId = accessibilityId;
-		return this;
 	}
 
 	@Override
@@ -55,11 +40,7 @@ public class GetActiveWindowBuilder extends DefaultBuilder<GetActiveWindowBuilde
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		if (StringUtils.isBlank(accessibilityId) && StringUtils.isBlank(windowName))
-			throw new UIFrameworkBuildingException(
-					String.format("Fields %s and %s cannot be empty at the same time for action %s",
-							WINDOW_NAME_FIELD_NAME, ACCESSIBILITY_ID_FILED_NAME, getActionName()));
-		
+		checkWindowIds();
 		RhWinActionsMessages.WinGetActiveWindow.Builder builder = RhWinActionsMessages.WinGetActiveWindow.newBuilder();
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
