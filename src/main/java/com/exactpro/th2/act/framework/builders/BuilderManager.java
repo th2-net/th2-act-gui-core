@@ -90,6 +90,10 @@ public class BuilderManager {
 		return new WaitForElementBuilder(context);
 	}
 
+	public MaximizeMainWindowBuilder maximizeMainWindow() {
+		return new MaximizeMainWindowBuilder(context);
+	}
+
 	public UIFrameworkContext getContext() {
 		return context;
 	}
