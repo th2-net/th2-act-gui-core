@@ -104,8 +104,9 @@ public class SessionWatcher extends Thread {
 
 			if (timeToEndSession <= 0)
 			{
-				logger.warn("Session {} is inactive more than {} minutes. It will be closed due to timeout",
-						sessionsId.getId(), sessionExpirationMs);
+				logger.warn("Session {} is inactive more than {} seconds. It will be closed due to timeout",
+						sessionsId.getId(), TimeUnit.MILLISECONDS.toSeconds(sessionExpirationMs));
+				
 
 				try {
 					framework.getHandExecutor().unregister(sessionsId);
