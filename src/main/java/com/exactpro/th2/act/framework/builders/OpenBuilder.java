@@ -28,6 +28,7 @@ public class OpenBuilder extends DefaultBuilder<OpenBuilder> {
 	
 	private String workDir;
 	private String appFile;
+	private String appArgs;
 
 	public OpenBuilder(UIFrameworkContext context) {
 		super(context);
@@ -40,6 +41,11 @@ public class OpenBuilder extends DefaultBuilder<OpenBuilder> {
 
 	public OpenBuilder appFile(String appFile) {
 		this.appFile = appFile;
+		return this;
+	}
+
+	public OpenBuilder appArgs(String appArgs) {
+		this.appArgs = appArgs;
 		return this;
 	}
 	
@@ -55,12 +61,13 @@ public class OpenBuilder extends DefaultBuilder<OpenBuilder> {
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(workDir, WORK_DIR_FIELD_NAME, appFile, APP_FILE_FIELD_NAME);
+		checkRequiredFields(workDir, WORK_DIR_FIELD_NAME, appFile, APP_FILE_FIELD_NAME);
 		RhWinActionsMessages.WinOpen.Builder builder = RhWinActionsMessages.WinOpen.newBuilder();
 		builder.setAppFile(appFile);
 		builder.setWorkDir(workDir);
-		this.addIfNotEmpty(id, builder::setId);
-		this.addIfNotEmpty(execute, builder::setExecute);
+		addIfNotEmpty(appArgs, builder::setAppArgs);
+		addIfNotEmpty(id, builder::setId);
+		addIfNotEmpty(execute, builder::setExecute);
 		return RhAction.newBuilder().setWinOpen(builder).build();
 	}
 }

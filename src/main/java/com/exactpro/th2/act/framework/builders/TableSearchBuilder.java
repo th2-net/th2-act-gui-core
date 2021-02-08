@@ -19,66 +19,100 @@ package com.exactpro.th2.act.framework.builders;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
-import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.WinTableSearch;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Iterator;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-@Deprecated
-public class TableClickBuilder extends DefaultBuilder<TableClickBuilder> {
+public class TableSearchBuilder extends DefaultBuilder<TableSearchBuilder> {
+
 	private Map<String, String> searchParams;
 	private String columnName;
 	private int columnIndex;
+	private int firstRowIndex;
+	private String rowNameFormat;
+	private String rowElementNameFormat;
+	private String rowElementValueFormat;
 
 
-	public TableClickBuilder(UIFrameworkContext context) {
+	public TableSearchBuilder(UIFrameworkContext context)
+	{
 		super(context);
 	}
 
-
-	public TableClickBuilder searchParams(Map<String, String> searchParams) {
+	public TableSearchBuilder searchParams(Map<String, String> searchParams) {
 		this.searchParams = searchParams;
 		return this;
 	}
 
-	public TableClickBuilder columnName(String columnName) {
+	public TableSearchBuilder columnName(String columnName) {
 		this.columnName = columnName;
 		return this;
 	}
 
-	public TableClickBuilder columnIndex(int columnIndex) {
+	public TableSearchBuilder columnIndex(int columnIndex) {
 		this.columnIndex = columnIndex;
 		return this;
 	}
 
+	public TableSearchBuilder setFirstRowIndex(int firstRowIndex)
+	{
+		this.firstRowIndex = firstRowIndex;
+		return this;
+	}
 
-	@Override
-	protected TableClickBuilder getBuilder() {
+	public TableSearchBuilder setRowNameFormat(String rowNameFormat)
+	{
+		this.rowNameFormat = rowNameFormat;
+		return this;
+	}
+
+	public TableSearchBuilder setRowElementNameFormat(String rowElementNameFormat)
+	{
+		this.rowElementNameFormat = rowElementNameFormat;
+		return this;
+	}
+
+	public TableSearchBuilder setRowElementValueFormat(String rowElementValueFormat)
+	{
+		this.rowElementValueFormat = rowElementValueFormat;
 		return this;
 	}
 
 	@Override
-	protected String getActionName() {
-		return "WinTableClick";
+	protected TableSearchBuilder getBuilder()
+	{
+		return this;
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected String getActionName()
+	{
+		return "TableSearch";
+	}
+
+	@Override
+	protected RhAction buildAction() throws UIFrameworkBuildingException
+	{
 		validateParams();
 
-		RhWinActionsMessages.WinTableClick.Builder builder = RhWinActionsMessages.WinTableClick.newBuilder();
-		builder.addAllLocators(buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, builder::setId);
+		WinTableSearch.Builder builder = WinTableSearch.newBuilder();
+		builder.addAllLocators(buildWinLocator(winLocator));
+		builder.setId(id);
 		addIfNotEmpty(execute, builder::setExecute);
+		addIfNotEmpty(String.valueOf(firstRowIndex), builder::setFirstRowIndex);
+		addIfNotEmpty(rowNameFormat, builder::setRowNameFormat);
+		addIfNotEmpty(rowElementNameFormat, builder::setRowElementNameFormat);
+		addIfNotEmpty(rowElementValueFormat, builder::setRowElementValueFormat);
 		builder.setSearchParams(createFilters(searchParams));
 		builder.setTargetColumn(columnName);
 		builder.setColumnIndex(String.valueOf(columnIndex));
 
-		return RhAction.newBuilder().setWinTableClick(builder.build()).build();
+		return RhAction.newBuilder().setWinTableSearch(builder.build()).build();
 	}
-
 
 	private void validateParams() throws UIFrameworkBuildingException {
 		if (searchParams == null || searchParams.isEmpty() || isEmpty(columnName))
@@ -86,8 +120,10 @@ public class TableClickBuilder extends DefaultBuilder<TableClickBuilder> {
 
 		if (columnIndex < 0)
 			throw new UIFrameworkBuildingException("Column index cannot be negative");
+		
+		if (StringUtils.isBlank(id))
+			throw new UIFrameworkBuildingException("'Id' cannot be empty");
 	}
-
 
 	private static String createFilters(Map<String, String> searchParams) {
 		StringBuilder result = new StringBuilder();
@@ -102,4 +138,5 @@ public class TableClickBuilder extends DefaultBuilder<TableClickBuilder> {
 
 		return result.toString();
 	}
+
 }
