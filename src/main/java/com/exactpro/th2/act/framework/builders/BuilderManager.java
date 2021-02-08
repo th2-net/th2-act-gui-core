@@ -82,6 +82,11 @@ public class BuilderManager {
 		return new TableClickBuilder(context);
 	}
 
+	public TableSearchBuilder tableSearch()
+	{
+		return new TableSearchBuilder(context);
+	}
+
 	public CheckElementBuilder checkElement() {
 		return new CheckElementBuilder(context);
 	}
