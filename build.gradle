@@ -52,7 +52,7 @@ dependencies {
     implementation "com.exactpro.th2:common"
     implementation "com.exactpro.th2:grpc-common"
     
-    implementation "com.exactpro.th2:grpc-hand:2.4.0-TH2-1005-540779759"
+    implementation "com.exactpro.th2:grpc-hand:2.4.1"
 
     implementation "org.apache.commons:commons-lang3"
     implementation "com.fasterxml.jackson.core:jackson-databind"
