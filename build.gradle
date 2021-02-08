@@ -47,12 +47,12 @@ sourceSets {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:2.10.1')
+    api platform('com.exactpro.th2:bom:2.10.+')
 
-    implementation 'com.exactpro.th2:common:2.9.0'
-    implementation 'com.exactpro.th2:grpc-common:2.3.2'
+    implementation 'com.exactpro.th2:common:3.0.0'
+    implementation 'com.exactpro.th2:grpc-common:3.0.0'
     
-    implementation "com.exactpro.th2:grpc-hand:2.5.1"
+    implementation "com.exactpro.th2:grpc-hand:2.5.2"
 
 
     implementation "org.apache.commons:commons-lang3"
