@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,13 +116,13 @@ public class TableSearchBuilder extends DefaultBuilder<TableSearchBuilder> {
 
 	private void validateParams() throws UIFrameworkBuildingException {
 		if (searchParams == null || searchParams.isEmpty() || isEmpty(columnName))
-			throw new UIFrameworkBuildingException("Search params or column name cannot be empty");
+			throw new UIFrameworkBuildingException("Search parameters and column name must be specified");
 
 		if (columnIndex < 0)
 			throw new UIFrameworkBuildingException("Column index cannot be negative");
 		
 		if (StringUtils.isBlank(id))
-			throw new UIFrameworkBuildingException("'Id' cannot be empty");
+			throw new UIFrameworkBuildingException("Id cannot be empty");
 	}
 
 	private static String createFilters(Map<String, String> searchParams) {
