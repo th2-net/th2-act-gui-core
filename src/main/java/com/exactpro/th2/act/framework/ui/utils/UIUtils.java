@@ -21,16 +21,33 @@ import com.exactpro.th2.act.framework.ui.constants.SendTextExtraButtons;
 
 public class UIUtils {
 
-	public static String modPlus(String mod, String button) {
-		return String.format("#%s+%s#", mod, button);
+	public static String keyCombo(String... button) {
+		StringBuilder sb = new StringBuilder();
+		sb.append('#');
+		boolean first = true;
+		for (String s : button) {
+			if (!first)
+				sb.append('+');
+			sb.append(s);
+			first = false;
+		}
+		sb.append('#');
+		return sb.toString();
 	}
 	
-	public static String modPlus(SendTextExtraButtons mod, String button) {
-		return modPlus(mod.rawCommand(), button);
+	public static String keyCombo(SendTextExtraButtons mod, String button) {
+		return keyCombo(mod.rawCommand(), button);
 	}
 
-	public static String modPlus(SendTextExtraButtons mod, SendTextExtraButtons button) {
-		return modPlus(mod.rawCommand(), button.rawCommand());
+	public static String keyCombo(SendTextExtraButtons mod, SendTextExtraButtons button) {
+		return keyCombo(mod.rawCommand(), button.rawCommand());
 	}
-	
+
+	public static String keyCombo(SendTextExtraButtons mod, SendTextExtraButtons mod2, String button) {
+		return keyCombo(mod.rawCommand(), mod2.rawCommand(), button);
+	}
+
+	public static String keyCombo(SendTextExtraButtons mod, SendTextExtraButtons mod2, SendTextExtraButtons button) {
+		return keyCombo(mod.rawCommand(), mod2.rawCommand(), button.rawCommand());
+	}	
 }
