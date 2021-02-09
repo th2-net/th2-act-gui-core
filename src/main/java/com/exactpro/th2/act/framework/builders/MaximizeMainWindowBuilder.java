@@ -20,39 +20,28 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
-import org.apache.commons.lang3.StringUtils;
 
-public class GetActiveWindowBuilder extends WindowBuilder<GetActiveWindowBuilder> {
+public class MaximizeMainWindowBuilder extends WindowBuilder<MaximizeMainWindowBuilder> {
 
-	protected int maxTimeout;
-	
-	public GetActiveWindowBuilder(UIFrameworkContext context) {
+	public MaximizeMainWindowBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
 	@Override
-	protected GetActiveWindowBuilder getBuilder() {
+	protected MaximizeMainWindowBuilder getBuilder() {
 		return this;
 	}
 
 	@Override
 	protected String getActionName() {
-		return "WinGetActiveWindow";
-	}
-
-	public void setMaxTimeout(int maxTimeout) {
-		this.maxTimeout = maxTimeout;
+		return "MaximizeMainWindow";
 	}
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		checkWindowIds();
-		RhWinActionsMessages.WinGetActiveWindow.Builder builder = RhWinActionsMessages.WinGetActiveWindow.newBuilder();
+		RhWinActionsMessages.MaximizeMainWindow.Builder builder = RhWinActionsMessages.MaximizeMainWindow.newBuilder();
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
-		addIfNotEmpty(windowName, builder::setWindowName);
-		addIfNotEmpty(accessibilityId, builder::setAccessibilityId);
-		builder.setMaxTimeout(maxTimeout);
-		return RhAction.newBuilder().setWinGetActiveWindow(builder).build();
+		return RhAction.newBuilder().setWinMaximizeMainWindow(builder).build();
 	}
 }

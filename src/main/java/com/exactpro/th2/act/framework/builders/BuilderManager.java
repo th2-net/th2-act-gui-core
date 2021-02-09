@@ -82,12 +82,21 @@ public class BuilderManager {
 		return new TableClickBuilder(context);
 	}
 
+	public TableSearchBuilder tableSearch()
+	{
+		return new TableSearchBuilder(context);
+	}
+
 	public CheckElementBuilder checkElement() {
 		return new CheckElementBuilder(context);
 	}
 
 	public WaitForElementBuilder waitForElement() {
 		return new WaitForElementBuilder(context);
+	}
+
+	public MaximizeMainWindowBuilder maximizeMainWindow() {
+		return new MaximizeMainWindowBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {
