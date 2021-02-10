@@ -41,7 +41,7 @@ public class UIElement {
 
 	protected WinLocator findAndSaveLocators(WinLocator locator, String actionId, boolean save) throws UIFrameworkBuildingException {
 		builders.searchElement().id(actionId).winLocator(locator).build();
-		WinLocator winLocator = WinLocator.root().byCachedId(actionId);
+		WinLocator winLocator = WinLocator.byCachedId(actionId);
 		if (save) {
 			this.cachedElements.put(actionId, winLocator);
 		}

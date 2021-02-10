@@ -16,17 +16,72 @@
 
 package com.exactpro.th2.act.framework.ui.constants;
 
-public class SendTextExtraButtons {
-	public static final String CTRL_NO_HASH = "ctrl";
-	public static final String ALT_NO_HASH = "alt";
-	public static final String NUM_PLUS = "#add#";
-	public static final String RETURN_BUTTON = "#return#";
-	public static final String RIGHT_BUTTON = "#right#";
-	public static final String HOME_BUTTON = "#home#";
-	public static final String ENTER_BUTTON = "#enter#";
-	public static final String PAGE_UP_BUTTON = "#pageup#";
-	public static final String PAGE_DOWN_BUTTON = "#pagedown#";
-	public static final String DOWN_BUTTON = "#down#";
-	public static final String SPACE_BUTTON = "#space#";
-	public static final String TAB_BUTTON = "#tab#";
+public enum SendTextExtraButtons {
+	
+	CONTROL		("ctrl"),
+	ALT			("alt"),
+	SHIFT		("shift"),
+	WINDOWS		("windows"),
+	COMMAND		("command"),
+	
+	UP			("up"),
+	DOWN		("down"),
+	LEFT		("left"),
+	RIGHT		("right"),
+	RETURN		("return"),
+	ENTER		("enter"),
+	SPACE		("space"),
+	TAB			("tab"),
+	ESC			("esc"),
+	END			("end"),
+	HOME		("home"),
+	INSERT		("insert"),
+	DELETE		("delete"),
+	BACKSPACE	("backspace"),
+	PAGE_UP		("pageup"),
+	PAGE_DOWN	("pagedown"),
+	
+	F1			("f1"),
+	F2			("f2"),
+	F3			("f3"),
+	F4			("f4"),
+	F5			("f5"),
+	F6			("f6"),
+	F7			("f7"),
+	F8			("f8"),
+	F9			("f9"),
+	F10			("f10"),
+	F11			("f11"),
+	F12			("f12"),
+
+	NUM_0		("num0"),
+	NUM_1		("num1"),
+	NUM_2		("num2"),
+	NUM_3		("num3"),
+	NUM_4		("num4"),
+	NUM_5		("num5"),
+	NUM_6		("num6"),
+	NUM_7		("num7"),
+	NUM_8		("num8"),
+	NUM_9		("num9"),
+
+	ADD			("add"),
+	SUBTRACT	("subtract"),
+	
+	NON_BREAKING_SPACE	("nbsp");
+	
+	private final String value;
+
+	SendTextExtraButtons(String value) {
+		this.value = value;
+	}
+	
+	public String handCommand() {
+		return "#" + this.value + "#";
+	}
+
+	public String rawCommand() {
+		return this.value;
+	}
+
 }
