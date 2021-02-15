@@ -36,6 +36,7 @@ public class TableSearchBuilder extends DefaultBuilder<TableSearchBuilder> {
 	private String rowNameFormat;
 	private String rowElementNameFormat;
 	private String rowElementValueFormat;
+	private String saveResult;
 
 
 	public TableSearchBuilder(UIFrameworkContext context)
@@ -82,6 +83,12 @@ public class TableSearchBuilder extends DefaultBuilder<TableSearchBuilder> {
 		return this;
 	}
 
+	public TableSearchBuilder saveResult(boolean save) {
+		this.saveResult = String.valueOf(save);
+		return this;
+	}
+
+
 	@Override
 	protected TableSearchBuilder getBuilder()
 	{
@@ -110,6 +117,7 @@ public class TableSearchBuilder extends DefaultBuilder<TableSearchBuilder> {
 		builder.setSearchParams(createFilters(searchParams));
 		builder.setTargetColumn(columnName);
 		builder.setColumnIndex(String.valueOf(columnIndex));
+		addIfNotEmpty(saveResult, builder::setSaveResult);
 
 		return RhAction.newBuilder().setWinTableSearch(builder.build()).build();
 	}
