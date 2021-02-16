@@ -16,8 +16,6 @@
 
 package com.exactpro.th2.act.framework;
 
-import com.exactpro.th2.act.framework.builders.BuilderManager;
-import com.exactpro.th2.act.framework.ui.UIElement;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.RhActionsList;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
@@ -89,10 +87,6 @@ public class UIFrameworkContext {
 
 	public RhSessionID getSessionID() {
 		return sessionID;
-	}
-
-	public BuilderManager createBuilderManager() {
-		return new BuilderManager(this);
 	}
 
 	public void addContextInfo(String name, ContextInfoData infoData) {
