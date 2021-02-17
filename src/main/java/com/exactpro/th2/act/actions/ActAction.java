@@ -20,6 +20,7 @@ import com.exactpro.th2.act.ActResult;
 import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.framework.UIFramework;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIFrameworkSessionContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
@@ -31,12 +32,12 @@ import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-public abstract class ActAction<T> {
+public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFrameworkSessionContext<K>> {
 	
-	protected final UIFramework framework;
+	protected final UIFramework<K, L> framework;
 	protected final Logger logger;
 
-	public ActAction(UIFramework framework) {
+	public ActAction(UIFramework<K, L> framework) {
 		this.framework = framework;
 		this.logger = getLogger();
 	}
@@ -47,7 +48,7 @@ public abstract class ActAction<T> {
 	protected abstract RhSessionID getSessionID(T details);
 	protected abstract EventID getParentEventId(T details);
 	protected abstract Logger getLogger();
-	protected abstract void collectActions(T details, UIFrameworkContext context, ActResult result) throws UIFrameworkException;
+	protected abstract void collectActions(T details, K context, ActResult result) throws UIFrameworkException;
 	protected abstract void processResult(ActResult result) throws UIFrameworkException;
 	protected abstract String getStatusInfo();
 	protected boolean storeParentEvent() {
@@ -59,7 +60,7 @@ public abstract class ActAction<T> {
 		RhSessionID sessionID = getSessionID(details);
 
 		ActResult actResult = new ActResult();
-		UIFrameworkContext frameworkContext = null;
+		K frameworkContext = null;
 		EventID parentEventId = null;
 		EventID actionEvent = null;
 		

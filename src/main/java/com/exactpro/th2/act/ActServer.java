@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ActServer {
+public class ActServer {
 	private final Logger logger = LoggerFactory.getLogger(getClass().getName() + "@" + hashCode());
 	private final Server server;
 
