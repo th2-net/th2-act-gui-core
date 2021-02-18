@@ -28,19 +28,19 @@ public class WebLocator {
 		this.matcher = matcher;
 	}
 	
-	public WebLocator byCssSelector(String value) {
+	public static WebLocator byCssSelector(String value) {
 		return new WebLocator(LocatorType.CSS_SELECTOR, value);
 	}
 
-	public WebLocator byTagName(String value) {
+	public static WebLocator byTagName(String value) {
 		return new WebLocator(LocatorType.TAG_NAME, value);
 	}
 
-	public WebLocator byId(String value) {
+	public static WebLocator byId(String value) {
 		return new WebLocator(LocatorType.ID, value);
 	}
 
-	public WebLocator byXPath(String value) {
+	public static WebLocator byXPath(String value) {
 		return new WebLocator(LocatorType.XPATH, value);
 	}
 

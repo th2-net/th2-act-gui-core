@@ -39,6 +39,16 @@ public class SendKeysToActiveBuilder extends WebDefaultBuilder<SendKeysToActiveB
 		return "SendKeysToActive";
 	}
 
+	public SendKeysToActiveBuilder text(String text1) {
+		this.text1 = text1;
+		return this;
+	}
+
+	public SendKeysToActiveBuilder text2(String text2) {
+		this.text2 = text2;
+		return this;
+	}
+
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(text1, LOCATOR_PARAM);

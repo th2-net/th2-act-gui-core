@@ -26,6 +26,10 @@ public class WebBuilderManager {
 		this.context = context;
 	}
 	
+	public OpenBuilder open() {
+		return new OpenBuilder(this.context);
+	}
+	
 	public ClickBuilder click() {
 		return new ClickBuilder(this.context);
 	}
@@ -128,5 +132,9 @@ public class WebBuilderManager {
 	
 	public CheckImageAvailabilityBuilder checkImageAvailability() {
 		return new CheckImageAvailabilityBuilder(this.context);
+	}
+
+	public UIFrameworkContext getContext() {
+		return context;
 	}
 }
