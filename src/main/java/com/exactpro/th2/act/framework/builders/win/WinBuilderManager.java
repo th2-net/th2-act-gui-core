@@ -18,11 +18,11 @@ package com.exactpro.th2.act.framework.builders.win;
 
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 
-public class BuilderManager {
+public class WinBuilderManager {
 	
 	private final UIFrameworkContext context;
 
-	public BuilderManager(UIFrameworkContext context) {
+	public WinBuilderManager(UIFrameworkContext context) {
 		this.context = context;
 	}
 	
@@ -97,6 +97,10 @@ public class BuilderManager {
 
 	public MaximizeMainWindowBuilder maximizeMainWindow() {
 		return new MaximizeMainWindowBuilder(context);
+	}
+	
+	public GetScreenshotBuilder getScreenshot() {
+		return new GetScreenshotBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {

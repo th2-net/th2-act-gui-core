@@ -22,7 +22,7 @@ import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 import com.google.protobuf.Int32Value;
 
-public class ClickBuilder extends WinDefaultBuilder<ClickBuilder> {
+public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 	
 	private Integer xOffset;
 	private Integer yOffset;

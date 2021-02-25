@@ -27,7 +27,7 @@ import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
-public class TableSearchBuilder extends WinDefaultBuilder<TableSearchBuilder> {
+public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 
 	private Map<String, String> searchParams;
 	private String columnName;

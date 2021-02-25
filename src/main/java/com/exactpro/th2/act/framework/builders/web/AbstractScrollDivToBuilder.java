@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBuilder<T>> extends WebDefaultBuilder<T> {
+public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBuilder<T>> extends AbstractWebBuilder<T> {
 	
 	protected Integer wait2;
 	protected WebLocator locator2;

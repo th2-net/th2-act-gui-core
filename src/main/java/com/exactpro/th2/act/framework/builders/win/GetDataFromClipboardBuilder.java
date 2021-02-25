@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class GetDataFromClipboardBuilder extends WinDefaultBuilder<GetDataFromClipboardBuilder> {
+public class GetDataFromClipboardBuilder extends AbstractWinBuilder<GetDataFromClipboardBuilder> {
 
 	public GetDataFromClipboardBuilder(UIFrameworkContext context) {
 		super(context);

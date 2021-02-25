@@ -20,7 +20,7 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import org.apache.commons.lang3.StringUtils;
 
-public abstract class WindowBuilder<T extends WindowBuilder<T>> extends WinDefaultBuilder<T>
+public abstract class WindowBuilder<T extends WindowBuilder<T>> extends AbstractWinBuilder<T>
 {
 	public static final String WINDOW_NAME_FIELD_NAME = "windowName",
 			ACCESSIBILITY_ID_FILED_NAME = "accessibilityId";

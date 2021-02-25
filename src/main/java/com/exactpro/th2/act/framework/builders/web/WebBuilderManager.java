@@ -17,6 +17,7 @@
 package com.exactpro.th2.act.framework.builders.web;
 
 import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.builders.win.GetScreenshotBuilder;
 
 public class WebBuilderManager {
 
@@ -132,6 +133,14 @@ public class WebBuilderManager {
 	
 	public CheckImageAvailabilityBuilder checkImageAvailability() {
 		return new CheckImageAvailabilityBuilder(this.context);
+	}
+	
+	public GetScreenshotBuilder getScreenshot() {
+		return new GetScreenshotBuilder(this.context);
+	}
+
+	public GetElementScreenshotBuilder getElementScreenshot() {
+		return new GetElementScreenshotBuilder(this.context);
 	}
 
 	public UIFrameworkContext getContext() {

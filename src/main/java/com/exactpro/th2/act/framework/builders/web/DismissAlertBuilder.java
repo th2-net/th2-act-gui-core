@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class DismissAlertBuilder extends WebDefaultBuilder<DismissAlertBuilder> {
+public class DismissAlertBuilder extends AbstractWebBuilder<DismissAlertBuilder> {
 	
 	protected DismissAlertBuilder(UIFrameworkContext context) {
 		super(context);

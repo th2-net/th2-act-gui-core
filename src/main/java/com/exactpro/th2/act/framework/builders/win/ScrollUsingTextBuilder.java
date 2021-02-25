@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class ScrollUsingTextBuilder extends WinDefaultBuilder<ScrollUsingTextBuilder> {
+public class ScrollUsingTextBuilder extends AbstractWinBuilder<ScrollUsingTextBuilder> {
 	
 	public static final String TEXT_LOCATOR_FIELD = "textLocators";
 	public static final String TEXT_TO_SEND_FIELD = "textToSend";

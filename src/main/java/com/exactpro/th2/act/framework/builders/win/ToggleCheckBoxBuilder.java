@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class ToggleCheckBoxBuilder extends WinDefaultBuilder<ToggleCheckBoxBuilder> {
+public class ToggleCheckBoxBuilder extends AbstractWinBuilder<ToggleCheckBoxBuilder> {
 	private boolean enabled = false;
 
 

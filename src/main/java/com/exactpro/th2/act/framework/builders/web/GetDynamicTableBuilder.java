@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class GetDynamicTableBuilder extends WebDefaultBuilder<GetDynamicTableBuilder> {
+public class GetDynamicTableBuilder extends AbstractWebBuilder<GetDynamicTableBuilder> {
 	
 	protected GetDynamicTableBuilder(UIFrameworkContext context) {
 		super(context);

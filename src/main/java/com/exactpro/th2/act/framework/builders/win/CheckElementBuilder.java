@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class CheckElementBuilder extends WinDefaultBuilder<CheckElementBuilder> {
+public class CheckElementBuilder extends AbstractWinBuilder<CheckElementBuilder> {
 	public CheckElementBuilder(UIFrameworkContext context) {
 		super(context);
 	}

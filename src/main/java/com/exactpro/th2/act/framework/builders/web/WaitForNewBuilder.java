@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class WaitForNewBuilder extends WebDefaultBuilder<WaitForNewBuilder> {
+public class WaitForNewBuilder extends AbstractWebBuilder<WaitForNewBuilder> {
 
 	public static final String SECONDS_PARAM = "seconds";
 	public static final String CHECK_MILLIS_PARAM = "checkMillis";

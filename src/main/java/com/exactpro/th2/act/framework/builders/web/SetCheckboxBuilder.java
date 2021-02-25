@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class SetCheckboxBuilder extends WebDefaultBuilder<SetCheckboxBuilder> {
+public class SetCheckboxBuilder extends AbstractWebBuilder<SetCheckboxBuilder> {
 	
 	public static final String CHECKED_PARAM = "checked";
 	

@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class GetElementBuilder extends WebDefaultBuilder<GetElementBuilder> {
+public class GetElementBuilder extends AbstractWebBuilder<GetElementBuilder> {
 	
 	public static final String ID_PARAM = "id";
 	

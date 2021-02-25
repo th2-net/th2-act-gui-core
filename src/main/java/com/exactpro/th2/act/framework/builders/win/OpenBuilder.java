@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class OpenBuilder extends WinDefaultBuilder<OpenBuilder> {
+public class OpenBuilder extends AbstractWinBuilder<OpenBuilder> {
 	
 	public static final String WORK_DIR_FIELD_NAME = "workDir";
 	public static final String APP_FILE_FIELD_NAME = "appFile";

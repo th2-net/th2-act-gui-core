@@ -22,7 +22,7 @@ import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
 import java.util.function.Consumer;
 
-public abstract class WebDefaultBuilder<T extends WebDefaultBuilder<T>> extends AbstractBuilder<T> {
+public abstract class AbstractWebBuilder<T extends AbstractWebBuilder<T>> extends AbstractBuilder<T> {
 	
 	public static final String LOCATOR_PARAM = "locator";
 	public static final String WAIT_PARAM = "wait";
@@ -63,7 +63,7 @@ public abstract class WebDefaultBuilder<T extends WebDefaultBuilder<T>> extends 
 		return getBuilder();
 	}
 
-	protected WebDefaultBuilder(UIFrameworkContext context) {
+	protected AbstractWebBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 	

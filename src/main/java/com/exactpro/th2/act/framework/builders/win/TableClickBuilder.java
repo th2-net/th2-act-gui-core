@@ -27,7 +27,7 @@ import java.util.Map;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Deprecated
-public class TableClickBuilder extends WinDefaultBuilder<TableClickBuilder> {
+public class TableClickBuilder extends AbstractWinBuilder<TableClickBuilder> {
 	private Map<String, String> searchParams;
 	private String columnName;
 	private int columnIndex;

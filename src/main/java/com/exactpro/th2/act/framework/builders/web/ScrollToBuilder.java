@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class ScrollToBuilder extends WebDefaultBuilder<ScrollToBuilder> {
+public class ScrollToBuilder extends AbstractWebBuilder<ScrollToBuilder> {
 	
 	protected ScrollToBuilder(UIFrameworkContext context) {
 		super(context);

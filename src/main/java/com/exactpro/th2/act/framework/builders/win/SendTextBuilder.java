@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class SendTextBuilder extends WinDefaultBuilder<SendTextBuilder> {
+public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 	
 	public static final String TEXT_FIELD_NAME = "text";
 

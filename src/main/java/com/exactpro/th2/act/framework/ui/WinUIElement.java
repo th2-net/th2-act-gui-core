@@ -16,7 +16,7 @@
 
 package com.exactpro.th2.act.framework.ui;
 
-import com.exactpro.th2.act.framework.builders.win.BuilderManager;
+import com.exactpro.th2.act.framework.builders.win.WinBuilderManager;
 import com.exactpro.th2.act.framework.builders.win.WinLocator;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 
@@ -25,11 +25,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class WinUIElement {
-	protected final BuilderManager builders;
+	protected final WinBuilderManager builders;
 	protected final Map<String, WinLocator> cachedElements;
 
 
-	public WinUIElement(BuilderManager builders) {
+	public WinUIElement(WinBuilderManager builders) {
 		this.builders = builders;
 		this.cachedElements = new HashMap<>();
 	}

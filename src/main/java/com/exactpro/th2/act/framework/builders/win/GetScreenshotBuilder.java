@@ -14,42 +14,38 @@
  * limitations under the License.
  */
 
-package com.exactpro.th2.act.framework.builders.web;
+package com.exactpro.th2.act.framework.builders.win;
 
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
-import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class SwitchWindowBuilder extends AbstractWebBuilder<SwitchWindowBuilder> {
+public class GetScreenshotBuilder extends AbstractWinBuilder<GetScreenshotBuilder> {
 	
-	public static final String WINDOW_NAME_PARAM = "window";
-	private Integer windowName;
-	
-	protected SwitchWindowBuilder(UIFrameworkContext context) {
+	public GetScreenshotBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
 	@Override
-	protected SwitchWindowBuilder getBuilder() {
+	protected GetScreenshotBuilder getBuilder() {
 		return this;
 	}
 
 	@Override
 	protected String getActionName() {
-		return "SwitchWindow";
-	}
-
-	public SwitchWindowBuilder windowName(int windowName) {
-		this.windowName = windowName;
-		return this;
+		return "GetScreenshot";
 	}
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		checkRequiredFields(this.windowName, WINDOW_NAME_PARAM);
-		RhActionsMessages.SwitchWindow.Builder builder = RhActionsMessages.SwitchWindow.newBuilder();
-		builder.setWindow(this.windowName);
-		return RhAction.newBuilder().setSwitchWindow(builder).build();
+		RhWinActionsMessages.WinGetScreenshot.Builder builder = RhWinActionsMessages.WinGetScreenshot.newBuilder();
+		if (winLocator != null) {
+			builder.addAllLocators(buildWinLocator(this.winLocator));	
+		}
+		
+		addIfNotEmpty(id, builder::setId);
+		addIfNotEmpty(execute, builder::setExecute);
+		return RhAction.newBuilder().setWinGetScreenshot(builder).build();
 	}
 }

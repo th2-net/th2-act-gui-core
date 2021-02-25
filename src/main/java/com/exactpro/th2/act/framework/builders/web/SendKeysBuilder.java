@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class SendKeysBuilder extends WebDefaultBuilder<SendKeysBuilder> {
+public class SendKeysBuilder extends AbstractWebBuilder<SendKeysBuilder> {
 	
 	public static final String TEXT_PARAM = "text";
 	public static final String TEXT2_PARAM = "text2";

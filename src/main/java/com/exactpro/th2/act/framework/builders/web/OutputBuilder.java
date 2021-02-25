@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class OutputBuilder extends WebDefaultBuilder<OutputBuilder> {
+public class OutputBuilder extends AbstractWebBuilder<OutputBuilder> {
 	
 	public static final String TEXT_PARAM = "text";
 	

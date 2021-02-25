@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class ClearElementBuilder extends WebDefaultBuilder<ClearElementBuilder> {
+public class ClearElementBuilder extends AbstractWebBuilder<ClearElementBuilder> {
 	
 	protected ClearElementBuilder(UIFrameworkContext context) {
 		super(context);

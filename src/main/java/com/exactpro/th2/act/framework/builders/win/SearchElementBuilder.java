@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class SearchElementBuilder extends WinDefaultBuilder<SearchElementBuilder> {
+public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilder> {
 	
 	public SearchElementBuilder(UIFrameworkContext context) {
 		super(context);

@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class OpenBuilder extends WebDefaultBuilder<OpenBuilder> {
+public class OpenBuilder extends AbstractWebBuilder<OpenBuilder> {
 	
 	public static final String OPEN_URL_FIELD_NAME = "url"; 
 

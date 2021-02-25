@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class GetElementValueBuilder extends WebDefaultBuilder<GetElementValueBuilder> {
+public class GetElementValueBuilder extends AbstractWebBuilder<GetElementValueBuilder> {
 	
 	protected GetElementValueBuilder(UIFrameworkContext context) {
 		super(context);

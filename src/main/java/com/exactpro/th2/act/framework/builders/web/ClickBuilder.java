@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class ClickBuilder extends WebDefaultBuilder<ClickBuilder> {
+public class ClickBuilder extends AbstractWebBuilder<ClickBuilder> {
 
 	private ClickButton button;
 	private Integer xOffset;

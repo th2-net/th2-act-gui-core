@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class RefreshBuilder extends WebDefaultBuilder<RefreshBuilder> {
+public class RefreshBuilder extends AbstractWebBuilder<RefreshBuilder> {
 
 	protected RefreshBuilder(UIFrameworkContext context) {
 		super(context);

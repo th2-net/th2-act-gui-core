@@ -21,39 +21,37 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class GetElementAttributeBuilder extends AbstractWebBuilder<GetElementAttributeBuilder> {
+public class GetElementScreenshotBuilder extends AbstractWebBuilder<GetElementScreenshotBuilder> {
 	
-	public static final String ATTRIBUTE_PARAM = "attribute";
+	private String name;
 	
-	private String attribute;
-	
-	protected GetElementAttributeBuilder(UIFrameworkContext context) {
+	protected GetElementScreenshotBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
+	public GetElementScreenshotBuilder name(String name) {
+		this.name = name;
+		return this;
+	}
+
 	@Override
-	protected GetElementAttributeBuilder getBuilder() {
+	protected GetElementScreenshotBuilder getBuilder() {
 		return this;
 	}
 
 	@Override
 	protected String getActionName() {
-		return "GetElementAttribute";
-	}
-
-	public GetElementAttributeBuilder attribute(String attribute) {
-		this.attribute = attribute;
-		return this;
+		return "GetElementScreenshot";
 	}
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(locator, LOCATOR_PARAM, attribute, ATTRIBUTE_PARAM);
-		RhActionsMessages.GetElementAttribute.Builder builder = RhActionsMessages.GetElementAttribute.newBuilder();
+		this.checkRequiredFields(this.locator, LOCATOR_PARAM);
+		RhActionsMessages.GetElementScreenshot.Builder builder = RhActionsMessages.GetElementScreenshot.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
-		builder.setAttribute(attribute);
-		return RhAction.newBuilder().setGetElementAttribute(builder).build();
+		addIfNotEmpty(name, builder::setName);
+		return RhAction.newBuilder().setGetElementScreenshot(builder).build();
 	}
 }

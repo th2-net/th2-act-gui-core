@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class WaitForAttributeBuilder extends WinDefaultBuilder<WaitForAttributeBuilder> {
+public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttributeBuilder> {
 	
 	public static final String ATTRIBUTE_NAME_FIELD_NAME = "attributeName";
 	public static final String EXPECTED_VALUE_FIELD_NAME = "expectedValue";

@@ -21,7 +21,7 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
 
-public class PageSourceBuilder extends WebDefaultBuilder<PageSourceBuilder> {
+public class PageSourceBuilder extends AbstractWebBuilder<PageSourceBuilder> {
 	
 	protected PageSourceBuilder(UIFrameworkContext context) {
 		super(context);
