@@ -53,7 +53,7 @@ public class GetElementBuilder extends AbstractWebBuilder<GetElementBuilder> {
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
-		builder.setId(id);
+		addIfNotNull(id, builder::setId);
 		return RhAction.newBuilder().setGetElement(builder).build();
 	}
 }
