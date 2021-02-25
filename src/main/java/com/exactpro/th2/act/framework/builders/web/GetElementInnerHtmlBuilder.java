@@ -34,7 +34,7 @@ public class GetElementInnerHtmlBuilder extends GetElementBuilder {
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(locator, LOCATOR_PARAM, id, ID_PARAM);
+		this.checkRequiredFields(locator, LOCATOR_PARAM);
 		RhActionsMessages.GetElementInnerHtml.Builder builder = RhActionsMessages.GetElementInnerHtml.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);

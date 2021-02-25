@@ -48,7 +48,7 @@ public class GetElementBuilder extends AbstractWebBuilder<GetElementBuilder> {
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(locator, LOCATOR_PARAM, id, ID_PARAM);
+		this.checkRequiredFields(locator, LOCATOR_PARAM);
 		RhActionsMessages.GetElement.Builder builder = RhActionsMessages.GetElement.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
