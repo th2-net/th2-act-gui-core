@@ -78,10 +78,6 @@ public class WinBuilderManager {
 		return new GetElementAttributeBuilder(context);
 	}
 
-	public TableClickBuilder getWinTableClick() {
-		return new TableClickBuilder(context);
-	}
-
 	public TableSearchBuilder tableSearch()
 	{
 		return new TableSearchBuilder(context);
