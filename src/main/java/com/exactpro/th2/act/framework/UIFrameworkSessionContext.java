@@ -16,13 +16,13 @@
 
 package com.exactpro.th2.act.framework;
 
-public class UIFrameworkSessionContext {
+public class UIFrameworkSessionContext<T extends UIFrameworkContext> {
 	
-	private final UIFrameworkContext context;
+	private final T context;
 	private volatile boolean busy;
 	private volatile boolean invalidated;
 
-	public UIFrameworkSessionContext(UIFrameworkContext context) {
+	public UIFrameworkSessionContext(T context) {
 		this.context = context;
 		this.busy = false;
 		this.invalidated = false;
@@ -44,7 +44,7 @@ public class UIFrameworkSessionContext {
 		this.invalidated = invalidated;
 	}
 
-	public UIFrameworkContext getContext() {
+	public T getContext() {
 		return context;
 	}
 }

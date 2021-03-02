@@ -31,11 +31,11 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class UIFramework implements AutoCloseable {
+public abstract class UIFramework<T extends UIFrameworkContext, K extends UIFrameworkSessionContext<T>> implements AutoCloseable {
 
 	private static final Logger logger = LoggerFactory.getLogger(UIFramework.class);
 	
-	protected final Map<RhSessionID, UIFrameworkSessionContext> contexts;
+	protected final Map<RhSessionID, K> contexts;
 	protected final ActConnections<? extends CustomConfiguration> connections;
 	protected final CustomConfiguration configuration;
 	protected final HandExecutor handExecutor;
@@ -51,16 +51,12 @@ public abstract class UIFramework implements AutoCloseable {
 		this.sessionWatcher.start();
 	}
 
-	protected UIFrameworkContext createContext(RhSessionID sessionID, HandExecutor executor) {
-		return new UIFrameworkContext(sessionID, executor);
-	}
-
-	private Pair<UIFrameworkSessionContext, Boolean> createContext(RhSessionID sessionID) {
+	private Pair<K, Boolean> createContext(RhSessionID sessionID) {
 		synchronized (this) {
 			boolean created = false;
-			UIFrameworkSessionContext frameworkSessionContext = contexts.get(sessionID);
+			K frameworkSessionContext = contexts.get(sessionID);
 			if (frameworkSessionContext == null) {
-				frameworkSessionContext = new UIFrameworkSessionContext(createContext(sessionID, this.handExecutor));
+				frameworkSessionContext = createSessionContext(createContext(sessionID, this.handExecutor));
 				contexts.put(sessionID, frameworkSessionContext);
 				created = true;
 				sessionWatcher.updateSessionTime(sessionID);
@@ -68,8 +64,11 @@ public abstract class UIFramework implements AutoCloseable {
 			return new ImmutablePair<>(frameworkSessionContext, created);
 		}
 	}
+
+	protected abstract T createContext(RhSessionID sessionID, HandExecutor executor);
+	protected abstract K createSessionContext(T context);
 	
-	private boolean checkBusy(final UIFrameworkSessionContext context) {
+	private boolean checkBusy(final K context) {
 		if (context.isBusy() || context.isInvalidated()) {
 			return false;
 		}
@@ -82,14 +81,14 @@ public abstract class UIFramework implements AutoCloseable {
 		}
 	}
 	
-	private void releaseExecution(final UIFrameworkSessionContext context) {
+	private void releaseExecution(final K context) {
 		synchronized (context.getContext()) {
 			context.setBusy(false);
 		}
 		context.getContext().setParentEventId(null);
 	}
 
-	private boolean invalidate(final UIFrameworkSessionContext context) {
+	private boolean invalidate(final K context) {
 		if (context.isBusy()) {
 			return false;
 		}
@@ -103,10 +102,10 @@ public abstract class UIFramework implements AutoCloseable {
 	}
 	
 	public void registerSession(RhSessionID sessionID) throws UIFrameworkException {
-		UIFrameworkSessionContext sessionContext = this.contexts.get(sessionID);
+		K sessionContext = this.contexts.get(sessionID);
 		boolean existed = sessionContext != null;
 		if (!existed) {
-			Pair<UIFrameworkSessionContext, Boolean> context = this.createContext(sessionID);
+			Pair<K, Boolean> context = this.createContext(sessionID);
 			existed = !context.getValue();
 		}
 		
@@ -116,9 +115,9 @@ public abstract class UIFramework implements AutoCloseable {
 	}
 	
 
-	public UIFrameworkContext newExecution(RhSessionID sessionID) throws UIFrameworkException {
+	public T newExecution(RhSessionID sessionID) throws UIFrameworkException {
 		
-		UIFrameworkSessionContext sessionContext = this.contexts.get(sessionID);
+		K sessionContext = this.contexts.get(sessionID);
 		if (sessionContext == null) {
 			throw new UIFrameworkException("Session is not created properly: " + sessionID.getId());
 		}
@@ -137,7 +136,7 @@ public abstract class UIFramework implements AutoCloseable {
 	}
 
 	public void unregisterSession(RhSessionID sessionID) throws UIFrameworkException {
-		UIFrameworkSessionContext sessionContext = this.contexts.get(sessionID);
+		K sessionContext = this.contexts.get(sessionID);
 		if (sessionContext == null) {
 			throw new UIFrameworkException("Session is not created properly: " + sessionID.getId());
 		}
