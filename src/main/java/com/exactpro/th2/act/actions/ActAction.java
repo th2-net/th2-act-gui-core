@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.exactpro.th2.act.actions;
 
 import com.exactpro.th2.act.ActResult;
-import com.exactpro.th2.act.configuration.CustomConfiguration;
 import com.exactpro.th2.act.framework.UIFramework;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.UIFrameworkSessionContext;
@@ -27,7 +26,6 @@ import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import com.exactpro.th2.common.grpc.EventID;
 import org.slf4j.Logger;
 
-import java.util.Collections;
 import java.util.Map;
 
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
@@ -56,45 +54,29 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 	}
 
 	public void run(T details) {
-
 		RhSessionID sessionID = getSessionID(details);
 
-		ActResult actResult = new ActResult();
+		ActResult actResult = createActResult();
 		K frameworkContext = null;
-		EventID parentEventId = null;
-		EventID actionEvent = null;
-		
+		EventID eventId = null;
+
 		try {
 			frameworkContext = framework.newExecution(sessionID);
-			parentEventId = getParentEventId(details);
-			if (storeParentEvent()) {
-				Map<String, String> requestParams = convertRequestParams(details);
-				actionEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
-				frameworkContext.setParentEventId(actionEvent);
-			} else {
-				frameworkContext.setParentEventId(parentEventId);
-			}
+			eventId = this.processAndGetEventId(frameworkContext, details);
 
 			this.collectActions(details, frameworkContext, actResult);
 			this.submitActions(details, frameworkContext, actResult);
 			actResult.setSessionID(sessionID);
-
-		} catch (UIFrameworkException e) {
-			logger.error("Cannot execute", e);
-			framework.createErrorEvent(actionEvent != null ? actionEvent : parentEventId,
-					"Error: " + getName(), Collections.emptyMap(), null, e);
+		} catch (Exception e) {
+			logger.error("An error occurred while executing action", e);
+			framework.createErrorEvent(eventId, "Error: " + getName(), "An internal action error has occurred", e);
 			actResult.setScriptStatus(ActResult.ActExecutionStatus.ACT_ERROR);
 			actResult.setErrorInfo("Cannot unregister framework session:" + e.getMessage());
 		} finally {
+			this.processResult(actResult, eventId);
 			if (frameworkContext != null) {
 				framework.onExecutionFinished(frameworkContext);
 			}
-		}
-
-		try {
-			this.processResult(actResult);
-		} catch (UIFrameworkException e) {
-			logger.error("Cannot process act result", e);
 		}
 	}
 
@@ -121,5 +103,33 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 	protected void putIfNotEmpty(String key, String value, Map<String, String> params) {
 		if (isNotEmpty(value))
 			params.put(key, value);
+	}
+
+	protected ActResult createActResult() {
+		return new ActResult();
+	}
+
+	protected EventID processAndGetEventId(K frameworkContext, T details) {
+		EventID parentEventId = getParentEventId(details);
+		EventID actionEvent = null;
+		if (storeParentEvent()) {
+			Map<String, String> requestParams = convertRequestParams(details);
+			actionEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
+			frameworkContext.setParentEventId(actionEvent);
+		} else {
+			frameworkContext.setParentEventId(parentEventId);
+		}
+
+		return actionEvent != null ? actionEvent : parentEventId;
+	}
+
+
+	private void processResult(ActResult actResult, EventID eventId) {
+		try {
+			this.processResult(actResult);
+		} catch (Exception e) {
+			logger.error("An error occurred while processing act result", e);
+			framework.createErrorEvent(eventId, "Processing act result", "Unable to process act result", e);
+		}
 	}
 }

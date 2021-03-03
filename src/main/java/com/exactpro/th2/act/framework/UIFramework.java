@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,6 +163,10 @@ public abstract class UIFramework<T extends UIFrameworkContext, K extends UIFram
 
 	public EventID createErrorEvent(EventID parentEventId, String name, Map<String, String> requested, String error, Throwable t) {
 		return this.handExecutor.logErrorEvent(parentEventId, name, requested, error, t);
+	}
+
+	public EventID createErrorEvent(EventID parentEventId, String name, String error, Throwable t) {
+		return this.createErrorEvent(parentEventId, name, Collections.emptyMap(), error, t);
 	}
 
 	@Override
