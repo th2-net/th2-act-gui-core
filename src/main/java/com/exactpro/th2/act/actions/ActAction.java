@@ -61,8 +61,9 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 		EventID eventId = null;
 
 		try {
+			eventId = getParentEventId(details);
 			frameworkContext = framework.newExecution(sessionID);
-			eventId = this.processAndGetEventId(frameworkContext, details);
+			eventId = this.processAndGetEventId(eventId, frameworkContext, details);
 
 			this.collectActions(details, frameworkContext, actResult);
 			this.submitActions(details, frameworkContext, actResult);
@@ -109,8 +110,7 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 		return new ActResult();
 	}
 
-	protected EventID processAndGetEventId(K frameworkContext, T details) {
-		EventID parentEventId = getParentEventId(details);
+	protected EventID processAndGetEventId(EventID parentEventId, K frameworkContext, T details) {
 		EventID actionEvent = null;
 		if (storeParentEvent()) {
 			Map<String, String> requestParams = convertRequestParams(details);
