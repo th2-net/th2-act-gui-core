@@ -143,6 +143,14 @@ public class WebBuilderManager {
 		return new GetElementScreenshotBuilder(this.context);
 	}
 
+	public ExecuteJSBuilder executeJS() {
+		return new ExecuteJSBuilder(this.context);
+	}
+
+	public ExecuteJSElementBuilder executeJSElement() {
+		return new ExecuteJSElementBuilder(this.context);
+	}
+	
 	public UIFrameworkContext getContext() {
 		return context;
 	}
