@@ -123,7 +123,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 	}
 
 	private void validateParams() throws UIFrameworkBuildingException {
-		if (searchParams == null || searchParams.isEmpty() || isEmpty(columnName))
+		if (searchParams == null || searchParams.isEmpty() || columnName == null)
 			throw new UIFrameworkBuildingException("Search parameters and column name must be specified");
 
 		if (columnIndex < 0)
