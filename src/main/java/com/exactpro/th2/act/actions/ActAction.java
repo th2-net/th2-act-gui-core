@@ -69,10 +69,10 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 			this.submitActions(details, frameworkContext, actResult);
 			actResult.setSessionID(sessionID);
 		} catch (Exception e) {
-			logger.error("An error occurred while executing action", e);
+			logger.error("An error occurred while executing action. Cannot unregister framework session", e);
 			framework.createErrorEvent(eventId, "Error: " + getName(), "An internal action error has occurred", e);
 			actResult.setScriptStatus(ActResult.ActExecutionStatus.ACT_ERROR);
-			actResult.setErrorInfo("Cannot unregister framework session:" + e.getMessage());
+			actResult.setErrorInfo(e.getMessage());
 		} finally {
 			this.processResult(actResult, eventId);
 			if (frameworkContext != null) {
