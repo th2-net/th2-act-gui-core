@@ -56,7 +56,7 @@ dependencies {
     implementation 'com.exactpro.th2:common:3.0.0'
     implementation 'com.exactpro.th2:grpc-common:3.0.0'
     
-    implementation "com.exactpro.th2:grpc-hand:2.6.3"
+    implementation "com.exactpro.th2:grpc-hand:2.6.5-TH2-1605-755043613-SNAPSHOT"
 
 
     implementation "org.apache.commons:commons-lang3"

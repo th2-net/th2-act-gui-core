@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,15 +19,10 @@ package com.exactpro.th2.act.framework;
 import com.exactpro.th2.act.events.EventDetails;
 import com.exactpro.th2.act.events.EventStoreHandler;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
-import com.exactpro.th2.act.grpc.hand.RhActionsList;
-import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
-import com.exactpro.th2.act.grpc.hand.RhBatchService;
-import com.exactpro.th2.act.grpc.hand.RhSessionID;
-import com.exactpro.th2.act.grpc.hand.RhTargetServer;
+import com.exactpro.th2.act.grpc.hand.*;
 import com.exactpro.th2.common.grpc.EventID;
 
 import java.time.Instant;
-
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -50,23 +45,8 @@ public class HandExecutor {
 		this.handConnector.unregister(sessionID);
 	}
 
-	public RhBatchResponse executeWinGuiScript(Map<String, String> requestParams, String eventName,
-	                                           EventID parentEventId, RhActionsList.Builder rhActionsList) {
-		Instant startTime = Instant.now();
-		EventID eventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
-		rhActionsList.setParentEventId(eventId);
-		RhBatchResponse response = handConnector.executeRhActionsBatch(rhActionsList.build());
-		Instant endTime = Instant.now();
-
-		EventDetails.EventInfo info = new EventDetails.EventInfo();
-		info.setParentEventId(parentEventId);
-		info.setStartTime(startTime);
-		info.setEndTime(endTime);
-		info.setEventName(eventName);
-		info.setEventId(eventId);
-		
-		eventStoreHandler.storeEvent(info, requestParams, response);
-		return response;
+	public RhBatchResponse executeWinGuiScript(RhActionsList rhActionsList) {
+		return handConnector.executeRhActionsBatch(rhActionsList);
 	}
 
 	public void executeVerification(List<VerificationDetail> verification, String eventName, EventID parentEventId) {
@@ -84,6 +64,7 @@ public class HandExecutor {
 		info.setEventId(newEventId);
 		info.setParentEventId(parentId);
 		info.setEventName(eventName);
+		info.setStartTime(Instant.now());
 		eventStoreHandler.storeEvent(info, requestParams);
 		return newEventId;
 	}
@@ -95,6 +76,7 @@ public class HandExecutor {
 		info.setEventId(newEventId);
 		info.setParentEventId(parentId);
 		info.setEventName(eventName);
+		info.setStartTime(Instant.now());
 		eventStoreHandler.storeErrorEvent(info, requestParams, errorDescription, throwable);
 		return newEventId;
 	}

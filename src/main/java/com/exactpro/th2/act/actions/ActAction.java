@@ -52,6 +52,9 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 	protected boolean storeParentEvent() {
 		return true;
 	}
+	protected boolean storeActionMessages() {
+		return false;
+	}
 
 	public void run(T details) {
 		RhSessionID sessionID = getSessionID(details);
@@ -66,7 +69,7 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 			eventId = this.processAndGetEventId(eventId, frameworkContext, details);
 
 			this.collectActions(details, frameworkContext, actResult);
-			this.submitActions(details, frameworkContext, actResult);
+			this.submitActions(frameworkContext, actResult);
 			actResult.setSessionID(sessionID);
 		} catch (Exception e) {
 			logger.error("An error occurred while executing action. Cannot unregister framework session", e);
@@ -86,12 +89,14 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 			case EXECUTION_ERROR: return ActResult.ActExecutionStatus.EXECUTION_ERROR;
 			case SUCCESS: return ActResult.ActExecutionStatus.SUCCESS;
 			case COMPILE_ERROR: return ActResult.ActExecutionStatus.COMPILE_ERROR;
+			case HAND_INTERNAL_ERROR: return ActResult.ActExecutionStatus.HAND_INTERNAL_ERROR;
+			case UNRECOGNIZED:
 			default: return ActResult.ActExecutionStatus.UNKNOWN_ERROR;
 		}
 	}
 
-	protected void submitActions(T request, UIFrameworkContext frameworkContext, ActResult respBuild) {
-		RhBatchResponse response = frameworkContext.submit(getName(), convertRequestParams(request));
+	protected void submitActions(UIFrameworkContext frameworkContext, ActResult respBuild) {
+		RhBatchResponse response = frameworkContext.submit(getName(), storeActionMessages());
 		if (response == null || response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS) {
 			respBuild.setStatusInfo(getStatusInfo());
 			respBuild.setScriptStatus(ActResult.ActExecutionStatus.SUCCESS);
