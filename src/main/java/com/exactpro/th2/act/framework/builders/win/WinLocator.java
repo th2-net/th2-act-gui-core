@@ -54,6 +54,10 @@ public class WinLocator {
 		return byId(id, null);
 	}
 
+	public WinLocator byCachedId(String id) {
+		return byLocator(WinLocatorType.CACHED_ELEMENT, id);
+	}
+
 	public WinLocator byId(String id, Integer index) {
 		return this.byLocator(WinLocatorType.ACCESSIBILITY_ID, id, index);
 	}
@@ -62,7 +66,7 @@ public class WinLocator {
 		return this.byLocator(WinLocatorType.XPATH, xpath);
 	}
 
-	public static WinLocator byCachedId(String cachedId) {
+	public static WinLocator fromCachedId(String cachedId) {
 		return root().byLocator(WinLocatorType.CACHED_ELEMENT, cachedId);
 	}
 	

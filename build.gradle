@@ -24,10 +24,6 @@ ext {
 repositories {
     mavenCentral()
     maven {
-        name 'Bintray'
-        url 'https://dl.bintray.com/exactpro/th2'
-    }
-    maven {
             name 'Sonatype_snapshots'
             url 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
     }
@@ -51,12 +47,12 @@ sourceSets {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:2.10.1')
-
-    implementation 'com.exactpro.th2:common:3.0.0'
-    implementation 'com.exactpro.th2:grpc-common:3.0.0'
+    api platform('com.exactpro.th2:bom:3.0.0')
     
-    implementation "com.exactpro.th2:grpc-hand:2.6.3"
+    implementation 'com.exactpro.th2:common:3.13.4'
+    implementation 'com.exactpro.th2:grpc-common:3.1.1'
+    
+    implementation "com.exactpro.th2:grpc-hand:2.7.1-th2-1876-812915961-SNAPSHOT"
 
 
     implementation "org.apache.commons:commons-lang3"
