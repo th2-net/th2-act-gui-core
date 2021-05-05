@@ -40,8 +40,7 @@ public class MaximizeMainWindowBuilder extends WindowBuilder<MaximizeMainWindowB
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.MaximizeMainWindow.Builder builder = RhWinActionsMessages.MaximizeMainWindow.newBuilder();
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinMaximizeMainWindow(builder).build();
 	}
 }

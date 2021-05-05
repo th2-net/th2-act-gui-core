@@ -71,8 +71,7 @@ public class ScrollUsingTextBuilder extends AbstractWinBuilder<ScrollUsingTextBu
 		winScrollUsingText.addAllLocators(this.buildWinLocator(this.winLocator));
 		winScrollUsingText.addAllTextLocators(this.buildWinLocator(this.textLocators));
 		winScrollUsingText.setTextToSend(this.textToSend);
-		addIfNotEmpty(id, winScrollUsingText::setId);
-		addIfNotEmpty(execute, winScrollUsingText::setExecute);
+		winScrollUsingText.setBaseParams(buildBaseParam());
 		addIfNotEmpty(maxIterations, winScrollUsingText::setMaxIterations);
 		return RhAction.newBuilder().setWinScrollUsingText(winScrollUsingText).build();
 	}

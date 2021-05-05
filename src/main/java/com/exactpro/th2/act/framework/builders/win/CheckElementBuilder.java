@@ -41,8 +41,7 @@ public class CheckElementBuilder extends AbstractWinBuilder<CheckElementBuilder>
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.WinCheckElement.Builder builder = RhWinActionsMessages.WinCheckElement.newBuilder();
 		builder.addAllLocators(buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinCheckElement(builder.build()).build();
 	}
 }

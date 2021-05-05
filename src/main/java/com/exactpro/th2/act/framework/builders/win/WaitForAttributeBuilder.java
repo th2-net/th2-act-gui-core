@@ -31,7 +31,6 @@ public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttribute
 	private String expectedValue;
 	private String maxTimeout;
 	private String checkInterval;
-	private String fromRoot;
 
 	public WaitForAttributeBuilder(UIFrameworkContext context) {
 		super(context);
@@ -65,15 +64,6 @@ public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttribute
 		return checkInterval(String.valueOf(checkInterval));
 	}
 
-	public WaitForAttributeBuilder fromRoot(String fromRoot) {
-		this.fromRoot = fromRoot;
-		return this;
-	}
-
-	public WaitForAttributeBuilder fromRoot(boolean fromRoot) {
-		return fromRoot(String.valueOf(fromRoot));
-	}
-
 	@Override
 	protected WaitForAttributeBuilder getBuilder() {
 		return this;
@@ -94,9 +84,7 @@ public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttribute
 		winForAttr.setExpectedValue(expectedValue);
 		winForAttr.setMaxTimeout(maxTimeout);
 		this.addIfNotEmpty(checkInterval, winForAttr::setCheckInterval);
-		this.addIfNotEmpty(id, winForAttr::setId);
-		this.addIfNotEmpty(execute, winForAttr::setExecute);
-		this.addIfNotEmpty(fromRoot, winForAttr::setFromRoot);
+		winForAttr.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinWaitForAttribute(winForAttr).build();
 	}
 }
