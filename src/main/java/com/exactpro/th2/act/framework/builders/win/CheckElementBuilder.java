@@ -22,10 +22,12 @@ import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
 public class CheckElementBuilder extends AbstractWinBuilder<CheckElementBuilder> {
+	
+	private boolean saveElement = false;
+	
 	public CheckElementBuilder(UIFrameworkContext context) {
 		super(context);
 	}
-
 
 	@Override
 	protected CheckElementBuilder getBuilder() {
@@ -37,12 +39,18 @@ public class CheckElementBuilder extends AbstractWinBuilder<CheckElementBuilder>
 		return "WinCheckElement";
 	}
 
+	public CheckElementBuilder saveElement(boolean saveElement) {
+		this.saveElement = saveElement;
+		return this;
+	}
+
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.WinCheckElement.Builder builder = RhWinActionsMessages.WinCheckElement.newBuilder();
 		builder.addAllLocators(buildWinLocator(this.winLocator));
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
+		builder.setSaveElement(saveElement);
 		return RhAction.newBuilder().setWinCheckElement(builder.build()).build();
 	}
 }
