@@ -28,6 +28,7 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 	protected String text;
 	protected String clearBefore;
 	protected String isDirectText;
+	protected boolean isExperimental = true;
 
 	public SendTextBuilder(UIFrameworkContext context) {
 		super(context);
@@ -66,6 +67,11 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 		return "WinSendText";
 	}
 
+	public SendTextBuilder experimental(boolean experimental) {
+		isExperimental = experimental;
+		return this;
+	}
+
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(text, TEXT_FIELD_NAME);
@@ -78,6 +84,7 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 		addIfNotEmpty(execute, sendTextBuilder::setExecute);
 		addIfNotEmpty(isDirectText, sendTextBuilder::setIsDirectText);
 		addIfNotEmpty(clearBefore, sendTextBuilder::setClearBefore);
+		sendTextBuilder.setNonExperimental(!isExperimental);
 		
 		return RhAction.newBuilder().setWinSendText(sendTextBuilder.build()).build();
 	}
