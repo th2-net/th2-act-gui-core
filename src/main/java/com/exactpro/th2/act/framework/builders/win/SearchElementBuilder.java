@@ -41,7 +41,7 @@ public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilde
 	}
 
 	public SearchElementBuilder experimental(boolean experimental) {
-		isExperimental = experimental;
+		this.isExperimental = experimental;
 		return this;
 	}
 

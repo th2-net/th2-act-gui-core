@@ -58,6 +58,10 @@ public class WinLocator {
 		return byLocator(WinLocatorType.CACHED_ELEMENT, id);
 	}
 
+	public WinLocator byCachedId(String id, Integer index) {
+		return byLocator(WinLocatorType.CACHED_ELEMENT, id, index);
+	}
+
 	public WinLocator byId(String id, Integer index) {
 		return this.byLocator(WinLocatorType.ACCESSIBILITY_ID, id, index);
 	}
@@ -68,6 +72,10 @@ public class WinLocator {
 
 	public static WinLocator fromCachedId(String cachedId) {
 		return root().byLocator(WinLocatorType.CACHED_ELEMENT, cachedId);
+	}
+
+	public static WinLocator fromCachedId(String cachedId, Integer index) {
+		return root().byLocator(WinLocatorType.CACHED_ELEMENT, cachedId, index);
 	}
 	
 	public boolean isRoot() {
