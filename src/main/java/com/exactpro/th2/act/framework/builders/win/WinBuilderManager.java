@@ -94,9 +94,13 @@ public class WinBuilderManager {
 	public MaximizeMainWindowBuilder maximizeMainWindow() {
 		return new MaximizeMainWindowBuilder(context);
 	}
-	
+
 	public GetScreenshotBuilder getScreenshot() {
 		return new GetScreenshotBuilder(context);
+	}
+
+	public GetElementColor getElementColor() {
+		return new GetElementColor(context);
 	}
 
 	public UIFrameworkContext getContext() {
