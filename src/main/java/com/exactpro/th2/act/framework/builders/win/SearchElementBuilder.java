@@ -23,7 +23,6 @@ import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
 public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilder> {
 	
-	private boolean isExperimental = true;
 	private boolean multipleElements = false;
 	
 	public SearchElementBuilder(UIFrameworkContext context) {
@@ -40,11 +39,6 @@ public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilde
 		return "WinSearchElement";
 	}
 
-	public SearchElementBuilder experimental(boolean experimental) {
-		this.isExperimental = experimental;
-		return this;
-	}
-
 	public SearchElementBuilder multipleElements(boolean multipleElements) {
 		this.multipleElements = multipleElements;
 		return this;
@@ -55,7 +49,6 @@ public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilde
 		this.checkRequiredFields(winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinSearchElement.Builder searchElementBuilder = RhWinActionsMessages.WinSearchElement.newBuilder();
 		searchElementBuilder.addAllLocators(this.buildWinLocator(winLocator));
-		searchElementBuilder.setNonExperimental(!isExperimental);
 		searchElementBuilder.setMultipleElements(multipleElements);
 		searchElementBuilder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinSearchElement(searchElementBuilder.build()).build();
