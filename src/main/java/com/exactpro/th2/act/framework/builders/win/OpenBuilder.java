@@ -66,8 +66,7 @@ public class OpenBuilder extends AbstractWinBuilder<OpenBuilder> {
 		builder.setAppFile(appFile);
 		builder.setWorkDir(workDir);
 		addIfNotEmpty(appArgs, builder::setAppArgs);
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinOpen(builder).build();
 	}
 }

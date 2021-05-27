@@ -65,9 +65,8 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinClick.Builder clickBuilder = RhWinActionsMessages.WinClick.newBuilder();
 		clickBuilder.addAllLocators(buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, clickBuilder::setId);
-		addIfNotEmpty(execute, clickBuilder::setExecute);
-		
+		clickBuilder.setBaseParams(buildBaseParam());
+
 		if (button != null) {
 			clickBuilder.setButton(button.grpcButton);
 		}

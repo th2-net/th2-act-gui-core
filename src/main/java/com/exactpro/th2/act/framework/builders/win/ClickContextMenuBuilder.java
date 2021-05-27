@@ -42,8 +42,7 @@ public class ClickContextMenuBuilder extends AbstractWinBuilder<ClickContextMenu
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinClickContextMenu.Builder clickCM = RhWinActionsMessages.WinClickContextMenu.newBuilder();
 		clickCM.addAllLocators(this.buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, clickCM::setId);
-		addIfNotEmpty(execute, clickCM::setExecute);
+		clickCM.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinClickContextMenu(clickCM).build();
 	}
 	

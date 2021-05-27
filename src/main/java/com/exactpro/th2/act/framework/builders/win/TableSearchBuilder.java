@@ -25,8 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Iterator;
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
-
 public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 
 	private Map<String, String> searchParams;
@@ -108,8 +106,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 
 		WinTableSearch.Builder builder = WinTableSearch.newBuilder();
 		builder.addAllLocators(buildWinLocator(winLocator));
-		builder.setId(id);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(String.valueOf(firstRowIndex), builder::setFirstRowIndex);
 		addIfNotEmpty(rowNameFormat, builder::setRowNameFormat);
 		addIfNotEmpty(rowElementNameFormat, builder::setRowElementNameFormat);

@@ -55,10 +55,9 @@ public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilde
 		this.checkRequiredFields(winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinSearchElement.Builder searchElementBuilder = RhWinActionsMessages.WinSearchElement.newBuilder();
 		searchElementBuilder.addAllLocators(this.buildWinLocator(winLocator));
-		this.addIfNotEmpty(id, searchElementBuilder::setId);
-		this.addIfNotEmpty(execute, searchElementBuilder::setExecute);
 		searchElementBuilder.setNonExperimental(!isExperimental);
 		searchElementBuilder.setMultipleElements(multipleElements);
+		searchElementBuilder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinSearchElement(searchElementBuilder.build()).build();
 	}
 }
