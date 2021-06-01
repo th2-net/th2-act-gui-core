@@ -58,6 +58,7 @@ public class WinUIElement {
 
 	protected void clickContext(String contextButtonName) throws UIFrameworkBuildingException {
 		this.builders.waitAction().time(250).build();
-		this.builders.clickContext().winLocator(WinLocator.root().byName(contextButtonName)).build();
+		this.builders.click().winLocator(WinLocator.root().byName(contextButtonName)).experimental(true)
+				.fromRoot(true).build();
 	}
 }

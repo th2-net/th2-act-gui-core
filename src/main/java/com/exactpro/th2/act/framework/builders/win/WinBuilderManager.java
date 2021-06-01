@@ -46,10 +46,6 @@ public class WinBuilderManager {
 		return new WaitForAttributeBuilder(context);
 	}
 
-	public ClickContextMenuBuilder clickContext() {
-		return new ClickContextMenuBuilder(context);
-	}
-
 	public GetActiveWindowBuilder getActiveWindow() {
 		return new GetActiveWindowBuilder(context);
 	}
