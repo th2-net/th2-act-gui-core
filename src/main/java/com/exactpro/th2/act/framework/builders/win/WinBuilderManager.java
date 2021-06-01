@@ -98,6 +98,10 @@ public class WinBuilderManager {
 	public GetScreenshotBuilder getScreenshot() {
 		return new GetScreenshotBuilder(context);
 	}
+	
+	public RestartDriver restartDriver() {
+		return new RestartDriver(context);
+	}
 
 	public UIFrameworkContext getContext() {
 		return context;
