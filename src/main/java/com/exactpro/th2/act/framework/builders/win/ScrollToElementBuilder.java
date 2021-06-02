@@ -94,10 +94,9 @@ public class ScrollToElementBuilder extends WindowBuilder<ScrollToElementBuilder
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, ELEMENT_WIN_LOCATOR_FIELD_NAME, this.actionWinLocator, ACTION_WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinScrollToElement.Builder builder = RhWinActionsMessages.WinScrollToElement.newBuilder();
-		builder.addAllActionLocators(buildWinLocator(this.winLocator));
+		builder.addAllElementLocators(buildWinLocator(this.winLocator));
 		builder.addAllActionLocators(buildWinLocator(this.actionWinLocator));
 		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
 		addIfNotEmpty(execute, builder::setExecute);
 
 		if (!StringUtils.isEmpty(clickOffsetX) && !StringUtils.isEmpty(clickOffsetY))
