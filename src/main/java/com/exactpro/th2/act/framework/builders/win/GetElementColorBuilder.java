@@ -20,19 +20,18 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
-import com.google.protobuf.Int32Value;
 
-public class GetElementColor extends AbstractWinBuilder<GetElementColor> {
-	private Integer xOffset;
-	private Integer yOffset;
+public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBuilder> {
+	private String xOffset;
+	private String yOffset;
 
 
-	public GetElementColor(UIFrameworkContext context) {
+	public GetElementColorBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
 
-	public GetElementColor offset(int x, int y) {
+	public GetElementColorBuilder offset(String x, String y) {
 		this.xOffset = x;
 		this.yOffset = y;
 		return this;
@@ -40,7 +39,7 @@ public class GetElementColor extends AbstractWinBuilder<GetElementColor> {
 
 
 	@Override
-	protected GetElementColor getBuilder() {
+	protected GetElementColorBuilder getBuilder() {
 		return this;
 	}
 
@@ -56,11 +55,8 @@ public class GetElementColor extends AbstractWinBuilder<GetElementColor> {
 		builder.addAllLocators(buildWinLocator(this.winLocator));
 		addIfNotEmpty(id, builder::setId);
 		addIfNotEmpty(execute, builder::setExecute);
-
-		if (xOffset != null && yOffset != null) {
-			builder.setXOffset(Int32Value.of(xOffset));
-			builder.setYOffset(Int32Value.of(yOffset));
-		}
+		addIfNotEmpty(xOffset, builder::setXOffset);
+		addIfNotEmpty(yOffset, builder::setYOffset);
 
 		return RhAction.newBuilder().setWinGetElementColor(builder.build()).build();
 	}

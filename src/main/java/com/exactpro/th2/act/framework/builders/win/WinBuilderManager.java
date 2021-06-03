@@ -99,8 +99,16 @@ public class WinBuilderManager {
 		return new GetScreenshotBuilder(context);
 	}
 
-	public GetElementColor getElementColor() {
-		return new GetElementColor(context);
+	public GetElementColorBuilder getElementColor() {
+		return new GetElementColorBuilder(context);
+	}
+
+	public DragAndDropBuilder dragAndDrop() {
+		return new DragAndDropBuilder(context);
+	}
+
+	public ScrollToElementBuilder scrollToElement() {
+		return new ScrollToElementBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {
