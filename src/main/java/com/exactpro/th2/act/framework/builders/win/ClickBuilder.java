@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,14 @@ import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
-import com.google.protobuf.Int32Value;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
-	
-	private Integer xOffset;
-	private Integer yOffset;
-	
+	private String xOffset;
+	private String yOffset;
+
 	private MouseClickButton button;
 	private ClickBorder border;
 
@@ -44,7 +45,14 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		return "WinClick";
 	}
 
+	@Deprecated(since = "2.2.1", forRemoval = true)
 	public ClickBuilder offset(int x, int y) {
+		this.xOffset = String.valueOf(x);
+		this.yOffset = String.valueOf(y);
+		return getBuilder();
+	}
+
+	public ClickBuilder offset(String x, String y) {
 		this.xOffset = x;
 		this.yOffset = y;
 		return getBuilder();
@@ -55,6 +63,7 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		return getBuilder();
 	}
 
+	@Deprecated(since = "2.2.1", forRemoval = true)
 	public ClickBuilder border(ClickBorder border) {
 		this.border = border;
 		return getBuilder();
@@ -71,14 +80,15 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 			clickBuilder.setButton(button.grpcButton);
 		}
 
-		if (border != null) {
-			clickBuilder.setAttachedBorder(border.grpcBorder);
+		if (!StringUtils.isEmpty(xOffset) && !StringUtils.isEmpty(yOffset)) {
+			if (border != null) {
+				Pair<String, String> coordinates = convertCoordinates(border, xOffset, yOffset);
+				clickBuilder.setXOffset(coordinates.getLeft()).setYOffset(coordinates.getRight());
+			} else {
+				clickBuilder.setXOffset(xOffset).setYOffset(yOffset);
+			} 
 		}
 
-		if (xOffset != null && yOffset != null) {
-			clickBuilder.setXOffset(Int32Value.of(xOffset));
-			clickBuilder.setYOffset(Int32Value.of(yOffset));
-		}
 		return RhAction.newBuilder().setWinClick(clickBuilder.build()).build();
 	}
 
@@ -96,6 +106,20 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		}
 	}
 
+
+	@Deprecated(since = "2.2.1", forRemoval = true)
+	private Pair<String, String> convertCoordinates(ClickBorder border, String xOffset, String yOffset) throws UIFrameworkBuildingException {
+		switch (border) {
+			case LEFT_TOP: return new ImmutablePair<>(xOffset, yOffset);
+			case LEFT_BOTTOM: return new ImmutablePair<>(xOffset, "height + " + yOffset);
+			case RIGHT_TOP: return new ImmutablePair<>("width + " + xOffset, yOffset);
+			case RIGHT_BOTTOM: return new ImmutablePair<>("width + " + xOffset, "height + " + yOffset);
+			default: throw new UIFrameworkBuildingException("Unsupported border type");
+		}
+	}
+
+
+	@Deprecated(since = "2.2.1", forRemoval = true)
 	public enum ClickBorder {
 
 		LEFT_TOP(RhWinActionsMessages.WinClick.AttachedBorder.LEFT_TOP),
@@ -109,5 +133,4 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 			this.grpcBorder = grpcBorder;
 		}
 	}
-	
 }

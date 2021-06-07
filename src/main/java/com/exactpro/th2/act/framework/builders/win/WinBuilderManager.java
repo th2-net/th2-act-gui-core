@@ -90,13 +90,25 @@ public class WinBuilderManager {
 	public MaximizeMainWindowBuilder maximizeMainWindow() {
 		return new MaximizeMainWindowBuilder(context);
 	}
-	
+
 	public GetScreenshotBuilder getScreenshot() {
 		return new GetScreenshotBuilder(context);
 	}
 	
 	public RestartDriver restartDriver() {
 		return new RestartDriver(context);
+	}
+
+	public GetElementColorBuilder getElementColor() {
+		return new GetElementColorBuilder(context);
+	}
+
+	public DragAndDropBuilder dragAndDrop() {
+		return new DragAndDropBuilder(context);
+	}
+
+	public ScrollToElementBuilder scrollToElement() {
+		return new ScrollToElementBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {
