@@ -51,7 +51,7 @@ dependencies {
 
     implementation 'com.exactpro.th2:common:3.13.4'
     implementation 'com.exactpro.th2:grpc-common:3.1.2'
-    implementation "com.exactpro.th2:grpc-hand:2.7.5-th2_1873_2-915679495-SNAPSHOT"
+    implementation "com.exactpro.th2:grpc-hand:2.7.5-th2_1873_2-921920005-SNAPSHOT"
     implementation "org.apache.commons:commons-lang3"
     implementation "com.fasterxml.jackson.core:jackson-databind"
     implementation "org.slf4j:slf4j-log4j12"

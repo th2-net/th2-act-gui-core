@@ -53,8 +53,7 @@ public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBu
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinGetElementColor.Builder builder = RhWinActionsMessages.WinGetElementColor.newBuilder();
 		builder.addAllLocators(buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(xOffset, builder::setXOffset);
 		addIfNotEmpty(yOffset, builder::setYOffset);
 
