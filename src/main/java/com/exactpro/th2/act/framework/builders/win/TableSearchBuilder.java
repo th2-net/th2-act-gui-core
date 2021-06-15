@@ -22,14 +22,13 @@ import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.WinTableSearch;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
-
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import java.util.List;
 
 public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 
-	private Map<String, String> searchParams;
+	private List<TableSearchFilter> searchParams;
 	private String columnName;
 	private int columnIndex;
 	private int firstRowIndex;
@@ -44,8 +43,15 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 		super(context);
 	}
 
-	public TableSearchBuilder searchParams(Map<String, String> searchParams) {
-		this.searchParams = searchParams;
+	public TableSearchBuilder addSearchParams(String name, String value) {
+		return this.addSearchParams(name, value, null);
+	}
+
+	public TableSearchBuilder addSearchParams(String name, String value, Integer index) {
+		if (this.searchParams == null) {
+			this.searchParams = new ArrayList<>();
+		}
+		this.searchParams.add(new TableSearchFilter(name, value, index));
 		return this;
 	}
 
@@ -133,13 +139,16 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 			throw new UIFrameworkBuildingException("Id cannot be empty");
 	}
 
-	private static String createFilters(Map<String, String> searchParams) {
+	private static String createFilters(List<TableSearchFilter> searchParams) {
 		StringBuilder result = new StringBuilder();
 
-		Iterator<Map.Entry<String, String>> iterator = searchParams.entrySet().iterator();
+		Iterator<TableSearchFilter> iterator = searchParams.iterator();
 		while (iterator.hasNext()) {
-			Map.Entry<String, String> searchParam = iterator.next();
-			result.append(searchParam.getKey()).append("=").append(searchParam.getValue());
+			TableSearchFilter searchParam = iterator.next();
+			result.append(searchParam.name).append("=").append(searchParam.value);
+			if (searchParam.index != null) {
+				result.append("=").append(searchParam.index);
+			}
 			if (iterator.hasNext())
 				result.append(";");
 		}
@@ -147,4 +156,16 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 		return result.toString();
 	}
 
+	private static class TableSearchFilter {
+		private final String name;
+		private final String value;
+		private final Integer index;
+
+		public TableSearchFilter(String name, String value, Integer index) {
+			this.name = name;
+			this.value = value;
+			this.index = index;
+		}
+	}
+	
 }
