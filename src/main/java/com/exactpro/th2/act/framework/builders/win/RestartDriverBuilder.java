@@ -21,14 +21,14 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class RestartDriver extends WindowBuilder<RestartDriver> {
+public class RestartDriverBuilder extends WindowBuilder<RestartDriverBuilder> {
 	
-	public RestartDriver(UIFrameworkContext context) {
+	public RestartDriverBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
 	@Override
-	protected RestartDriver getBuilder() {
+	protected RestartDriverBuilder getBuilder() {
 		return this;
 	}
 

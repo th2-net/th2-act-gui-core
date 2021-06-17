@@ -95,8 +95,8 @@ public class WinBuilderManager {
 		return new GetScreenshotBuilder(context);
 	}
 	
-	public RestartDriver restartDriver() {
-		return new RestartDriver(context);
+	public RestartDriverBuilder restartDriver() {
+		return new RestartDriverBuilder(context);
 	}
 
 	public GetElementColorBuilder getElementColor() {
