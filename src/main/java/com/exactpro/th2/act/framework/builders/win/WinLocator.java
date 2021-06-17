@@ -107,12 +107,12 @@ public class WinLocator {
 	}
 
 	public enum WinLocatorType {
-		
 		CACHED_ELEMENT("cachedId"),
 		ACCESSIBILITY_ID("accessibilityId"),
 		NAME("name"),
-		XPATH("xpath");
-		
+		XPATH("xpath"),
+		ROOT("root");
+
 		private final String name;
 
 		WinLocatorType(String name) {
@@ -123,13 +123,13 @@ public class WinLocator {
 			return name;
 		}
 	}
-	
+
 	private static class RootLocator extends WinLocator {
 
 		private static final RootLocator INSTANCE = new RootLocator();
 		
 		protected RootLocator() {
-			super(null, null, null);
+			super(null, WinLocatorType.ROOT, null);
 		}
 
 		@Override

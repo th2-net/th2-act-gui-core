@@ -65,6 +65,8 @@ public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extend
 	}
 
 	protected List<RhWinActionsMessages.WinLocator> buildWinLocator(WinLocator winLocator) {
+		if (winLocator.isRoot())
+			return buildRootLocator(winLocator);
 
 		List<RhWinActionsMessages.WinLocator> builtLocators = new ArrayList<>();
 		WinLocator currentLocator = winLocator;
@@ -84,6 +86,13 @@ public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extend
 		return builtLocators;
 	}
 
+
+	private List<RhWinActionsMessages.WinLocator> buildRootLocator(WinLocator locator) {
+		RhWinActionsMessages.WinLocator message = RhWinActionsMessages.WinLocator.newBuilder()
+				.setLocator(locator.getLocatorType().getName())
+				.build();
+		return Collections.singletonList(message);
+	}
 	protected RhWinActionsMessages.BaseWinParams buildBaseParam() {
 		RhWinActionsMessages.BaseWinParams.Builder params = RhWinActionsMessages.BaseWinParams.newBuilder();
 		addIfNotEmpty(id, params::setId);
