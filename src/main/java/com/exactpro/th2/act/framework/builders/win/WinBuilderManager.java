@@ -19,13 +19,13 @@ package com.exactpro.th2.act.framework.builders.win;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 
 public class WinBuilderManager {
-	
+
 	private final UIFrameworkContext context;
 
 	public WinBuilderManager(UIFrameworkContext context) {
 		this.context = context;
 	}
-	
+
 	public SendTextBuilder sendText() {
 		return new SendTextBuilder(context);
 	}
@@ -65,7 +65,7 @@ public class WinBuilderManager {
 	public ToggleCheckBoxBuilder toggleCheckbox() {
 		return new ToggleCheckBoxBuilder(context);
 	}
-	
+
 	public ScrollUsingTextBuilder scrollUsingTextBuilder() {
 		return new ScrollUsingTextBuilder(context);
 	}
@@ -94,7 +94,7 @@ public class WinBuilderManager {
 	public GetScreenshotBuilder getScreenshot() {
 		return new GetScreenshotBuilder(context);
 	}
-	
+
 	public RestartDriverBuilder restartDriver() {
 		return new RestartDriverBuilder(context);
 	}
@@ -109,6 +109,10 @@ public class WinBuilderManager {
 
 	public ScrollToElementBuilder scrollToElement() {
 		return new ScrollToElementBuilder(context);
+	}
+
+	public ColorsCollectorBuilder colorsCollector() {
+		return new ColorsCollectorBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {
