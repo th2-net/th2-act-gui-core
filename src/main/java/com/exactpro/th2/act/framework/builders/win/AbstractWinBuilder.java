@@ -32,7 +32,9 @@ public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extend
 	protected String id;
 	protected String execute;
 	protected WinLocator winLocator;
-	
+	protected boolean fromRoot;
+	protected boolean experimental;
+
 	public AbstractWinBuilder(UIFrameworkContext context) {
 		super(context);
 	}
@@ -49,6 +51,16 @@ public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extend
 
 	public T winLocator(WinLocator winLocator) {
 		this.winLocator = winLocator;
+		return getBuilder();
+	}
+
+	public T fromRoot(boolean fromRoot) {
+		this.fromRoot = fromRoot;
+		return getBuilder();
+	}
+
+	public T experimental(boolean experimental) {
+		this.experimental = experimental;
 		return getBuilder();
 	}
 
@@ -80,5 +92,14 @@ public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extend
 				.setLocator(locator.getLocatorType().getName())
 				.build();
 		return Collections.singletonList(message);
+	}
+	protected RhWinActionsMessages.BaseWinParams buildBaseParam() {
+		RhWinActionsMessages.BaseWinParams.Builder params = RhWinActionsMessages.BaseWinParams.newBuilder();
+		addIfNotEmpty(id, params::setId);
+		addIfNotEmpty(execute, params::setExecute);
+		params.setFromRoot(fromRoot);
+		params.setExperimentalDriver(experimental);
+
+		return params.build();
 	}
 }

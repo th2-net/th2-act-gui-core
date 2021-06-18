@@ -46,10 +46,6 @@ public class WinBuilderManager {
 		return new WaitForAttributeBuilder(context);
 	}
 
-	public ClickContextMenuBuilder clickContext() {
-		return new ClickContextMenuBuilder(context);
-	}
-
 	public GetActiveWindowBuilder getActiveWindow() {
 		return new GetActiveWindowBuilder(context);
 	}
@@ -97,6 +93,10 @@ public class WinBuilderManager {
 
 	public GetScreenshotBuilder getScreenshot() {
 		return new GetScreenshotBuilder(context);
+	}
+	
+	public RestartDriverBuilder restartDriver() {
+		return new RestartDriverBuilder(context);
 	}
 
 	public GetElementColorBuilder getElementColor() {

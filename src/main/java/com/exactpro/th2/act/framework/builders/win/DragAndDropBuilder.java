@@ -72,9 +72,7 @@ public class DragAndDropBuilder extends WindowBuilder<DragAndDropBuilder> {
 		RhWinActionsMessages.WinDragAndDrop.Builder builder = RhWinActionsMessages.WinDragAndDrop.newBuilder();
 		builder.addAllFromLocators(buildWinLocator(this.winLocator));
 		builder.addAllToLocators(buildWinLocator(this.toWinLocator));
-
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 
 		if (!StringUtils.isEmpty(fromOffsetX) && !StringUtils.isEmpty(fromOffsetY))
 			builder.setFromOffsetX(fromOffsetX).setFromOffsetY(fromOffsetY);

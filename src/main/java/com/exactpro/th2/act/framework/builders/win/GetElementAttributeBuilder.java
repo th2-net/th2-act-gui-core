@@ -50,8 +50,7 @@ public class GetElementAttributeBuilder extends AbstractWinBuilder<GetElementAtt
 		this.checkRequiredFields(winLocator, WIN_LOCATOR_FIELD_NAME, attributeName, ATTRIBUTE_NAME_FIELD_NAME);
 		RhWinActionsMessages.WinGetElementAttribute.Builder getElemtnAttribute = RhWinActionsMessages.WinGetElementAttribute.newBuilder();
 		getElemtnAttribute.addAllLocators(this.buildWinLocator(winLocator));
-		this.addIfNotEmpty(id, getElemtnAttribute::setId);
-		this.addIfNotEmpty(execute, getElemtnAttribute::setExecute);
+		getElemtnAttribute.setBaseParams(buildBaseParam());
 		getElemtnAttribute.setAttributeName(attributeName);
 		return RhAction.newBuilder().setWinGetElementAttribute(getElemtnAttribute.build()).build();
 	}
