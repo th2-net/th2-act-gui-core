@@ -18,13 +18,18 @@ package com.exactpro.th2.act.framework.builders.win;
 
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
+import com.exactpro.th2.act.framework.ui.constants.SendTextExtraButtons;
+import com.exactpro.th2.act.framework.ui.utils.UIUtils;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Arrays;
+
 public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 	private String xOffset;
 	private String yOffset;
+	private String modifiers;
 
 	private MouseClickButton button;
 
@@ -59,6 +64,12 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		return getBuilder();
 	}
 
+	public ClickBuilder modifiers(SendTextExtraButtons... modifiers) {
+		String[] rawCommands = Arrays.stream(modifiers).map(SendTextExtraButtons::rawCommand).toArray(String[]::new);
+		this.modifiers = UIUtils.keyCombo(rawCommands);
+		return getBuilder();
+	}
+
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
@@ -73,6 +84,8 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		if (!StringUtils.isEmpty(xOffset) && !StringUtils.isEmpty(yOffset)) {
 			clickBuilder.setXOffset(xOffset).setYOffset(yOffset);
 		}
+
+		addIfNotEmpty(modifiers, clickBuilder::setModifiers);
 
 		return RhAction.newBuilder().setWinClick(clickBuilder.build()).build();
 	}
