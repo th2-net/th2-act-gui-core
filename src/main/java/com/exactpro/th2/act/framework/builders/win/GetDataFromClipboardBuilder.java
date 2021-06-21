@@ -41,8 +41,7 @@ public class GetDataFromClipboardBuilder extends AbstractWinBuilder<GetDataFromC
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.WinGetDataFromClipboard.Builder builder
 				= RhWinActionsMessages.WinGetDataFromClipboard.newBuilder();
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinGetDataFromClipboard(builder).build();
 	}
 }

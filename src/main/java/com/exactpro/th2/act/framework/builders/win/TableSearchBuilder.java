@@ -114,8 +114,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 
 		WinTableSearch.Builder builder = WinTableSearch.newBuilder();
 		builder.addAllLocators(buildWinLocator(winLocator));
-		builder.setId(id);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(String.valueOf(firstRowIndex), builder::setFirstRowIndex);
 		addIfNotEmpty(rowNameFormat, builder::setRowNameFormat);
 		addIfNotEmpty(rowElementNameFormat, builder::setRowElementNameFormat);

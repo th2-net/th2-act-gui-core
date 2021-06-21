@@ -41,7 +41,7 @@ public class WinUIElement {
 
 	protected WinLocator findAndSaveLocators(WinLocator locator, String actionId, boolean save) throws UIFrameworkBuildingException {
 		builders.searchElement().id(actionId).winLocator(locator).build();
-		WinLocator winLocator = WinLocator.byCachedId(actionId);
+		WinLocator winLocator = WinLocator.fromCachedId(actionId);
 		if (save) {
 			this.cachedElements.put(actionId, winLocator);
 		}
@@ -58,6 +58,7 @@ public class WinUIElement {
 
 	protected void clickContext(String contextButtonName) throws UIFrameworkBuildingException {
 		this.builders.waitAction().time(250).build();
-		this.builders.clickContext().winLocator(WinLocator.root().byName(contextButtonName)).build();
+		this.builders.click().winLocator(WinLocator.root().byName(contextButtonName)).experimental(true)
+				.fromRoot(true).build();
 	}
 }

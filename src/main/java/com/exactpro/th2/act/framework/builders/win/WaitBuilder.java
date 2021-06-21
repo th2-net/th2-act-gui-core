@@ -51,8 +51,7 @@ public class WaitBuilder extends AbstractWinBuilder<WaitBuilder> {
 		this.checkRequiredFields(waitingTime, WAITING_TIME_FIELD_NAME);
 		RhWinActionsMessages.WinWait.Builder builder = RhWinActionsMessages.WinWait.newBuilder();
 		builder.setMillis(waitingTime);
-		this.addIfNotEmpty(this.id, builder::setId);
-		this.addIfNotEmpty(this.execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinWait(builder).build();
 	}
 }

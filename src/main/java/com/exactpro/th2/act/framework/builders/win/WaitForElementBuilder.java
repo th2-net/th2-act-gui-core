@@ -25,7 +25,6 @@ public class WaitForElementBuilder extends AbstractWinBuilder<WaitForElementBuil
 	public static final String TIMEOUT_FILED_NAME = "timeout";
 
 	private String timeout;
-	private String fromRoot;
 
 
 	public WaitForElementBuilder(UIFrameworkContext context) {
@@ -35,11 +34,6 @@ public class WaitForElementBuilder extends AbstractWinBuilder<WaitForElementBuil
 
 	public WaitForElementBuilder timeout(int timeout) {
 		this.timeout = String.valueOf(timeout);
-		return this;
-	}
-
-	public WaitForElementBuilder fromRoot(boolean fromRoot) {
-		this.fromRoot = String.valueOf(fromRoot);
 		return this;
 	}
 
@@ -60,9 +54,7 @@ public class WaitForElementBuilder extends AbstractWinBuilder<WaitForElementBuil
 		RhWinActionsMessages.WinWaitForElement.Builder waitForElement = RhWinActionsMessages.WinWaitForElement.newBuilder();
 		waitForElement.addAllLocators(this.buildWinLocator(this.winLocator));
 		waitForElement.setTimeout(timeout);
-		this.addIfNotEmpty(id, waitForElement::setId);
-		this.addIfNotEmpty(execute, waitForElement::setExecute);
-		this.addIfNotEmpty(fromRoot, waitForElement::setFromRoot);
+		waitForElement.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinWaitForElement(waitForElement).build();
 	}
 }

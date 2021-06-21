@@ -43,9 +43,7 @@ public class GetScreenshotBuilder extends AbstractWinBuilder<GetScreenshotBuilde
 		if (winLocator != null) {
 			builder.addAllLocators(buildWinLocator(this.winLocator));	
 		}
-		
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		return RhAction.newBuilder().setWinGetScreenshot(builder).build();
 	}
 }

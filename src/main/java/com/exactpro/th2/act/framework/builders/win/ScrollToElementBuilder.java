@@ -96,8 +96,7 @@ public class ScrollToElementBuilder extends WindowBuilder<ScrollToElementBuilder
 		RhWinActionsMessages.WinScrollToElement.Builder builder = RhWinActionsMessages.WinScrollToElement.newBuilder();
 		builder.addAllElementLocators(buildWinLocator(this.winLocator));
 		builder.addAllActionLocators(buildWinLocator(this.actionWinLocator));
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 
 		if (!StringUtils.isEmpty(clickOffsetX) && !StringUtils.isEmpty(clickOffsetY))
 			builder.setClickOffsetX(clickOffsetX).setClickOffsetY(clickOffsetY);
