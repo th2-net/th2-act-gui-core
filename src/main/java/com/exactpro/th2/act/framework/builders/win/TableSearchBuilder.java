@@ -120,7 +120,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 		addIfNotEmpty(rowElementNameFormat, builder::setRowElementNameFormat);
 		addIfNotEmpty(rowElementValueFormat, builder::setRowElementValueFormat);
 		builder.setSearchParams(createFilters(searchParams));
-		builder.setTargetColumn(columnName);
+		addIfNotEmpty(columnName, builder::setTargetColumn);
 		builder.setColumnIndex(String.valueOf(columnIndex));
 		addIfNotEmpty(saveResult, builder::setSaveResult);
 
@@ -128,8 +128,8 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 	}
 
 	private void validateParams() throws UIFrameworkBuildingException {
-		if (searchParams == null || searchParams.isEmpty() || columnName == null)
-			throw new UIFrameworkBuildingException("Search parameters and column name must be specified");
+		if (searchParams == null || searchParams.isEmpty())
+			throw new UIFrameworkBuildingException("Search parameters must be specified");
 
 		if (columnIndex < 0)
 			throw new UIFrameworkBuildingException("Column index cannot be negative");
