@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,30 +21,26 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class ClickContextMenuBuilder extends AbstractWinBuilder<ClickContextMenuBuilder> {
-
-	public ClickContextMenuBuilder(UIFrameworkContext context) {
+public class RestartDriverBuilder extends WindowBuilder<RestartDriverBuilder> {
+	
+	public RestartDriverBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
 	@Override
-	protected ClickContextMenuBuilder getBuilder() {
+	protected RestartDriverBuilder getBuilder() {
 		return this;
 	}
 
 	@Override
 	protected String getActionName() {
-		return "WinClickContextMenu";
+		return "WinRestartDriver";
 	}
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
-		RhWinActionsMessages.WinClickContextMenu.Builder clickCM = RhWinActionsMessages.WinClickContextMenu.newBuilder();
-		clickCM.addAllLocators(this.buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, clickCM::setId);
-		addIfNotEmpty(execute, clickCM::setExecute);
-		return RhAction.newBuilder().setWinClickContextMenu(clickCM).build();
+		RhWinActionsMessages.WinRestartDriver.Builder restartDriver = RhWinActionsMessages.WinRestartDriver.newBuilder();
+		restartDriver.setBaseParams(buildBaseParam());
+		return RhAction.newBuilder().setWinRestartDriver(restartDriver.build()).build();
 	}
-	
 }

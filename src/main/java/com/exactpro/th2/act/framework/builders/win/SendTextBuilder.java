@@ -74,8 +74,7 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 		if (this.winLocator != null) {
 			sendTextBuilder.addAllLocators(buildWinLocator(this.winLocator));
 		}
-		addIfNotEmpty(id, sendTextBuilder::setId);
-		addIfNotEmpty(execute, sendTextBuilder::setExecute);
+		sendTextBuilder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(isDirectText, sendTextBuilder::setIsDirectText);
 		addIfNotEmpty(clearBefore, sendTextBuilder::setClearBefore);
 		

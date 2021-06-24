@@ -19,6 +19,7 @@ package com.exactpro.th2.act.framework.builders;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.LinkedHashSet;
@@ -43,7 +44,7 @@ public abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
 	}
 
 	protected void addIfNotEmpty(String arg, Consumer<String> function) {
-		if (arg != null && !arg.isEmpty()) {
+		if (StringUtils.isNotEmpty(arg)) {
 			function.accept(arg);
 		}
 	}

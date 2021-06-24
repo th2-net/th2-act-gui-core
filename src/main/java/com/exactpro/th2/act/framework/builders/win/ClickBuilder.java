@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,20 @@ package com.exactpro.th2.act.framework.builders.win;
 
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
+import com.exactpro.th2.act.framework.ui.constants.SendTextExtraButtons;
+import com.exactpro.th2.act.framework.ui.utils.UIUtils;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
-import com.google.protobuf.Int32Value;
+import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
-	
-	private Integer xOffset;
-	private Integer yOffset;
-	
+	private String xOffset;
+	private String yOffset;
+	private String modifiers;
+
 	private MouseClickButton button;
-	private ClickBorder border;
 
 	public ClickBuilder(UIFrameworkContext context) {
 		super(context);
@@ -45,6 +48,12 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 	}
 
 	public ClickBuilder offset(int x, int y) {
+		this.xOffset = String.valueOf(x);
+		this.yOffset = String.valueOf(y);
+		return getBuilder();
+	}
+
+	public ClickBuilder offset(String x, String y) {
 		this.xOffset = x;
 		this.yOffset = y;
 		return getBuilder();
@@ -55,8 +64,9 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		return getBuilder();
 	}
 
-	public ClickBuilder border(ClickBorder border) {
-		this.border = border;
+	public ClickBuilder modifiers(SendTextExtraButtons... modifiers) {
+		String[] rawCommands = Arrays.stream(modifiers).map(SendTextExtraButtons::rawCommand).toArray(String[]::new);
+		this.modifiers = UIUtils.keyCombo(rawCommands);
 		return getBuilder();
 	}
 
@@ -65,21 +75,18 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinClick.Builder clickBuilder = RhWinActionsMessages.WinClick.newBuilder();
 		clickBuilder.addAllLocators(buildWinLocator(this.winLocator));
-		addIfNotEmpty(id, clickBuilder::setId);
-		addIfNotEmpty(execute, clickBuilder::setExecute);
-		
+		clickBuilder.setBaseParams(buildBaseParam());
+
 		if (button != null) {
 			clickBuilder.setButton(button.grpcButton);
 		}
 
-		if (border != null) {
-			clickBuilder.setAttachedBorder(border.grpcBorder);
+		if (!StringUtils.isEmpty(xOffset) && !StringUtils.isEmpty(yOffset)) {
+			clickBuilder.setXOffset(xOffset).setYOffset(yOffset);
 		}
 
-		if (xOffset != null && yOffset != null) {
-			clickBuilder.setXOffset(Int32Value.of(xOffset));
-			clickBuilder.setYOffset(Int32Value.of(yOffset));
-		}
+		addIfNotEmpty(modifiers, clickBuilder::setModifiers);
+
 		return RhAction.newBuilder().setWinClick(clickBuilder.build()).build();
 	}
 
@@ -96,19 +103,4 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 			this.grpcButton = grpcButton;
 		}
 	}
-
-	public enum ClickBorder {
-
-		LEFT_TOP(RhWinActionsMessages.WinClick.AttachedBorder.LEFT_TOP),
-		LEFT_BOTTOM(RhWinActionsMessages.WinClick.AttachedBorder.LEFT_BOTTOM),
-		RIGHT_TOP(RhWinActionsMessages.WinClick.AttachedBorder.RIGHT_TOP),
-		RIGHT_BOTTOM(RhWinActionsMessages.WinClick.AttachedBorder.RIGHT_BOTTOM);
-
-		private final RhWinActionsMessages.WinClick.AttachedBorder grpcBorder;
-
-		ClickBorder(RhWinActionsMessages.WinClick.AttachedBorder grpcBorder) {
-			this.grpcBorder = grpcBorder;
-		}
-	}
-	
 }

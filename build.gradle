@@ -24,10 +24,6 @@ ext {
 repositories {
     mavenCentral()
     maven {
-        name 'Bintray'
-        url 'https://dl.bintray.com/exactpro/th2'
-    }
-    maven {
             name 'Sonatype_snapshots'
             url 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
     }
@@ -51,20 +47,15 @@ sourceSets {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:2.10.1')
+    api platform('com.exactpro.th2:bom:3.0.0')
 
-    implementation 'com.exactpro.th2:common:3.0.0'
-    implementation 'com.exactpro.th2:grpc-common:3.0.0'
-    
-    implementation "com.exactpro.th2:grpc-hand:2.6.5-TH2-1605-755043613-SNAPSHOT"
-
-
+    implementation 'com.exactpro.th2:common:3.13.4'
+    implementation 'com.exactpro.th2:grpc-common:3.1.2'
+    implementation "com.exactpro.th2:grpc-hand:2.7.8-TH2-1605-966987667-SNAPSHOT"
     implementation "org.apache.commons:commons-lang3"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-
     implementation "org.slf4j:slf4j-log4j12"
     implementation "org.slf4j:slf4j-api"
-
     implementation "org.apache.commons:commons-collections4:4.4"
 
     testImplementation 'junit:junit:4.12'

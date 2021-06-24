@@ -19,13 +19,13 @@ package com.exactpro.th2.act.framework.builders.win;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 
 public class WinBuilderManager {
-	
+
 	private final UIFrameworkContext context;
 
 	public WinBuilderManager(UIFrameworkContext context) {
 		this.context = context;
 	}
-	
+
 	public SendTextBuilder sendText() {
 		return new SendTextBuilder(context);
 	}
@@ -44,10 +44,6 @@ public class WinBuilderManager {
 
 	public WaitForAttributeBuilder waitForAttribute() {
 		return new WaitForAttributeBuilder(context);
-	}
-
-	public ClickContextMenuBuilder clickContext() {
-		return new ClickContextMenuBuilder(context);
 	}
 
 	public GetActiveWindowBuilder getActiveWindow() {
@@ -69,7 +65,7 @@ public class WinBuilderManager {
 	public ToggleCheckBoxBuilder toggleCheckbox() {
 		return new ToggleCheckBoxBuilder(context);
 	}
-	
+
 	public ScrollUsingTextBuilder scrollUsingTextBuilder() {
 		return new ScrollUsingTextBuilder(context);
 	}
@@ -94,9 +90,29 @@ public class WinBuilderManager {
 	public MaximizeMainWindowBuilder maximizeMainWindow() {
 		return new MaximizeMainWindowBuilder(context);
 	}
-	
+
 	public GetScreenshotBuilder getScreenshot() {
 		return new GetScreenshotBuilder(context);
+	}
+
+	public RestartDriverBuilder restartDriver() {
+		return new RestartDriverBuilder(context);
+	}
+
+	public GetElementColorBuilder getElementColor() {
+		return new GetElementColorBuilder(context);
+	}
+
+	public DragAndDropBuilder dragAndDrop() {
+		return new DragAndDropBuilder(context);
+	}
+
+	public ScrollToElementBuilder scrollToElement() {
+		return new ScrollToElementBuilder(context);
+	}
+
+	public ColorsCollectorBuilder colorsCollector() {
+		return new ColorsCollectorBuilder(context);
 	}
 
 	public UIFrameworkContext getContext() {

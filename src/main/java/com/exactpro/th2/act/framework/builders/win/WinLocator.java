@@ -54,6 +54,14 @@ public class WinLocator {
 		return byId(id, null);
 	}
 
+	public WinLocator byCachedId(String id) {
+		return byLocator(WinLocatorType.CACHED_ELEMENT, id);
+	}
+
+	public WinLocator byCachedId(String id, Integer index) {
+		return byLocator(WinLocatorType.CACHED_ELEMENT, id, index);
+	}
+
 	public WinLocator byId(String id, Integer index) {
 		return this.byLocator(WinLocatorType.ACCESSIBILITY_ID, id, index);
 	}
@@ -62,8 +70,12 @@ public class WinLocator {
 		return this.byLocator(WinLocatorType.XPATH, xpath);
 	}
 
-	public static WinLocator byCachedId(String cachedId) {
+	public static WinLocator fromCachedId(String cachedId) {
 		return root().byLocator(WinLocatorType.CACHED_ELEMENT, cachedId);
+	}
+
+	public static WinLocator fromCachedId(String cachedId, Integer index) {
+		return root().byLocator(WinLocatorType.CACHED_ELEMENT, cachedId, index);
 	}
 	
 	public boolean isRoot() {
@@ -95,12 +107,12 @@ public class WinLocator {
 	}
 
 	public enum WinLocatorType {
-		
 		CACHED_ELEMENT("cachedId"),
 		ACCESSIBILITY_ID("accessibilityId"),
 		NAME("name"),
-		XPATH("xpath");
-		
+		XPATH("xpath"),
+		ROOT("root");
+
 		private final String name;
 
 		WinLocatorType(String name) {
@@ -111,13 +123,13 @@ public class WinLocator {
 			return name;
 		}
 	}
-	
+
 	private static class RootLocator extends WinLocator {
 
 		private static final RootLocator INSTANCE = new RootLocator();
 		
 		protected RootLocator() {
-			super(null, null, null);
+			super(null, WinLocatorType.ROOT, null);
 		}
 
 		@Override

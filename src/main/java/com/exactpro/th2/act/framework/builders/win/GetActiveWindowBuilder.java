@@ -47,8 +47,7 @@ public class GetActiveWindowBuilder extends WindowBuilder<GetActiveWindowBuilder
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
 		checkWindowIds();
 		RhWinActionsMessages.WinGetActiveWindow.Builder builder = RhWinActionsMessages.WinGetActiveWindow.newBuilder();
-		addIfNotEmpty(id, builder::setId);
-		addIfNotEmpty(execute, builder::setExecute);
+		builder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(windowName, builder::setWindowName);
 		addIfNotEmpty(accessibilityId, builder::setAccessibilityId);
 		builder.setMaxTimeout(maxTimeout);

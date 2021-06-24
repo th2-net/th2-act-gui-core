@@ -21,29 +21,42 @@ import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
 
-public class GetScreenshotBuilder extends AbstractWinBuilder<GetScreenshotBuilder> {
-	
-	public GetScreenshotBuilder(UIFrameworkContext context) {
+public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBuilder> {
+	private String xOffset;
+	private String yOffset;
+
+
+	public GetElementColorBuilder(UIFrameworkContext context) {
 		super(context);
 	}
 
+
+	public GetElementColorBuilder offset(String x, String y) {
+		this.xOffset = x;
+		this.yOffset = y;
+		return this;
+	}
+
+
 	@Override
-	protected GetScreenshotBuilder getBuilder() {
+	protected GetElementColorBuilder getBuilder() {
 		return this;
 	}
 
 	@Override
 	protected String getActionName() {
-		return "GetScreenshot";
+		return "WinGetElementColor";
 	}
 
 	@Override
 	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		RhWinActionsMessages.WinGetScreenshot.Builder builder = RhWinActionsMessages.WinGetScreenshot.newBuilder();
-		if (winLocator != null) {
-			builder.addAllLocators(buildWinLocator(this.winLocator));	
-		}
+		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
+		RhWinActionsMessages.WinGetElementColor.Builder builder = RhWinActionsMessages.WinGetElementColor.newBuilder();
+		builder.addAllLocators(buildWinLocator(this.winLocator));
 		builder.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinGetScreenshot(builder).build();
+		addIfNotEmpty(xOffset, builder::setXOffset);
+		addIfNotEmpty(yOffset, builder::setYOffset);
+
+		return RhAction.newBuilder().setWinGetElementColor(builder.build()).build();
 	}
 }
