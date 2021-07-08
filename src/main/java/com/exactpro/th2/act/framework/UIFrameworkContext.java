@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +22,7 @@ import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import com.exactpro.th2.common.grpc.EventID;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UIFrameworkContext {
 
@@ -36,41 +32,42 @@ public class UIFrameworkContext {
 	private HandExecutor handExecutor;
 
 	private List<RhAction> buffer;
-	private Map<String, RhBatchResponse> rhResponses;
 	private Map<String, ContextInfoData> contextInfo;
 
 	public UIFrameworkContext(RhSessionID sessionID, HandExecutor handExecutor) {
 		this.sessionID = sessionID;
 		this.handExecutor = handExecutor;
 		this.buffer = new ArrayList<>();
-		this.rhResponses = new LinkedHashMap<>();
 		this.contextInfo = new LinkedHashMap<>();
 	}
 
 	public RhBatchResponse submit(String eventName) {
-		return this.submit(true, eventName, Collections.emptyMap());
+		return this.submit(true, eventName, false);
 	}
 
-	public RhBatchResponse submit(String eventName, Map<String, String> eventParamList) {
-		return this.submit(true, eventName, eventParamList);
+	public RhBatchResponse submit(String eventName, boolean storeActionMessages) {
+		return this.submit(true, eventName, storeActionMessages);
 	}
 
-	public RhBatchResponse submit(boolean clear, String eventName, Map<String, String> eventParamList) {
+	public RhBatchResponse submit(boolean clear, String eventName, boolean storeActionMessages) {
 		if (buffer.isEmpty())
 			return null;
-		
-		RhActionsList.Builder builder = RhActionsList.newBuilder();
-		builder.setSessionId(sessionID);
-		for (RhAction rhAction : buffer) {
-			builder.addRhAction(rhAction);
+
+		RhActionsList.Builder builder = RhActionsList.newBuilder()
+				.setSessionId(sessionID)
+				.setEventName(eventName)
+				.setParentEventId(this.parentEventId)
+				.setStoreActionMessages(storeActionMessages);
+
+		Iterator<RhAction> iterator = buffer.iterator();
+		while (iterator.hasNext()) {
+			RhAction action = iterator.next();
+			builder.addRhAction(action);
+			if (clear)
+				iterator.remove();
 		}
-		RhBatchResponse response = handExecutor.executeWinGuiScript(eventParamList, eventName,
-				this.parentEventId, builder);
-		this.rhResponses.put(eventName, response);
-		if (clear) {
-			buffer.clear();
-		}
-		return response;
+
+		return handExecutor.executeWinGuiScript(builder.build());
 	}
 
 	public void setParentEventId(EventID parentEventId) {

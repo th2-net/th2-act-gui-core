@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.exactpro.th2.act.events;
 
 import com.exactpro.th2.act.events.verification.FieldsVerifier;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
-import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.common.grpc.Event;
 import com.exactpro.th2.common.grpc.EventBatch;
 import com.exactpro.th2.common.grpc.EventID;
@@ -35,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.util.*;
 
@@ -83,59 +82,32 @@ public class EventStoreHandler
 		}
 	}
 	
-	private static List<Object> createMainPayload(Map<String, String> requestParams, RhBatchResponse response)
-	{
-		Map<String, String> responseMap = new LinkedHashMap<>();
-		responseMap.put("Action status", response.getScriptStatus().name());
-		responseMap.put("Errors", response.getErrorMessage());
-		responseMap.put("SessionId", response.getSessionId());
-
-		List<Object> payload = new ArrayList<>(4);
-		payload.addAll(createPayloadFromRequestParams(requestParams));
-		payload.add(new EventPayloadMessage("Response"));
-		payload.add(new EventPayloadTable(responseMap));
-		return payload;
+	private static List<Object> createMainPayload(Map<String, String> requestParams) {
+		return createPayloadFromRequestParams(requestParams);
 	}
 
-	public String writePayloadBody(List<Object> payload, EventID eventId)
-	{
-		try
-		{
-			return mapper.writeValueAsString(payload);
-		}
-		catch (JsonProcessingException e)
-		{
+	public byte[] writePayloadBody(List<Object> payload, EventID eventId) {
+		try {
+			return mapper.writeValueAsBytes(payload);
+		} catch (JsonProcessingException e) {
 			logger.error("Error while creating body, event " + eventId, e);
-			return e.getMessage();
+			return e.getMessage().getBytes(StandardCharsets.UTF_8);
 		}
 	}
 
 	private ByteString byteStringFromPayload(List<Object> objects, EventID eventID) {
-		String stringBody = writePayloadBody(objects, eventID);
-		return ByteString.copyFrom(stringBody, Charset.defaultCharset());
+		return ByteString.copyFrom(writePayloadBody(objects, eventID));
 	}
-	
-	public void storeEvent(EventDetails.EventInfo info, Map<String, String> requestParams, RhBatchResponse response)
-	{
+
+	public void storeEvent(EventDetails.EventInfo info, Map<String, String> requestParams) {
 		logger.debug("Storing execution event");
-		// Create main event with request and response information
-		EventDetails details = new EventDetails(info);
-		details.setBuffer(this.byteStringFromPayload(createMainPayload(requestParams, response), info.getEventId()));
-		details.setStatus(response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS);
-		details.setMessageIDList(response.getAttachedMessageIdsList());
-
-		this.storeEvent(details);
-	}
-
-	public void storeEvent(EventDetails.EventInfo info, Map<String, String> requestParams)
-	{
-		logger.debug("Storing parent event");
 		// Create main event with request and response information
 		EventDetails details = new EventDetails(info);
 		details.setStatus(true);
 		if (MapUtils.isNotEmpty(requestParams)) {
-			details.setBuffer(this.byteStringFromPayload(createPayloadFromRequestParams(requestParams), info.getEventId()));
+			details.setBuffer(this.byteStringFromPayload(createMainPayload(requestParams), info.getEventId()));
 		}
+
 		this.storeEvent(details);
 	}
 
@@ -185,7 +157,7 @@ public class EventStoreHandler
 	{
 		Event event = createEvent(eventDetails);
 		try {
-			eventBatchRouter.send(EventBatch.newBuilder().addEvents(event).build(), "publish", "event");
+			eventBatchRouter.send(EventBatch.newBuilder().addEvents(event).build());
 			logger.info("Event ID = " + event.getId());
 		} catch (IOException e) {
 			logger.warn("Could not store event", e);

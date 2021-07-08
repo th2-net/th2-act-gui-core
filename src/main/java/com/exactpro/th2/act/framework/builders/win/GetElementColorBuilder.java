@@ -37,6 +37,10 @@ public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBu
 		return this;
 	}
 
+	public GetElementColorBuilder offset(int x, int y) {
+		return offset(String.valueOf(x), String.valueOf(y));
+	}
+
 
 	@Override
 	protected GetElementColorBuilder getBuilder() {

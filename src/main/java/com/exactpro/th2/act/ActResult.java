@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,10 +68,10 @@ public class ActResult {
 
 	public enum ActExecutionStatus {
 		SUCCESS,
-		ACT_ERROR,
-		HAND_ERROR,
 		COMPILE_ERROR,
 		EXECUTION_ERROR,
+		ACT_ERROR,
+		HAND_INTERNAL_ERROR,
 		UNKNOWN_ERROR;
 	}
 }
