@@ -75,7 +75,7 @@ public class ColorsCollectorBuilder extends WindowBuilder<ColorsCollectorBuilder
 			builder.setStartXOffset(startXOffset).setStartYOffset(startYOffset);
 
 		if (StringUtils.isNotEmpty(endXOffset) && StringUtils.isNotEmpty(endYOffset))
-			builder.setEndYOffset(endXOffset).setEndYOffset(endYOffset);
+			builder.setEndXOffset(endXOffset).setEndYOffset(endYOffset);
 		
 		return RhAction.newBuilder().setWinColorsCollector(builder.build()).build();
 	}
