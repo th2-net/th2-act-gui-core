@@ -115,6 +115,10 @@ public class WinBuilderManager {
 		return new ColorsCollectorBuilder(context);
 	}
 
+	public TakeScreenshotBuilder takeScreenshot() {
+		return new TakeScreenshotBuilder(context);
+	}
+
 	public UIFrameworkContext getContext() {
 		return context;
 	}
