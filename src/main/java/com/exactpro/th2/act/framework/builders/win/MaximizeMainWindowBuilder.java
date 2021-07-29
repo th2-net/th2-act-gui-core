@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class MaximizeMainWindowBuilder extends WindowBuilder<MaximizeMainWindowBuilder> {
 
-	public MaximizeMainWindowBuilder(UIFrameworkContext context) {
+	public MaximizeMainWindowBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,9 +38,9 @@ public class MaximizeMainWindowBuilder extends WindowBuilder<MaximizeMainWindowB
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.MaximizeMainWindow.Builder builder = RhWinActionsMessages.MaximizeMainWindow.newBuilder();
 		builder.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinMaximizeMainWindow(builder).build();
+		return RhWinActions.newBuilder().setWinMaximizeMainWindow(builder).build();
 	}
 }

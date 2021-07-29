@@ -16,17 +16,17 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class GetElementAttributeBuilder extends AbstractWinBuilder<GetElementAttributeBuilder> {
 	
 	public static final String ATTRIBUTE_NAME_FIELD_NAME = "attributeName";
 	private String attributeName;
 
-	public GetElementAttributeBuilder(UIFrameworkContext context) {
+	public GetElementAttributeBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -46,12 +46,12 @@ public class GetElementAttributeBuilder extends AbstractWinBuilder<GetElementAtt
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(winLocator, WIN_LOCATOR_FIELD_NAME, attributeName, ATTRIBUTE_NAME_FIELD_NAME);
 		RhWinActionsMessages.WinGetElementAttribute.Builder getElemtnAttribute = RhWinActionsMessages.WinGetElementAttribute.newBuilder();
 		getElemtnAttribute.addAllLocators(this.buildWinLocator(winLocator));
 		getElemtnAttribute.setBaseParams(buildBaseParam());
 		getElemtnAttribute.setAttributeName(attributeName);
-		return RhAction.newBuilder().setWinGetElementAttribute(getElemtnAttribute.build()).build();
+		return RhWinActions.newBuilder().setWinGetElementAttribute(getElemtnAttribute.build()).build();
 	}
 }

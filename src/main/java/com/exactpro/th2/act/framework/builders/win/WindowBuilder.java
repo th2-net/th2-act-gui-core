@@ -16,7 +16,7 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import org.apache.commons.lang3.StringUtils;
 
@@ -27,7 +27,7 @@ public abstract class WindowBuilder<T extends WindowBuilder<T>> extends Abstract
 
 	protected String windowName, accessibilityId;
 
-	public WindowBuilder(UIFrameworkContext context)
+	public WindowBuilder(UIWinFrameworkContext context)
 	{
 		super(context);
 	}

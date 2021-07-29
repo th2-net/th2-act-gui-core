@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class SelectBuilder extends AbstractWebBuilder<SelectBuilder> {
 	
@@ -28,7 +28,7 @@ public class SelectBuilder extends AbstractWebBuilder<SelectBuilder> {
 	private Boolean noOptionalFail;
 	
 	
-	protected SelectBuilder(UIFrameworkContext context) {
+	protected SelectBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -58,7 +58,7 @@ public class SelectBuilder extends AbstractWebBuilder<SelectBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(locator, LOCATOR_PARAM);
 		RhActionsMessages.Select.Builder builder = RhActionsMessages.Select.newBuilder();
 		addIfNotNull(wait, builder::setWait);
@@ -67,6 +67,6 @@ public class SelectBuilder extends AbstractWebBuilder<SelectBuilder> {
 		addIfNotEmpty(text, builder::setText);
 		addIfNotEmpty(defaultText, builder::setDefault);
 		addIfNotNull(noOptionalFail, builder::setNoOptionalFail);
-		return RhAction.newBuilder().setSelect(builder).build();
+		return RhWebActions.newBuilder().setSelect(builder).build();
 	}
 }

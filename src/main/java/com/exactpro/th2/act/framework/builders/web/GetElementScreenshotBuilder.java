@@ -16,16 +16,16 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class GetElementScreenshotBuilder extends AbstractWebBuilder<GetElementScreenshotBuilder> {
 	
 	private String name;
 	
-	protected GetElementScreenshotBuilder(UIFrameworkContext context) {
+	protected GetElementScreenshotBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -45,13 +45,13 @@ public class GetElementScreenshotBuilder extends AbstractWebBuilder<GetElementSc
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.locator, LOCATOR_PARAM);
 		RhActionsMessages.GetElementScreenshot.Builder builder = RhActionsMessages.GetElementScreenshot.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
 		addIfNotEmpty(name, builder::setName);
-		return RhAction.newBuilder().setGetElementScreenshot(builder).build();
+		return RhWebActions.newBuilder().setGetElementScreenshot(builder).build();
 	}
 }

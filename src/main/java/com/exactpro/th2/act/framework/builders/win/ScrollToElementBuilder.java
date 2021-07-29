@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 import org.apache.commons.lang3.StringUtils;
 
 public class ScrollToElementBuilder extends WindowBuilder<ScrollToElementBuilder> {
@@ -38,7 +38,7 @@ public class ScrollToElementBuilder extends WindowBuilder<ScrollToElementBuilder
 	private String textToSend;
 
 
-	public ScrollToElementBuilder(UIFrameworkContext context) {
+	public ScrollToElementBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -91,7 +91,7 @@ public class ScrollToElementBuilder extends WindowBuilder<ScrollToElementBuilder
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, ELEMENT_WIN_LOCATOR_FIELD_NAME, this.actionWinLocator, ACTION_WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinScrollToElement.Builder builder = RhWinActionsMessages.WinScrollToElement.newBuilder();
 		builder.addAllElementLocators(buildWinLocator(this.winLocator));
@@ -107,7 +107,7 @@ public class ScrollToElementBuilder extends WindowBuilder<ScrollToElementBuilder
 		builder.setIsElementShouldBeDisplayed(isElementShouldBeDisplayed);
 		addIfNotEmpty(textToSend, builder::setTextToSend);
 
-		return RhAction.newBuilder().setWinScrollToElement(builder.build()).build();
+		return RhWinActions.newBuilder().setWinScrollToElement(builder.build()).build();
 	}
 
 

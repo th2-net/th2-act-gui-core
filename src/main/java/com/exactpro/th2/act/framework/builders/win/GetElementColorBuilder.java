@@ -16,17 +16,17 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBuilder> {
 	private String xOffset;
 	private String yOffset;
 
 
-	public GetElementColorBuilder(UIFrameworkContext context) {
+	public GetElementColorBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -53,7 +53,7 @@ public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBu
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinGetElementColor.Builder builder = RhWinActionsMessages.WinGetElementColor.newBuilder();
 		builder.addAllLocators(buildWinLocator(this.winLocator));
@@ -61,6 +61,6 @@ public class GetElementColorBuilder extends AbstractWinBuilder<GetElementColorBu
 		addIfNotEmpty(xOffset, builder::setXOffset);
 		addIfNotEmpty(yOffset, builder::setYOffset);
 
-		return RhAction.newBuilder().setWinGetElementColor(builder.build()).build();
+		return RhWinActions.newBuilder().setWinGetElementColor(builder.build()).build();
 	}
 }

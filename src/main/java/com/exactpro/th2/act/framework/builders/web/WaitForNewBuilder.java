@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class WaitForNewBuilder extends AbstractWebBuilder<WaitForNewBuilder> {
 
@@ -29,7 +29,7 @@ public class WaitForNewBuilder extends AbstractWebBuilder<WaitForNewBuilder> {
 	private Integer seconds;
 	private Integer checkMillis;
 
-	protected WaitForNewBuilder(UIFrameworkContext context) {
+	protected WaitForNewBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -54,13 +54,13 @@ public class WaitForNewBuilder extends AbstractWebBuilder<WaitForNewBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		checkRequiredFields(this.seconds, SECONDS_PARAM, this.checkMillis, CHECK_MILLIS_PARAM, this.locator, LOCATOR_PARAM);
 		RhActionsMessages.WaitForNew.Builder builder = RhActionsMessages.WaitForNew.newBuilder();
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
 		builder.setSeconds(this.seconds);
 		builder.setCheckMillis(this.checkMillis);
-		return RhAction.newBuilder().setWaitForNew(builder).build();
+		return RhWebActions.newBuilder().setWaitForNew(builder).build();
 	}
 }

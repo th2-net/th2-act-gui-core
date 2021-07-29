@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class GetWindowBuilder extends WindowBuilder<GetWindowBuilder> {
 	
-	public GetWindowBuilder(UIFrameworkContext context) {
+	public GetWindowBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,12 +38,12 @@ public class GetWindowBuilder extends WindowBuilder<GetWindowBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		checkWindowIds();		
 		RhWinActionsMessages.WinGetWindow.Builder builder = RhWinActionsMessages.WinGetWindow.newBuilder();
 		builder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(windowName, builder::setWindowName);
 		addIfNotEmpty(accessibilityId, builder::setAccessibilityId);
-		return RhAction.newBuilder().setWinGetWindow(builder).build();
+		return RhWinActions.newBuilder().setWinGetWindow(builder).build();
 	}
 }

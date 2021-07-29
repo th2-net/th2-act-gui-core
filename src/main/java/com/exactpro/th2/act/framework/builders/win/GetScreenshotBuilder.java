@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class GetScreenshotBuilder extends AbstractWinBuilder<GetScreenshotBuilder> {
 	
-	public GetScreenshotBuilder(UIFrameworkContext context) {
+	public GetScreenshotBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,12 +38,12 @@ public class GetScreenshotBuilder extends AbstractWinBuilder<GetScreenshotBuilde
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.WinGetScreenshot.Builder builder = RhWinActionsMessages.WinGetScreenshot.newBuilder();
 		if (winLocator != null) {
 			builder.addAllLocators(buildWinLocator(this.winLocator));	
 		}
 		builder.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinGetScreenshot(builder).build();
+		return RhWinActions.newBuilder().setWinGetScreenshot(builder).build();
 	}
 }

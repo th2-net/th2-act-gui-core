@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class RefreshBuilder extends AbstractWebBuilder<RefreshBuilder> {
 
-	protected RefreshBuilder(UIFrameworkContext context) {
+	protected RefreshBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,7 +38,7 @@ public class RefreshBuilder extends AbstractWebBuilder<RefreshBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		return RhAction.newBuilder().setRefresh(RhActionsMessages.Refresh.newBuilder()).build();
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
+		return RhWebActions.newBuilder().setRefresh(RhActionsMessages.Refresh.newBuilder()).build();
 	}
 }

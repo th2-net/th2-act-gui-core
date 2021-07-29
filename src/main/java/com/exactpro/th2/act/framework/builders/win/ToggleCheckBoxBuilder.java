@@ -16,16 +16,16 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class ToggleCheckBoxBuilder extends AbstractWinBuilder<ToggleCheckBoxBuilder> {
 	private boolean enabled = false;
 
 
-	public ToggleCheckBoxBuilder(UIFrameworkContext context) {
+	public ToggleCheckBoxBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -46,13 +46,13 @@ public class ToggleCheckBoxBuilder extends AbstractWinBuilder<ToggleCheckBoxBuil
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.WinToggleCheckBox.Builder checkboxBuilder = RhWinActionsMessages.WinToggleCheckBox.newBuilder();
 		checkboxBuilder.addAllLocators(buildWinLocator(winLocator));
 		checkboxBuilder.setExpectedState(getCheckboxStatus());
 		checkboxBuilder.setBaseParams(buildBaseParam());
 
-		return RhAction.newBuilder().setWinToggleCheckBox(checkboxBuilder).build();
+		return RhWinActions.newBuilder().setWinToggleCheckBox(checkboxBuilder).build();
 	}
 
 

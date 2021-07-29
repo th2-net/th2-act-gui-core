@@ -16,56 +16,73 @@
 
 package com.exactpro.th2.act.framework;
 
-import com.exactpro.th2.act.grpc.hand.RhAction;
-import com.exactpro.th2.act.grpc.hand.RhActionsList;
+import com.exactpro.th2.act.events.AdditionalEventInfo;
+import com.exactpro.th2.act.grpc.hand.RhActionList;
+import com.exactpro.th2.act.grpc.hand.RhActionsBatch;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
 import com.exactpro.th2.common.grpc.EventID;
+import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-public class UIFrameworkContext {
+public abstract class UIFrameworkContext<T> {
 
 	private RhSessionID sessionID;
 	private EventID parentEventId;
 
 	private HandExecutor handExecutor;
-
-	private List<RhAction> buffer;
+	
 	private Map<String, ContextInfoData> contextInfo;
+	protected List<T> buffer;
 
 	public UIFrameworkContext(RhSessionID sessionID, HandExecutor handExecutor) {
 		this.sessionID = sessionID;
 		this.handExecutor = handExecutor;
-		this.buffer = new ArrayList<>();
 		this.contextInfo = new LinkedHashMap<>();
+		this.buffer = new ArrayList<>();
 	}
 
 	public RhBatchResponse submit(String eventName) {
-		return this.submit(true, eventName, false);
+		return this.submit(true, eventName, false, null);
 	}
 
 	public RhBatchResponse submit(String eventName, boolean storeActionMessages) {
-		return this.submit(true, eventName, storeActionMessages);
+		return this.submit(true, eventName, storeActionMessages, null);
 	}
 
-	public RhBatchResponse submit(boolean clear, String eventName, boolean storeActionMessages) {
-		if (buffer.isEmpty())
+	public RhBatchResponse submit(String eventName, boolean storeActionMessages, AdditionalEventInfo info) {
+		return this.submit(true, eventName, storeActionMessages, info);
+	}
+	
+	protected abstract RhActionList buildActionList(boolean clear);
+
+	public RhBatchResponse submit(boolean clear, String eventName, boolean storeActionMessages, AdditionalEventInfo addInfo) {
+		if (this.buffer.isEmpty())
 			return null;
 
-		RhActionsList.Builder builder = RhActionsList.newBuilder()
+		RhActionsBatch.Builder builder = RhActionsBatch.newBuilder()
 				.setSessionId(sessionID)
 				.setEventName(eventName)
 				.setParentEventId(this.parentEventId)
 				.setStoreActionMessages(storeActionMessages);
-
-		Iterator<RhAction> iterator = buffer.iterator();
-		while (iterator.hasNext()) {
-			RhAction action = iterator.next();
-			builder.addRhAction(action);
-			if (clear)
-				iterator.remove();
+		
+		if (addInfo != null) {
+			var eventInfo = RhActionsBatch.AdditionalEventInfo.newBuilder();
+			if (StringUtils.isNotEmpty(addInfo.getDescription())) {
+				eventInfo.setDescription(addInfo.getDescription());
+			}
+			if (MapUtils.isNotEmpty(addInfo.getInputTable()) &&
+					StringUtils.isNotEmpty(addInfo.getInputTableHeader())) {
+				eventInfo.setPrintTable(true);
+				eventInfo.setRequestParamsTableTitle(addInfo.getInputTableHeader());
+				addInfo.getInputTable().forEach((k, v) -> {eventInfo.addKeys(k); eventInfo.addValues(v);});
+			}
+			builder.setAdditionalEventInfo(eventInfo);
 		}
+		
+		builder.setRhAction(buildActionList(clear));
 
 		return handExecutor.executeWinGuiScript(builder.build());
 	}
@@ -76,10 +93,6 @@ public class UIFrameworkContext {
 
 	public EventID getParentEventId() {
 		return parentEventId;
-	}
-
-	public void addRhAction(RhAction action) {
-		this.buffer.add(action);
 	}
 
 	public RhSessionID getSessionID() {
@@ -104,5 +117,9 @@ public class UIFrameworkContext {
 
 	public ContextInfoData getContextInfo(String methodName) {
 		return contextInfo.get(methodName);
+	}
+	
+	public void addAction(T action) {
+		this.buffer.add(action);
 	}
 }

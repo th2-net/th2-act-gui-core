@@ -18,7 +18,6 @@ package com.exactpro.th2.act.framework.builders;
 
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -27,20 +26,20 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
 
-public abstract class AbstractBuilder<T extends AbstractBuilder<T>> {
+public abstract class AbstractBuilder<T extends AbstractBuilder<T, K>, K> {
 	
-	protected final UIFrameworkContext context;
+	protected final UIFrameworkContext<K> context;
 
-	protected AbstractBuilder(UIFrameworkContext context) {
+	protected AbstractBuilder(UIFrameworkContext<K> context) {
 		this.context = context;
 	}
 
 	protected abstract T getBuilder();
 	protected abstract String getActionName();
-	protected abstract RhAction buildAction() throws UIFrameworkBuildingException;
+	protected abstract K buildAction() throws UIFrameworkBuildingException;
 
 	public void build() throws UIFrameworkBuildingException {
-		this.context.addRhAction(this.buildAction());
+		this.context.addAction(this.buildAction());
 	}
 
 	protected void addIfNotEmpty(String arg, Consumer<String> function) {

@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class WaitBuilder extends AbstractWinBuilder<WaitBuilder> {
 	
@@ -27,7 +27,7 @@ public class WaitBuilder extends AbstractWinBuilder<WaitBuilder> {
 	
 	private int waitingTime;
 
-	public WaitBuilder(UIFrameworkContext context) {
+	public WaitBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -47,11 +47,11 @@ public class WaitBuilder extends AbstractWinBuilder<WaitBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(waitingTime, WAITING_TIME_FIELD_NAME);
 		RhWinActionsMessages.WinWait.Builder builder = RhWinActionsMessages.WinWait.newBuilder();
 		builder.setMillis(waitingTime);
 		builder.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinWait(builder).build();
+		return RhWinActions.newBuilder().setWinWait(builder).build();
 	}
 }

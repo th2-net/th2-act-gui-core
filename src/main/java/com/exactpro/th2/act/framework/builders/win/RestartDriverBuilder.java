@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class RestartDriverBuilder extends WindowBuilder<RestartDriverBuilder> {
 	
-	public RestartDriverBuilder(UIFrameworkContext context) {
+	public RestartDriverBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,9 +38,9 @@ public class RestartDriverBuilder extends WindowBuilder<RestartDriverBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		RhWinActionsMessages.WinRestartDriver.Builder restartDriver = RhWinActionsMessages.WinRestartDriver.newBuilder();
 		restartDriver.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinRestartDriver(restartDriver.build()).build();
+		return RhWinActions.newBuilder().setWinRestartDriver(restartDriver.build()).build();
 	}
 }

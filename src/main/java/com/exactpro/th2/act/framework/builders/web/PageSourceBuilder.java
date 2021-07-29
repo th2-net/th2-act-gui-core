@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class PageSourceBuilder extends AbstractWebBuilder<PageSourceBuilder> {
 	
-	protected PageSourceBuilder(UIFrameworkContext context) {
+	protected PageSourceBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,7 +38,7 @@ public class PageSourceBuilder extends AbstractWebBuilder<PageSourceBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
-		return RhAction.newBuilder().setPageSource(RhActionsMessages.PageSource.newBuilder()).build();
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
+		return RhWebActions.newBuilder().setPageSource(RhActionsMessages.PageSource.newBuilder()).build();
 	}
 }

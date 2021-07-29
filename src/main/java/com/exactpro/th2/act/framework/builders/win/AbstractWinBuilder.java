@@ -16,16 +16,17 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.builders.AbstractBuilder;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 import com.google.protobuf.Int32Value;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extends AbstractBuilder<T> {
+public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extends AbstractBuilder<T, RhWinActions> {
 	
 	public static final String WIN_LOCATOR_FIELD_NAME = "winLocator";
 	
@@ -35,7 +36,7 @@ public abstract class AbstractWinBuilder<T extends AbstractWinBuilder<T>> extend
 	protected boolean fromRoot;
 	protected boolean experimental;
 
-	public AbstractWinBuilder(UIFrameworkContext context) {
+	public AbstractWinBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 	

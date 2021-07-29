@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class WaitBuilder extends AbstractWebBuilder<WaitBuilder> {
 
@@ -27,7 +27,7 @@ public class WaitBuilder extends AbstractWebBuilder<WaitBuilder> {
 	
 	private Integer seconds;
 
-	protected WaitBuilder(UIFrameworkContext context) {
+	protected WaitBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -47,10 +47,10 @@ public class WaitBuilder extends AbstractWebBuilder<WaitBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		checkRequiredFields(this.seconds, SECONDS_PARAM);
 		RhActionsMessages.Wait.Builder builder = RhActionsMessages.Wait.newBuilder();
 		builder.setSeconds(this.seconds);
-		return RhAction.newBuilder().setWait(builder).build();
+		return RhWebActions.newBuilder().setWait(builder).build();
 	}
 }

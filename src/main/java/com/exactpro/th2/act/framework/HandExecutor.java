@@ -16,6 +16,7 @@
 
 package com.exactpro.th2.act.framework;
 
+import com.exactpro.th2.act.events.AdditionalEventInfo;
 import com.exactpro.th2.act.events.EventDetails;
 import com.exactpro.th2.act.events.EventStoreHandler;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
@@ -45,7 +46,7 @@ public class HandExecutor {
 		this.handConnector.unregister(sessionID);
 	}
 
-	public RhBatchResponse executeWinGuiScript(RhActionsList rhActionsList) {
+	public RhBatchResponse executeWinGuiScript(RhActionsBatch rhActionsList) {
 		return handConnector.executeRhActionsBatch(rhActionsList);
 	}
 
@@ -58,26 +59,14 @@ public class HandExecutor {
 		eventStoreHandler.storeVerification(info, verification);
 	}
 	
-	public EventID logParentEvent(EventID parentId, String eventName, Map<String, String> requestParams) {
+	public EventID logEvent(EventID parentId, String eventName, AdditionalEventInfo eventInfo) {
 		EventID newEventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
 		EventDetails.EventInfo info = new EventDetails.EventInfo();
 		info.setEventId(newEventId);
 		info.setParentEventId(parentId);
 		info.setEventName(eventName);
 		info.setStartTime(Instant.now());
-		eventStoreHandler.storeEvent(info, requestParams);
-		return newEventId;
-	}
-
-	public EventID logErrorEvent(EventID parentId, String eventName, Map<String, String> requestParams,
-								 String errorDescription, Throwable throwable) {
-		EventID newEventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
-		EventDetails.EventInfo info = new EventDetails.EventInfo();
-		info.setEventId(newEventId);
-		info.setParentEventId(parentId);
-		info.setEventName(eventName);
-		info.setStartTime(Instant.now());
-		eventStoreHandler.storeErrorEvent(info, requestParams, errorDescription, throwable);
+		eventStoreHandler.storeEvent(info, eventInfo);
 		return newEventId;
 	}
 	

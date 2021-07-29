@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class ClickBuilder extends AbstractWebBuilder<ClickBuilder> {
 
@@ -28,7 +28,7 @@ public class ClickBuilder extends AbstractWebBuilder<ClickBuilder> {
 	private Integer yOffset;
 	private ClickModifiers[] modifiers;
 	
-	protected ClickBuilder(UIFrameworkContext context) {
+	protected ClickBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -59,7 +59,7 @@ public class ClickBuilder extends AbstractWebBuilder<ClickBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.locator, LOCATOR_PARAM);
 		RhActionsMessages.Click.Builder builder = RhActionsMessages.Click.newBuilder();
 		addIfNotNull(wait, builder::setWait);
@@ -80,7 +80,7 @@ public class ClickBuilder extends AbstractWebBuilder<ClickBuilder> {
 			builder.setXOffset(xOffset);
 			builder.setYOffset(yOffset);
 		}
-		return RhAction.newBuilder().setClick(builder).build();
+		return RhWebActions.newBuilder().setClick(builder).build();
 	}
 	
 	public enum ClickButton {

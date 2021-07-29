@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class GetDynamicTableBuilder extends AbstractWebBuilder<GetDynamicTableBuilder> {
 	
-	protected GetDynamicTableBuilder(UIFrameworkContext context) {
+	protected GetDynamicTableBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,12 +38,12 @@ public class GetDynamicTableBuilder extends AbstractWebBuilder<GetDynamicTableBu
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(locator, LOCATOR_PARAM);
 		RhActionsMessages.GetDynamicTable.Builder builder = RhActionsMessages.GetDynamicTable.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
-		return RhAction.newBuilder().setGetDynamicTable(builder).build();
+		return RhWebActions.newBuilder().setGetDynamicTable(builder).build();
 	}
 }

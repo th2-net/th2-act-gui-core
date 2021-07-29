@@ -16,16 +16,16 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class GetActiveWindowBuilder extends WindowBuilder<GetActiveWindowBuilder> {
 
 	protected int maxTimeout;
 	
-	public GetActiveWindowBuilder(UIFrameworkContext context) {
+	public GetActiveWindowBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -44,13 +44,13 @@ public class GetActiveWindowBuilder extends WindowBuilder<GetActiveWindowBuilder
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		checkWindowIds();
 		RhWinActionsMessages.WinGetActiveWindow.Builder builder = RhWinActionsMessages.WinGetActiveWindow.newBuilder();
 		builder.setBaseParams(buildBaseParam());
 		addIfNotEmpty(windowName, builder::setWindowName);
 		addIfNotEmpty(accessibilityId, builder::setAccessibilityId);
 		builder.setMaxTimeout(maxTimeout);
-		return RhAction.newBuilder().setWinGetActiveWindow(builder).build();
+		return RhWinActions.newBuilder().setWinGetActiveWindow(builder).build();
 	}
 }

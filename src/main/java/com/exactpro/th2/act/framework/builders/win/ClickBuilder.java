@@ -16,12 +16,12 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
 import com.exactpro.th2.act.framework.ui.constants.SendTextExtraButtons;
 import com.exactpro.th2.act.framework.ui.utils.UIUtils;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.Arrays;
@@ -33,7 +33,7 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 
 	private MouseClickButton button;
 
-	public ClickBuilder(UIFrameworkContext context) {
+	public ClickBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 	
@@ -71,7 +71,7 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinClick.Builder clickBuilder = RhWinActionsMessages.WinClick.newBuilder();
 		clickBuilder.addAllLocators(buildWinLocator(this.winLocator));
@@ -87,7 +87,7 @@ public class ClickBuilder extends AbstractWinBuilder<ClickBuilder> {
 
 		addIfNotEmpty(modifiers, clickBuilder::setModifiers);
 
-		return RhAction.newBuilder().setWinClick(clickBuilder.build()).build();
+		return RhWinActions.newBuilder().setWinClick(clickBuilder.build()).build();
 	}
 
 	public enum MouseClickButton {

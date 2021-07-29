@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class ExecuteJSElementBuilder extends ExecuteJSBuilder {
 	
-	protected ExecuteJSElementBuilder(UIFrameworkContext context) {
+	protected ExecuteJSElementBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,13 +38,13 @@ public class ExecuteJSElementBuilder extends ExecuteJSBuilder {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.locator, LOCATOR_PARAM, this.commands, COMMANDS_PRAMS);
 		var builder = RhActionsMessages.ExecuteJSElement.newBuilder();
 		builder.setCommands(this.commands);
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
-		return RhAction.newBuilder().setExecuteJsElement(builder).build();
+		return RhWebActions.newBuilder().setExecuteJsElement(builder).build();
 	}
 }

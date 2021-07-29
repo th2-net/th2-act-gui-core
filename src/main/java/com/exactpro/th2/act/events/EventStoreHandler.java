@@ -29,6 +29,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.Timestamp;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +62,7 @@ public class EventStoreHandler
 		}
 	}
 
-	private static List<Object> createPayloadFromErrorParams(String text, Throwable t) {
+	private void createPayloadFromErrorParams(String text, Throwable t, EventPayloadBuilder builder) {
 		Map<String, String> obj = new LinkedHashMap<>();
 		if (text != null && text.isEmpty()) {
 			obj.put("Error text", text);
@@ -71,20 +72,11 @@ public class EventStoreHandler
 			obj.put("Stack trace", ExceptionUtils.getStackTrace(t));
 		}
 		
-		if (MapUtils.isNotEmpty(obj))
-		{
-			List<Object> payload = new ArrayList<>(2);
-			payload.add(new EventPayloadMessage("Error details"));
-			payload.add(new EventPayloadTable(obj, false));
-			return payload;
-		} else {
-			return Collections.emptyList();
+		if (MapUtils.isNotEmpty(obj)) {
+			builder.printTable("Error details", obj);
 		}
 	}
 	
-	private static List<Object> createMainPayload(Map<String, String> requestParams) {
-		return createPayloadFromRequestParams(requestParams);
-	}
 
 	public byte[] writePayloadBody(List<Object> payload, EventID eventId) {
 		try {
@@ -99,35 +91,32 @@ public class EventStoreHandler
 		return ByteString.copyFrom(writePayloadBody(objects, eventID));
 	}
 
-	public void storeEvent(EventDetails.EventInfo info, Map<String, String> requestParams) {
+	public void storeEvent(EventDetails.EventInfo info, AdditionalEventInfo additionalEventInfo) {
 		logger.debug("Storing execution event");
+		
 		// Create main event with request and response information
 		EventDetails details = new EventDetails(info);
-		details.setStatus(true);
-		if (MapUtils.isNotEmpty(requestParams)) {
-			details.setBuffer(this.byteStringFromPayload(createMainPayload(requestParams), info.getEventId()));
-		}
-
-		this.storeEvent(details);
-	}
-
-	public void storeErrorEvent(EventDetails.EventInfo info, Map<String, String> requestParams, String text, Throwable t)
-	{
-		logger.debug("Storing parent event");
-		// Create main event with request and response information
-		EventDetails details = new EventDetails(info);
-		details.setStatus(false);
-		List<Object> buffer = new ArrayList<>();
-		if (MapUtils.isNotEmpty(requestParams)) {
-			buffer.addAll(createPayloadFromRequestParams(requestParams));
-		}
-		if (text != null || t != null) {
-			buffer.addAll(createPayloadFromErrorParams(text, t));
+		details.setStatus(additionalEventInfo.isStatus());
+		
+		EventPayloadBuilder payloadBuilder = new EventPayloadBuilder();
+		
+		if (StringUtils.isNotEmpty(additionalEventInfo.getDescription())) {
+			payloadBuilder.printText("Description:\n" + additionalEventInfo.getDescription());
 		}
 		
-		if (!buffer.isEmpty()) {
-			details.setBuffer(this.byteStringFromPayload(buffer, info.getEventId()));
+		if (StringUtils.isNotEmpty(additionalEventInfo.getInputTableHeader())
+				&& MapUtils.isNotEmpty(additionalEventInfo.getInputTable())) {
+			payloadBuilder.printTable(additionalEventInfo.getInputTableHeader(),
+					additionalEventInfo.getInputTable());
 		}
+
+		createPayloadFromErrorParams(additionalEventInfo.getErrorText(), additionalEventInfo.getThrowable(),
+				payloadBuilder);
+		
+		if (!payloadBuilder.isEmpty()) {
+			details.setBuffer(payloadBuilder.toByteString());
+		}
+
 		this.storeEvent(details);
 	}
 
@@ -146,7 +135,7 @@ public class EventStoreHandler
 		copiedInfo.setEndTime(Instant.now());
 		
 		EventDetails eventDetails = new EventDetails();
-		eventDetails.setInfo(info);
+		eventDetails.setInfo(copiedInfo);
 		eventDetails.setBuffer(this.byteStringFromPayload(Collections.singletonList(verificationResult), verificationEventId));
 		eventDetails.setStatus(verifier.isSuccess());
 		

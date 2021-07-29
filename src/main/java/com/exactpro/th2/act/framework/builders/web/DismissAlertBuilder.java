@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class DismissAlertBuilder extends AbstractWebBuilder<DismissAlertBuilder> {
 	
-	protected DismissAlertBuilder(UIFrameworkContext context) {
+	protected DismissAlertBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,9 +38,9 @@ public class DismissAlertBuilder extends AbstractWebBuilder<DismissAlertBuilder>
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(wait, WAIT_PARAM);
-		return RhAction.newBuilder().setDismissAlert(RhActionsMessages.DismissAlert.newBuilder().setWait(wait)).build();
+		return RhWebActions.newBuilder().setDismissAlert(RhActionsMessages.DismissAlert.newBuilder().setWait(wait)).build();
 	}
 
 }
