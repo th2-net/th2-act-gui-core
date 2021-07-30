@@ -27,10 +27,9 @@ public class UIWinFrameworkContext extends UIFrameworkContext<RhWinActionsMessag
 	}
 
 	@Override
-	protected RhActionList buildActionList(boolean clear) {
+	protected RhActionList buildActionList() {
 		var builder = RhWinActionsMessages.RhWinActionList.newBuilder();
 		builder.addAllWinActionList(this.buffer);
-		this.buffer.clear();
 		return RhActionList.newBuilder().setWin(builder).build();
 	}
 	

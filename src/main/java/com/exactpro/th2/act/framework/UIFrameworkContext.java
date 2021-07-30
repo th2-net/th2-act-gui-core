@@ -56,7 +56,7 @@ public abstract class UIFrameworkContext<T> {
 		return this.submit(true, eventName, storeActionMessages, info);
 	}
 	
-	protected abstract RhActionList buildActionList(boolean clear);
+	protected abstract RhActionList buildActionList();
 
 	public RhBatchResponse submit(boolean clear, String eventName, boolean storeActionMessages, AdditionalEventInfo addInfo) {
 		if (this.buffer.isEmpty())
@@ -82,7 +82,11 @@ public abstract class UIFrameworkContext<T> {
 			builder.setAdditionalEventInfo(eventInfo);
 		}
 		
-		builder.setRhAction(buildActionList(clear));
+		builder.setRhAction(buildActionList());
+		
+		if (clear) {
+			this.buffer.clear();
+		}
 
 		return handExecutor.executeWinGuiScript(builder.build());
 	}

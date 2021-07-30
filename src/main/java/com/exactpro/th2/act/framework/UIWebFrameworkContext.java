@@ -27,10 +27,9 @@ public class UIWebFrameworkContext extends UIFrameworkContext<RhActionsMessages.
 	}
 
 	@Override
-	protected RhActionList buildActionList(boolean clear) {
+	protected RhActionList buildActionList() {
 		var builder = RhActionsMessages.RhWebActionList.newBuilder();
 		builder.addAllWebActionList(this.buffer);
-		this.buffer.clear();
 		return RhActionList.newBuilder().setWeb(builder).build();
 	}
 	
