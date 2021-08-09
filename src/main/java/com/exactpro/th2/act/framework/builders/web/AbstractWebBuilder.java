@@ -16,13 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.builders.AbstractBuilder;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 import java.util.function.Consumer;
 
-public abstract class AbstractWebBuilder<T extends AbstractWebBuilder<T>> extends AbstractBuilder<T> {
+public abstract class AbstractWebBuilder<T extends AbstractWebBuilder<T>> extends AbstractBuilder<T, RhWebActions> {
 	
 	public static final String LOCATOR_PARAM = "locator";
 	public static final String WAIT_PARAM = "wait";
@@ -63,7 +64,7 @@ public abstract class AbstractWebBuilder<T extends AbstractWebBuilder<T>> extend
 		return getBuilder();
 	}
 
-	protected AbstractWebBuilder(UIFrameworkContext context) {
+	protected AbstractWebBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 	

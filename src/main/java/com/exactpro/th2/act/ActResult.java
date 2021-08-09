@@ -72,6 +72,6 @@ public class ActResult {
 		EXECUTION_ERROR,
 		ACT_ERROR,
 		HAND_INTERNAL_ERROR,
-		UNKNOWN_ERROR;
+		UNKNOWN_ERROR
 	}
 }

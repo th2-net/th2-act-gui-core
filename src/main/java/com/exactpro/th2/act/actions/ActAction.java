@@ -17,6 +17,7 @@
 package com.exactpro.th2.act.actions;
 
 import com.exactpro.th2.act.ActResult;
+import com.exactpro.th2.act.events.AdditionalEventInfo;
 import com.exactpro.th2.act.framework.UIFramework;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.UIFrameworkSessionContext;
@@ -28,12 +29,13 @@ import org.slf4j.Logger;
 
 import java.util.Map;
 
-import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
-public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFrameworkSessionContext<K>> {
+public abstract class ActAction<T, K extends UIFrameworkContext<?>, L extends UIFrameworkSessionContext<K>> {
 	
 	protected final UIFramework<K, L> framework;
 	protected final Logger logger;
+	
+	protected Map<String, String> requestTable;
 
 	public ActAction(UIFramework<K, L> framework) {
 		this.framework = framework;
@@ -49,11 +51,20 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 	protected abstract void collectActions(T details, K context, ActResult result) throws UIFrameworkException;
 	protected abstract void processResult(ActResult result) throws UIFrameworkException;
 	protected abstract String getStatusInfo();
+	
 	protected boolean storeParentEvent() {
 		return true;
 	}
 	protected boolean storeActionMessages() {
 		return false;
+	}
+
+	protected String getRequestTableHeader() {
+		return "Request parameters";
+	}
+
+	protected String getDescription() {
+		return null;
 	}
 
 	public void run(T details) {
@@ -66,6 +77,7 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 		try {
 			eventId = getParentEventId(details);
 			frameworkContext = framework.newExecution(sessionID);
+			this.requestTable = this.convertRequestParams(details);
 			eventId = this.processAndGetEventId(eventId, frameworkContext, details);
 
 			this.collectActions(details, frameworkContext, actResult);
@@ -73,7 +85,7 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 			actResult.setSessionID(sessionID);
 		} catch (Exception e) {
 			logger.error("An error occurred while executing action. Cannot unregister framework session", e);
-			framework.createErrorEvent(eventId, "Error: " + getName(), "An internal action error has occurred", e);
+			printEventError(eventId, "Error: " + getName(), "An internal action error has occurred", e);
 			actResult.setScriptStatus(ActResult.ActExecutionStatus.ACT_ERROR);
 			actResult.setErrorInfo(e.getMessage());
 		} finally {
@@ -95,8 +107,12 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 		}
 	}
 
-	protected void submitActions(UIFrameworkContext frameworkContext, ActResult respBuild) {
-		RhBatchResponse response = frameworkContext.submit(getName(), storeActionMessages());
+	protected void submitActions(UIFrameworkContext<?> frameworkContext, ActResult respBuild) {
+		AdditionalEventInfo info = null;
+		if (!storeParentEvent()) {
+			info = createAdditionalEventInfo();
+		}
+		RhBatchResponse response = frameworkContext.submit(getName(), storeActionMessages(), info);
 		if (response == null || response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS) {
 			respBuild.setStatusInfo(getStatusInfo());
 			respBuild.setScriptStatus(ActResult.ActExecutionStatus.SUCCESS);
@@ -106,11 +122,6 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 		}
 	}
 
-	protected void putIfNotEmpty(String key, String value, Map<String, String> params) {
-		if (isNotEmpty(value))
-			params.put(key, value);
-	}
-
 	protected ActResult createActResult() {
 		return new ActResult();
 	}
@@ -118,8 +129,7 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 	protected EventID processAndGetEventId(EventID parentEventId, K frameworkContext, T details) {
 		EventID actionEvent = null;
 		if (storeParentEvent()) {
-			Map<String, String> requestParams = convertRequestParams(details);
-			actionEvent = framework.createParentEvent(parentEventId, getName(), requestParams);
+			actionEvent = framework.createEvent(parentEventId, getName(), createAdditionalEventInfo());
 			frameworkContext.setParentEventId(actionEvent);
 		} else {
 			frameworkContext.setParentEventId(parentEventId);
@@ -128,13 +138,31 @@ public abstract class ActAction<T, K extends UIFrameworkContext, L extends UIFra
 		return actionEvent != null ? actionEvent : parentEventId;
 	}
 
+	protected AdditionalEventInfo createAdditionalEventInfo() {
+		AdditionalEventInfo addEvInfo = new AdditionalEventInfo();
+		addEvInfo.setInputTableHeader(getRequestTableHeader());
+		addEvInfo.setInputTable(this.requestTable);
+		addEvInfo.setDescription(getDescription());
+		return addEvInfo;
+	}
 
 	private void processResult(ActResult actResult, EventID eventId) {
 		try {
 			this.processResult(actResult);
 		} catch (Exception e) {
 			logger.error("An error occurred while processing act result", e);
-			framework.createErrorEvent(eventId, "Processing act result", "Unable to process act result", e);
+			printEventError(eventId, "Processing act result", "Unable to process act result", e);
 		}
+	}
+	
+	protected void printEventError(EventID eventId, String eventName, String errorText, Throwable throwable) {
+		AdditionalEventInfo addEvInfo = new AdditionalEventInfo();
+		addEvInfo.setError(errorText, throwable);
+		if (!storeParentEvent()) {
+			addEvInfo.setInputTableHeader(getRequestTableHeader());
+			addEvInfo.setInputTable(this.requestTable);
+			addEvInfo.setDescription(getDescription());
+		}
+		framework.createEvent(eventId, eventName, addEvInfo);
 	}
 }

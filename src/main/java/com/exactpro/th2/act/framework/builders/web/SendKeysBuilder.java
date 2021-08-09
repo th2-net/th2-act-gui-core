@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class SendKeysBuilder extends AbstractWebBuilder<SendKeysBuilder> {
 	
@@ -37,7 +37,7 @@ public class SendKeysBuilder extends AbstractWebBuilder<SendKeysBuilder> {
 	private Boolean needClick;
 	
 
-	protected SendKeysBuilder(UIFrameworkContext context) {
+	protected SendKeysBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -92,7 +92,7 @@ public class SendKeysBuilder extends AbstractWebBuilder<SendKeysBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(locator, LOCATOR_PARAM, text, TEXT_PARAM);
 		RhActionsMessages.SendKeys.Builder builder = RhActionsMessages.SendKeys.newBuilder();
 		addIfNotNull(wait, builder::setWait);
@@ -111,6 +111,6 @@ public class SendKeysBuilder extends AbstractWebBuilder<SendKeysBuilder> {
 		addIfNotNull(checkInput, builder::setCheckInput);
 		addIfNotNull(needClick, builder::setNeedClick);
 		
-		return RhAction.newBuilder().setSendKeys(builder).build();
+		return RhWebActions.newBuilder().setSendKeys(builder).build();
 	}
 }

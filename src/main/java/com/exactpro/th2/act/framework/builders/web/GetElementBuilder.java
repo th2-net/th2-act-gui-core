@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class GetElementBuilder extends AbstractWebBuilder<GetElementBuilder> {
 	
@@ -27,7 +27,7 @@ public class GetElementBuilder extends AbstractWebBuilder<GetElementBuilder> {
 	
 	protected String id;
 
-	protected GetElementBuilder(UIFrameworkContext context) {
+	protected GetElementBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -47,13 +47,13 @@ public class GetElementBuilder extends AbstractWebBuilder<GetElementBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(locator, LOCATOR_PARAM);
 		RhActionsMessages.GetElement.Builder builder = RhActionsMessages.GetElement.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
 		addIfNotNull(id, builder::setId);
-		return RhAction.newBuilder().setGetElement(builder).build();
+		return RhWebActions.newBuilder().setGetElement(builder).build();
 	}
 }

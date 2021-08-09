@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class ScrollUsingTextBuilder extends AbstractWinBuilder<ScrollUsingTextBuilder> {
 	
@@ -30,7 +30,7 @@ public class ScrollUsingTextBuilder extends AbstractWinBuilder<ScrollUsingTextBu
 	private String maxIterations;
 	private String textToSend;
 	
-	public ScrollUsingTextBuilder(UIFrameworkContext context) {
+	public ScrollUsingTextBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -65,7 +65,7 @@ public class ScrollUsingTextBuilder extends AbstractWinBuilder<ScrollUsingTextBu
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(winLocator, WIN_LOCATOR_FIELD_NAME, textLocators, TEXT_LOCATOR_FIELD, textToSend, TEXT_TO_SEND_FIELD);
 		RhWinActionsMessages.WinScrollUsingText.Builder winScrollUsingText = RhWinActionsMessages.WinScrollUsingText.newBuilder();
 		winScrollUsingText.addAllLocators(this.buildWinLocator(this.winLocator));
@@ -73,6 +73,6 @@ public class ScrollUsingTextBuilder extends AbstractWinBuilder<ScrollUsingTextBu
 		winScrollUsingText.setTextToSend(this.textToSend);
 		winScrollUsingText.setBaseParams(buildBaseParam());
 		addIfNotEmpty(maxIterations, winScrollUsingText::setMaxIterations);
-		return RhAction.newBuilder().setWinScrollUsingText(winScrollUsingText).build();
+		return RhWinActions.newBuilder().setWinScrollUsingText(winScrollUsingText).build();
 	}
 }

@@ -16,16 +16,16 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilder> {
 	
 	private boolean multipleElements = false;
 	
-	public SearchElementBuilder(UIFrameworkContext context) {
+	public SearchElementBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -45,12 +45,12 @@ public class SearchElementBuilder extends AbstractWinBuilder<SearchElementBuilde
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinSearchElement.Builder searchElementBuilder = RhWinActionsMessages.WinSearchElement.newBuilder();
 		searchElementBuilder.addAllLocators(this.buildWinLocator(winLocator));
 		searchElementBuilder.setMultipleElements(multipleElements);
 		searchElementBuilder.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinSearchElement(searchElementBuilder.build()).build();
+		return RhWinActions.newBuilder().setWinSearchElement(searchElementBuilder.build()).build();
 	}
 }

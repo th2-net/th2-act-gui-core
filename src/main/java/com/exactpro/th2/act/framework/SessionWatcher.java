@@ -34,13 +34,13 @@ public class SessionWatcher extends Thread {
 	
 	public static final Long DEFAULT_EXPIRATION_TIME = 30L; 
 
-	private final UIFramework framework;
+	private final UIFramework<?, ?> framework;
 	private final Map<RhSessionID, Long> sessions;
 
 	private final long sessionExpirationMs;
 	private final AtomicBoolean run;
 	
-	public static SessionWatcher create(UIFramework framework, CustomConfiguration customConfiguration) {
+	public static SessionWatcher create(UIFramework<?, ?> framework, CustomConfiguration customConfiguration) {
 		long timeout;
 		if (customConfiguration != null && customConfiguration.getSessionExpirationTime() != null) {
 			timeout = customConfiguration.getSessionExpirationTime();
@@ -50,7 +50,7 @@ public class SessionWatcher extends Thread {
 		return new SessionWatcher(framework, timeout);
 	}
 
-	private SessionWatcher(UIFramework framework, long sessionTimeoutMin) {
+	private SessionWatcher(UIFramework<?, ?> framework, long sessionTimeoutMin) {
 		super("SESSION-WATCHER");
 		this.framework = framework;
 		this.sessionExpirationMs = TimeUnit.MINUTES.toMillis(sessionTimeoutMin);

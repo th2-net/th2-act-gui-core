@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttributeBuilder> {
 	
@@ -32,7 +32,7 @@ public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttribute
 	private String maxTimeout;
 	private String checkInterval;
 
-	public WaitForAttributeBuilder(UIFrameworkContext context) {
+	public WaitForAttributeBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -75,7 +75,7 @@ public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttribute
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(attributeName, ATTRIBUTE_NAME_FIELD_NAME, expectedValue, EXPECTED_VALUE_FIELD_NAME, 
 				maxTimeout, MAX_TIMEOUT_FIELD_NAME);
 		RhWinActionsMessages.WinWaitForAttribute.Builder winForAttr = RhWinActionsMessages.WinWaitForAttribute.newBuilder();
@@ -85,6 +85,6 @@ public class WaitForAttributeBuilder extends AbstractWinBuilder<WaitForAttribute
 		winForAttr.setMaxTimeout(maxTimeout);
 		this.addIfNotEmpty(checkInterval, winForAttr::setCheckInterval);
 		winForAttr.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinWaitForAttribute(winForAttr).build();
+		return RhWinActions.newBuilder().setWinWaitForAttribute(winForAttr).build();
 	}
 }

@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class OpenBuilder extends AbstractWebBuilder<OpenBuilder> {
 	
@@ -27,7 +27,7 @@ public class OpenBuilder extends AbstractWebBuilder<OpenBuilder> {
 
 	private String url;
 
-	protected OpenBuilder(UIFrameworkContext context) {
+	protected OpenBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -47,10 +47,10 @@ public class OpenBuilder extends AbstractWebBuilder<OpenBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		checkRequiredFields(this.url, OPEN_URL_FIELD_NAME);
 		RhActionsMessages.Open.Builder builder = RhActionsMessages.Open.newBuilder();
 		builder.setUrl(this.url);
-		return RhAction.newBuilder().setOpen(builder).build();
+		return RhWebActions.newBuilder().setOpen(builder).build();
 	}
 }

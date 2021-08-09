@@ -16,14 +16,14 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class GetElementValueBuilder extends AbstractWebBuilder<GetElementValueBuilder> {
 	
-	protected GetElementValueBuilder(UIFrameworkContext context) {
+	protected GetElementValueBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -38,12 +38,12 @@ public class GetElementValueBuilder extends AbstractWebBuilder<GetElementValueBu
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(locator, LOCATOR_PARAM);
 		RhActionsMessages.GetElementValue.Builder builder = RhActionsMessages.GetElementValue.newBuilder();
 		addIfNotNull(wait, builder::setWait);
 		addIfNotNull(webId, builder::setWebId);
 		this.writeLocator(builder::setLocator, builder::setMatcher);
-		return RhAction.newBuilder().setGetElementValue(builder).build();
+		return RhWebActions.newBuilder().setGetElementValue(builder).build();
 	}
 }

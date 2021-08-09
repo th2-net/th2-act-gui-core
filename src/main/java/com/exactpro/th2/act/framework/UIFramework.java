@@ -18,6 +18,7 @@ package com.exactpro.th2.act.framework;
 
 import com.exactpro.th2.act.ActConnections;
 import com.exactpro.th2.act.configuration.CustomConfiguration;
+import com.exactpro.th2.act.events.AdditionalEventInfo;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkIsBusyException;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
@@ -31,7 +32,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class UIFramework<T extends UIFrameworkContext, K extends UIFrameworkSessionContext<T>> implements AutoCloseable {
+public abstract class UIFramework<T extends UIFrameworkContext<?>, K extends UIFrameworkSessionContext<T>> implements AutoCloseable {
 
 	private static final Logger logger = LoggerFactory.getLogger(UIFramework.class);
 	
@@ -129,7 +130,7 @@ public abstract class UIFramework<T extends UIFrameworkContext, K extends UIFram
 		return sessionContext.getContext();
 	}
 	
-	public void onExecutionFinished(UIFrameworkContext context) {
+	public void onExecutionFinished(T context) {
 		RhSessionID sessionID = context.getSessionID();
 		this.releaseExecution(this.contexts.get(sessionID));
 		this.sessionWatcher.updateSessionTime(sessionID);
@@ -152,21 +153,9 @@ public abstract class UIFramework<T extends UIFrameworkContext, K extends UIFram
 	public HandExecutor getHandExecutor() {
 		return handExecutor;
 	}
-	
-	public EventID createParentEvent(EventID parentEventId, String name) {
-		return this.handExecutor.logParentEvent(parentEventId, name, Collections.emptyMap());
-	}
 
-	public EventID createParentEvent(EventID parentEventId, String name, Map<String, String> requested) {
-		return this.handExecutor.logParentEvent(parentEventId, name, requested);
-	}
-
-	public EventID createErrorEvent(EventID parentEventId, String name, Map<String, String> requested, String error, Throwable t) {
-		return this.handExecutor.logErrorEvent(parentEventId, name, requested, error, t);
-	}
-
-	public EventID createErrorEvent(EventID parentEventId, String name, String error, Throwable t) {
-		return this.createErrorEvent(parentEventId, name, Collections.emptyMap(), error, t);
+	public EventID createEvent(EventID parentEventId, String name, AdditionalEventInfo eventInfo) {
+		return this.handExecutor.logEvent(parentEventId, name, eventInfo);
 	}
 
 	@Override

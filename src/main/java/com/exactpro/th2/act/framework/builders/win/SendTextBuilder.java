@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 	
@@ -29,7 +29,7 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 	protected String clearBefore;
 	protected String isDirectText;
 
-	public SendTextBuilder(UIFrameworkContext context) {
+	public SendTextBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -67,7 +67,7 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(text, TEXT_FIELD_NAME);
 		RhWinActionsMessages.WinSendText.Builder sendTextBuilder = RhWinActionsMessages.WinSendText.newBuilder();
 		sendTextBuilder.setText(text);
@@ -78,6 +78,6 @@ public class SendTextBuilder extends AbstractWinBuilder<SendTextBuilder> {
 		addIfNotEmpty(isDirectText, sendTextBuilder::setIsDirectText);
 		addIfNotEmpty(clearBefore, sendTextBuilder::setClearBefore);
 		
-		return RhAction.newBuilder().setWinSendText(sendTextBuilder.build()).build();
+		return RhWinActions.newBuilder().setWinSendText(sendTextBuilder.build()).build();
 	}
 }

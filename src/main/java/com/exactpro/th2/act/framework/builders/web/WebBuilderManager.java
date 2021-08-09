@@ -16,14 +16,13 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
-import com.exactpro.th2.act.framework.builders.win.GetScreenshotBuilder;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 
 public class WebBuilderManager {
 
-	private final UIFrameworkContext context;
+	private final UIWebFrameworkContext context;
 	
-	public WebBuilderManager(UIFrameworkContext context) {
+	public WebBuilderManager(UIWebFrameworkContext context) {
 		this.context = context;
 	}
 	
@@ -151,7 +150,7 @@ public class WebBuilderManager {
 		return new ExecuteJSElementBuilder(this.context);
 	}
 	
-	public UIFrameworkContext getContext() {
+	public UIWebFrameworkContext getContext() {
 		return context;
 	}
 }

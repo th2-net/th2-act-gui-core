@@ -16,17 +16,17 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class SwitchWindowBuilder extends AbstractWebBuilder<SwitchWindowBuilder> {
 	
 	public static final String WINDOW_NAME_PARAM = "window";
 	private Integer windowName;
 	
-	protected SwitchWindowBuilder(UIFrameworkContext context) {
+	protected SwitchWindowBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -46,10 +46,10 @@ public class SwitchWindowBuilder extends AbstractWebBuilder<SwitchWindowBuilder>
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		checkRequiredFields(this.windowName, WINDOW_NAME_PARAM);
 		RhActionsMessages.SwitchWindow.Builder builder = RhActionsMessages.SwitchWindow.newBuilder();
 		builder.setWindow(this.windowName);
-		return RhAction.newBuilder().setSwitchWindow(builder).build();
+		return RhWebActions.newBuilder().setSwitchWindow(builder).build();
 	}
 }

@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class OpenBuilder extends AbstractWinBuilder<OpenBuilder> {
 	
@@ -30,7 +30,7 @@ public class OpenBuilder extends AbstractWinBuilder<OpenBuilder> {
 	private String appFile;
 	private String appArgs;
 
-	public OpenBuilder(UIFrameworkContext context) {
+	public OpenBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -60,13 +60,13 @@ public class OpenBuilder extends AbstractWinBuilder<OpenBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		checkRequiredFields(workDir, WORK_DIR_FIELD_NAME, appFile, APP_FILE_FIELD_NAME);
 		RhWinActionsMessages.WinOpen.Builder builder = RhWinActionsMessages.WinOpen.newBuilder();
 		builder.setAppFile(appFile);
 		builder.setWorkDir(workDir);
 		addIfNotEmpty(appArgs, builder::setAppArgs);
 		builder.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinOpen(builder).build();
+		return RhWinActions.newBuilder().setWinOpen(builder).build();
 	}
 }

@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 
 public class WaitForElementBuilder extends AbstractWinBuilder<WaitForElementBuilder> {
 	public static final String TIMEOUT_FILED_NAME = "timeout";
@@ -27,7 +27,7 @@ public class WaitForElementBuilder extends AbstractWinBuilder<WaitForElementBuil
 	private String timeout;
 
 
-	public WaitForElementBuilder(UIFrameworkContext context) {
+	public WaitForElementBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -49,12 +49,12 @@ public class WaitForElementBuilder extends AbstractWinBuilder<WaitForElementBuil
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(timeout, TIMEOUT_FILED_NAME);
 		RhWinActionsMessages.WinWaitForElement.Builder waitForElement = RhWinActionsMessages.WinWaitForElement.newBuilder();
 		waitForElement.addAllLocators(this.buildWinLocator(this.winLocator));
 		waitForElement.setTimeout(timeout);
 		waitForElement.setBaseParams(buildBaseParam());
-		return RhAction.newBuilder().setWinWaitForElement(waitForElement).build();
+		return RhWinActions.newBuilder().setWinWaitForElement(waitForElement).build();
 	}
 }

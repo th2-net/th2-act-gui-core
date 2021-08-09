@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class KeyActionBuilder extends AbstractWebBuilder<KeyActionBuilder> {
 
@@ -27,7 +27,7 @@ public class KeyActionBuilder extends AbstractWebBuilder<KeyActionBuilder> {
 	private KeyActionType keyAction;
 	private String key;
 
-	protected KeyActionBuilder(UIFrameworkContext context) {
+	protected KeyActionBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -42,14 +42,14 @@ public class KeyActionBuilder extends AbstractWebBuilder<KeyActionBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(key, KEY_PARAM);
 		RhActionsMessages.KeyAction.Builder builder = RhActionsMessages.KeyAction.newBuilder();
 		if (keyAction != null) {
 			builder.setKeyAction(keyAction.actionType);
 		}
 		builder.setKey(key);
-		return RhAction.newBuilder().setKeyAction(builder).build();
+		return RhWebActions.newBuilder().setKeyAction(builder).build();
 	}
 	
 	public enum KeyActionType {

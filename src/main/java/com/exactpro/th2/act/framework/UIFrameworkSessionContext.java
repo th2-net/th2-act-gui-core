@@ -16,7 +16,7 @@
 
 package com.exactpro.th2.act.framework;
 
-public class UIFrameworkSessionContext<T extends UIFrameworkContext> {
+public class UIFrameworkSessionContext<T extends UIFrameworkContext<?>> {
 	
 	private final T context;
 	private volatile boolean busy;

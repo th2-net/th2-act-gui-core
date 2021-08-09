@@ -16,16 +16,16 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class SendKeysToActiveBuilder extends AbstractWebBuilder<SendKeysToActiveBuilder> {
 	
 	private String text1, text2;
 	
-	protected SendKeysToActiveBuilder(UIFrameworkContext context) {
+	protected SendKeysToActiveBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -50,13 +50,13 @@ public class SendKeysToActiveBuilder extends AbstractWebBuilder<SendKeysToActive
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(text1, LOCATOR_PARAM);
 		RhActionsMessages.SendKeysToActive.Builder builder = RhActionsMessages.SendKeysToActive.newBuilder();
 		
 		builder.setText(text1);
 		addIfNotNull(text2, builder::setText2);
 
-		return RhAction.newBuilder().setSendKeysToActive(builder).build();
+		return RhWebActions.newBuilder().setSendKeysToActive(builder).build();
 	}
 }

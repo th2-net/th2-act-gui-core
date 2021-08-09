@@ -16,16 +16,16 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public class GetScreenshotBuilder extends AbstractWebBuilder<GetScreenshotBuilder> {
 	
 	private String name;
 	
-	protected GetScreenshotBuilder(UIFrameworkContext context) {
+	protected GetScreenshotBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -45,9 +45,9 @@ public class GetScreenshotBuilder extends AbstractWebBuilder<GetScreenshotBuilde
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 		RhActionsMessages.GetScreenshot.Builder builder = RhActionsMessages.GetScreenshot.newBuilder();
 		addIfNotEmpty(this.name, builder::setName);
-		return RhAction.newBuilder().setGetScreenshot(builder).build();
+		return RhWebActions.newBuilder().setGetScreenshot(builder).build();
 	}
 }

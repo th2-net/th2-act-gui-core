@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 import org.apache.commons.lang3.StringUtils;
 
 public class ColorsCollectorBuilder extends WindowBuilder<ColorsCollectorBuilder>{
@@ -29,7 +29,7 @@ public class ColorsCollectorBuilder extends WindowBuilder<ColorsCollectorBuilder
 	private String endYOffset;
 
 
-	public ColorsCollectorBuilder(UIFrameworkContext context) {
+	public ColorsCollectorBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -65,7 +65,7 @@ public class ColorsCollectorBuilder extends WindowBuilder<ColorsCollectorBuilder
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinColorsCollector.Builder builder = RhWinActionsMessages.WinColorsCollector.newBuilder();
 		builder.addAllLocators(buildWinLocator(this.winLocator));
@@ -77,6 +77,6 @@ public class ColorsCollectorBuilder extends WindowBuilder<ColorsCollectorBuilder
 		if (StringUtils.isNotEmpty(endXOffset) && StringUtils.isNotEmpty(endYOffset))
 			builder.setEndXOffset(endXOffset).setEndYOffset(endYOffset);
 		
-		return RhAction.newBuilder().setWinColorsCollector(builder.build()).build();
+		return RhWinActions.newBuilder().setWinColorsCollector(builder.build()).build();
 	}
 }

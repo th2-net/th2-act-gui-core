@@ -16,9 +16,9 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.WinTableSearch;
 import org.apache.commons.lang3.StringUtils;
 
@@ -38,7 +38,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 	private String saveResult;
 
 
-	public TableSearchBuilder(UIFrameworkContext context)
+	public TableSearchBuilder(UIWinFrameworkContext context)
 	{
 		super(context);
 	}
@@ -108,7 +108,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException
 	{
 		validateParams();
 
@@ -124,7 +124,7 @@ public class TableSearchBuilder extends AbstractWinBuilder<TableSearchBuilder> {
 		builder.setColumnIndex(String.valueOf(columnIndex));
 		addIfNotEmpty(saveResult, builder::setSaveResult);
 
-		return RhAction.newBuilder().setWinTableSearch(builder.build()).build();
+		return RhWinActions.newBuilder().setWinTableSearch(builder.build()).build();
 	}
 
 	private void validateParams() throws UIFrameworkBuildingException {

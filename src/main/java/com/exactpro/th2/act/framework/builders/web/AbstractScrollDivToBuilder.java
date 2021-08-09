@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.web;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWebFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhActionsMessages.RhWebActions;
 
 public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBuilder<T>> extends AbstractWebBuilder<T> {
 	
@@ -27,7 +27,7 @@ public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBu
 	protected WebLocator locator2;
 	protected Integer yOffset;
 	
-	protected AbstractScrollDivToBuilder(UIFrameworkContext context) {
+	protected AbstractScrollDivToBuilder(UIWebFrameworkContext context) {
 		super(context);
 	}
 
@@ -49,7 +49,7 @@ public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBu
 	
 	public static class ScrollDivToBuilder extends AbstractScrollDivToBuilder<ScrollDivToBuilder> {
 
-		protected ScrollDivToBuilder(UIFrameworkContext context) {
+		protected ScrollDivToBuilder(UIWebFrameworkContext context) {
 			super(context);
 		}
 
@@ -64,7 +64,7 @@ public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBu
 		}
 		
 		@Override
-		protected RhAction buildAction() throws UIFrameworkBuildingException {
+		protected RhWebActions buildAction() throws UIFrameworkBuildingException {
 			this.checkRequiredFields(locator, LOCATOR_PARAM, locator2, LOCATOR2_PARAM);
 			RhActionsMessages.ScrollDivTo.Builder builder = RhActionsMessages.ScrollDivTo.newBuilder();
 			addIfNotNull(wait, builder::setWait);
@@ -73,7 +73,7 @@ public abstract class AbstractScrollDivToBuilder<T extends AbstractScrollDivToBu
 			addIfNotNull(wait2, builder::setWait2);
 			this.writeLocator(this.locator2, builder::setLocator2, builder::setMatcher2);
 			addIfNotNull(yOffset, builder::setYOffset);
-			return RhAction.newBuilder().setScrollDivTo(builder).build();
+			return RhWebActions.newBuilder().setScrollDivTo(builder).build();
 		}
 	}
 

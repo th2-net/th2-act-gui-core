@@ -16,10 +16,10 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkBuildingException;
-import com.exactpro.th2.act.grpc.hand.RhAction;
 import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages;
+import com.exactpro.th2.act.grpc.hand.rhactions.RhWinActionsMessages.RhWinActions;
 import org.apache.commons.lang3.StringUtils;
 
 public class DragAndDropBuilder extends WindowBuilder<DragAndDropBuilder> {
@@ -33,7 +33,7 @@ public class DragAndDropBuilder extends WindowBuilder<DragAndDropBuilder> {
 	private String toOffsetY;
 
 
-	public DragAndDropBuilder(UIFrameworkContext context) {
+	public DragAndDropBuilder(UIWinFrameworkContext context) {
 		super(context);
 	}
 
@@ -67,7 +67,7 @@ public class DragAndDropBuilder extends WindowBuilder<DragAndDropBuilder> {
 	}
 
 	@Override
-	protected RhAction buildAction() throws UIFrameworkBuildingException {
+	protected RhWinActions buildAction() throws UIFrameworkBuildingException {
 		this.checkRequiredFields(this.winLocator, FROM_WIN_LOCATOR_FIELD_NAME, this.toWinLocator, TO_WIN_LOCATOR_FIELD_NAME);
 		RhWinActionsMessages.WinDragAndDrop.Builder builder = RhWinActionsMessages.WinDragAndDrop.newBuilder();
 		builder.addAllFromLocators(buildWinLocator(this.winLocator));
@@ -80,6 +80,6 @@ public class DragAndDropBuilder extends WindowBuilder<DragAndDropBuilder> {
 		if (!StringUtils.isEmpty(toOffsetX) && !StringUtils.isEmpty(toOffsetY))
 			builder.setToOffsetX(toOffsetX).setToOffsetY(toOffsetY);
 
-		return RhAction.newBuilder().setWinDragAndDrop(builder.build()).build();
+		return RhWinActions.newBuilder().setWinDragAndDrop(builder.build()).build();
 	}
 }

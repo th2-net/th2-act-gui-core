@@ -16,13 +16,13 @@
 
 package com.exactpro.th2.act.framework.builders.win;
 
-import com.exactpro.th2.act.framework.UIFrameworkContext;
+import com.exactpro.th2.act.framework.UIWinFrameworkContext;
 
 public class WinBuilderManager {
 
-	private final UIFrameworkContext context;
+	private final UIWinFrameworkContext context;
 
-	public WinBuilderManager(UIFrameworkContext context) {
+	public WinBuilderManager(UIWinFrameworkContext context) {
 		this.context = context;
 	}
 
@@ -115,11 +115,7 @@ public class WinBuilderManager {
 		return new ColorsCollectorBuilder(context);
 	}
 
-	public TakeScreenshotBuilder takeScreenshot() {
-		return new TakeScreenshotBuilder(context);
-	}
-
-	public UIFrameworkContext getContext() {
+	public UIWinFrameworkContext getContext() {
 		return context;
 	}
 }
