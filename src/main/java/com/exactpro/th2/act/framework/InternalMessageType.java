@@ -31,4 +31,14 @@ public enum InternalMessageType {
 	public MessageType getType() {
 		return type;
 	}
+
+	public static InternalMessageType convert(MessageType type) {
+		switch (type) {
+			case PLAIN_STRING: return InternalMessageType.PLAIN_STRING;
+			case FIX: return InternalMessageType.FIX;
+			case UNRECOGNIZED:
+			default:
+				throw new IllegalArgumentException("Unrecognized message type");
+		}
+	}
 }
