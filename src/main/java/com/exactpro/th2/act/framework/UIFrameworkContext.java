@@ -21,11 +21,15 @@ import com.exactpro.th2.act.grpc.hand.RhActionList;
 import com.exactpro.th2.act.grpc.hand.RhActionsBatch;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
+import com.exactpro.th2.common.event.EventUtils;
 import com.exactpro.th2.common.grpc.EventID;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class UIFrameworkContext<T> {
 
@@ -44,47 +48,95 @@ public abstract class UIFrameworkContext<T> {
 		this.buffer = new ArrayList<>();
 	}
 
+	/**
+	 * @deprecated
+	 * This method is no longer acceptable to compute time between versions.
+	 * <p> Use {@link #submit(ExecutionParams)} instead.
+	 */
+	@Deprecated(forRemoval = true)
 	public RhBatchResponse submit(String eventName) {
-		return this.submit(true, eventName, false, null);
+		return this.submit(ExecutionParams.createDefaultParams(eventName));
 	}
 
+	/**
+	 * @deprecated
+	 * This method is no longer acceptable to compute time between versions.
+	 * <p> Use {@link #submit(ExecutionParams)} instead.
+	 */
+	@Deprecated(forRemoval = true)
 	public RhBatchResponse submit(String eventName, boolean storeActionMessages) {
-		return this.submit(true, eventName, storeActionMessages, null);
+		return this.submit(eventName, storeActionMessages, true, null, InternalMessageType.PLAIN_STRING);
 	}
 
+	/**
+	 * @deprecated
+	 * This method is no longer acceptable to compute time between versions.
+	 * <p> Use {@link #submit(ExecutionParams)} instead.
+	 */
+	@Deprecated(forRemoval = true)
 	public RhBatchResponse submit(String eventName, boolean storeActionMessages, AdditionalEventInfo info) {
-		return this.submit(true, eventName, storeActionMessages, info);
+		return this.submit(eventName, true, storeActionMessages, info, InternalMessageType.PLAIN_STRING);
 	}
-	
+
+	/**
+	 * @deprecated
+	 * This method is no longer acceptable to compute time between versions.
+	 * <p> Use {@link #submit(ExecutionParams)} instead.
+	 */
+	@Deprecated(forRemoval = true)
+	public RhBatchResponse submit(boolean clearBuffer, String eventName, boolean storeActionMessages, AdditionalEventInfo info) {
+		return this.submit(eventName, clearBuffer, storeActionMessages, info, InternalMessageType.PLAIN_STRING);
+	}
+
+	/**
+	 * @deprecated
+	 * This method is no longer acceptable to compute time between versions.
+	 * <p> Use {@link #submit(ExecutionParams)} instead.
+	 */
+	@Deprecated(forRemoval = true)
+	public RhBatchResponse submit(String eventName, boolean clearBuffer, boolean storeActionMessages, AdditionalEventInfo info, InternalMessageType messageType) {
+		ExecutionParams executionParams = ExecutionParams.builder()
+				.setEventName(eventName)
+				.setClearBuffer(clearBuffer)
+				.setStoreActionMessages(storeActionMessages)
+				.setAdditionalEventInfo(info)
+				.setMessageType(messageType)
+				.build();
+		return this.submit(executionParams);
+	}
+
 	protected abstract RhActionList buildActionList();
 
-	public RhBatchResponse submit(boolean clear, String eventName, boolean storeActionMessages, AdditionalEventInfo addInfo) {
+	public RhBatchResponse submit(ExecutionParams executionParams) {
 		if (this.buffer.isEmpty())
 			return null;
 
 		RhActionsBatch.Builder builder = RhActionsBatch.newBuilder()
 				.setSessionId(sessionID)
-				.setEventName(eventName)
+				.setEventName(executionParams.getEventName())
 				.setParentEventId(this.parentEventId)
-				.setStoreActionMessages(storeActionMessages);
-		
-		if (addInfo != null) {
+				.setStoreActionMessages(executionParams.isStoreActionMessages())
+				.setExecutionId(EventUtils.generateUUID())
+				.setMessageType(executionParams.getMessageType().getType());
+
+		if (executionParams.hasAdditionalEventInfo()) {
+			AdditionalEventInfo additionalEventInfo = executionParams.getAdditionalEventInfo();
 			var eventInfo = RhActionsBatch.AdditionalEventInfo.newBuilder();
-			if (StringUtils.isNotEmpty(addInfo.getDescription())) {
-				eventInfo.setDescription(addInfo.getDescription());
+			if (StringUtils.isNotEmpty(additionalEventInfo.getDescription())) {
+				eventInfo.setDescription(additionalEventInfo.getDescription());
 			}
-			if (MapUtils.isNotEmpty(addInfo.getInputTable()) &&
-					StringUtils.isNotEmpty(addInfo.getInputTableHeader())) {
+			if (MapUtils.isNotEmpty(additionalEventInfo.getInputTable()) &&
+					StringUtils.isNotEmpty(additionalEventInfo.getInputTableHeader())) {
 				eventInfo.setPrintTable(true);
-				eventInfo.setRequestParamsTableTitle(addInfo.getInputTableHeader());
-				addInfo.getInputTable().forEach((k, v) -> {eventInfo.addKeys(k); eventInfo.addValues(v);});
+				eventInfo.setRequestParamsTableTitle(additionalEventInfo.getInputTableHeader());
+				additionalEventInfo.getInputTable().forEach((k, v) -> {eventInfo.addKeys(k); eventInfo.addValues(v);});
 			}
 			builder.setAdditionalEventInfo(eventInfo);
 		}
-		
+
 		builder.setRhAction(buildActionList());
-		
-		if (clear) {
+
+		if (executionParams.isClearBuffer()) {
 			this.buffer.clear();
 		}
 

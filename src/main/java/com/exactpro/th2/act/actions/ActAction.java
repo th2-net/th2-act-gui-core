@@ -18,6 +18,7 @@ package com.exactpro.th2.act.actions;
 
 import com.exactpro.th2.act.ActResult;
 import com.exactpro.th2.act.events.AdditionalEventInfo;
+import com.exactpro.th2.act.framework.ExecutionParams;
 import com.exactpro.th2.act.framework.UIFramework;
 import com.exactpro.th2.act.framework.UIFrameworkContext;
 import com.exactpro.th2.act.framework.UIFrameworkSessionContext;
@@ -112,13 +113,22 @@ public abstract class ActAction<T, K extends UIFrameworkContext<?>, L extends UI
 		if (!storeParentEvent()) {
 			info = createAdditionalEventInfo();
 		}
-		RhBatchResponse response = frameworkContext.submit(getName(), storeActionMessages(), info);
+		ExecutionParams executionParams = ExecutionParams.builder()
+				.setEventName(getName())
+				.setStoreActionMessages(storeActionMessages())
+				.setAdditionalEventInfo(info)
+				.build();
+		RhBatchResponse response = frameworkContext.submit(executionParams);
 		if (response == null || response.getScriptStatus() == RhBatchResponse.ScriptExecutionStatus.SUCCESS) {
 			respBuild.setStatusInfo(getStatusInfo());
 			respBuild.setScriptStatus(ActResult.ActExecutionStatus.SUCCESS);
 		} else {
 			respBuild.setErrorInfo(response.getErrorMessage());
 			respBuild.setScriptStatus(this.convertStatusFromRh(response.getScriptStatus()));
+		}
+		if (response != null) {
+			respBuild.setExecutionId(response.getExecutionId());
+			respBuild.setMessageType(response.getMessageType());
 		}
 	}
 

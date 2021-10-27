@@ -16,6 +16,8 @@
 
 package com.exactpro.th2.act;
 
+import com.exactpro.th2.act.grpc.hand.MessageType;
+
 import java.util.Map;
 
 public class ActResult {
@@ -25,6 +27,8 @@ public class ActResult {
 	private String errorInfo;
 	private Map<String, String> data;
 	private Object sessionID;
+	private String executionId;
+	private MessageType messageType;
 
 	public ActExecutionStatus getScriptStatus() {
 		return scriptStatus;
@@ -64,6 +68,22 @@ public class ActResult {
 
 	public void setSessionID(Object sessionID) {
 		this.sessionID = sessionID;
+	}
+
+	public String getExecutionId() {
+		return executionId;
+	}
+
+	public void setExecutionId(String executionId) {
+		this.executionId = executionId;
+	}
+
+	public MessageType getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(MessageType messageType) {
+		this.messageType = messageType;
 	}
 
 	public enum ActExecutionStatus {

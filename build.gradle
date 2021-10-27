@@ -31,7 +31,10 @@ repositories {
             name 'Sonatype_releases'
             url 'https://s01.oss.sonatype.org/content/repositories/releases/'
     }
-
+    maven {
+        name 'Local'
+        url sharedDir
+    }
     configurations.all {
         resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
         resolutionStrategy.cacheDynamicVersionsFor 0, 'seconds'
@@ -51,7 +54,7 @@ dependencies {
 
     implementation 'com.exactpro.th2:common:3.13.4'
     implementation 'com.exactpro.th2:grpc-common:3.1.2'
-    implementation "com.exactpro.th2:grpc-hand:2.8.0"
+    implementation "com.exactpro.th2:grpc-hand:2.9.0"
     implementation "org.apache.commons:commons-lang3"
     implementation "com.fasterxml.jackson.core:jackson-databind"
     implementation "org.slf4j:slf4j-log4j12"
