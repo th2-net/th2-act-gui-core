@@ -21,7 +21,6 @@ import com.exactpro.th2.act.grpc.hand.RhActionList;
 import com.exactpro.th2.act.grpc.hand.RhActionsBatch;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
-import com.exactpro.th2.common.event.EventUtils;
 import com.exactpro.th2.common.grpc.EventID;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,8 +32,9 @@ import java.util.Map;
 
 public abstract class UIFrameworkContext<T> {
 
-	private RhSessionID sessionID;
-	private EventID parentEventId;
+	protected RhSessionID sessionID;
+	protected EventID parentEventId;
+	protected String executionId;
 
 	private HandExecutor handExecutor;
 	
@@ -116,7 +116,7 @@ public abstract class UIFrameworkContext<T> {
 				.setEventName(executionParams.getEventName())
 				.setParentEventId(this.parentEventId)
 				.setStoreActionMessages(executionParams.isStoreActionMessages())
-				.setExecutionId(EventUtils.generateUUID())
+				.setExecutionId(this.executionId)
 				.setMessageType(executionParams.getMessageType().getType());
 
 		if (executionParams.hasAdditionalEventInfo()) {
@@ -177,5 +177,13 @@ public abstract class UIFrameworkContext<T> {
 	
 	public void addAction(T action) {
 		this.buffer.add(action);
+	}
+
+	public void setExecutionId(String executionId) {
+		this.executionId = executionId;
+	}
+
+	public String getExecutionId() {
+		return executionId;
 	}
 }

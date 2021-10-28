@@ -24,6 +24,7 @@ public class Result<T> {
 	protected String errorInfo;
 	protected Map<String, T> data;
 	protected Object sessionID;
+	protected String executionId;
 
 	public ActResult.ActExecutionStatus getScriptStatus() {
 		return scriptStatus;
@@ -65,6 +66,13 @@ public class Result<T> {
 		this.sessionID = sessionID;
 	}
 
+	public String getExecutionId() {
+		return executionId;
+	}
+
+	public void setExecutionId(String executionId) {
+		this.executionId = executionId;
+	}
 
 	public enum ActExecutionStatus {
 		SUCCESS,

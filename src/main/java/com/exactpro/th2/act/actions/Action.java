@@ -26,6 +26,7 @@ import com.exactpro.th2.act.framework.UIFrameworkSessionContext;
 import com.exactpro.th2.act.framework.exceptions.UIFrameworkException;
 import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
 import com.exactpro.th2.act.grpc.hand.RhSessionID;
+import com.exactpro.th2.common.event.EventUtils;
 import com.exactpro.th2.common.grpc.EventID;
 import org.slf4j.Logger;
 
@@ -79,10 +80,13 @@ public abstract class Action<T, K extends UIFrameworkContext<?>, L extends UIFra
 			frameworkContext = framework.newExecution(sessionID);
 			this.requestTable = this.convertRequestParams(details);
 			eventId = this.processAndGetEventId(eventId, frameworkContext, details);
+			String executionId = EventUtils.generateUUID();
+			frameworkContext.setExecutionId(executionId);
 
 			this.collectActions(details, frameworkContext, actResult);
 			this.submitActions(frameworkContext, actResult);
 			actResult.setSessionID(sessionID);
+			actResult.setExecutionId(executionId);
 		} catch (Exception e) {
 			logger.error("An error occurred while executing action. Cannot unregister framework session", e);
 			printEventError(eventId, "Error: " + getName(), "An internal action error has occurred", e);
