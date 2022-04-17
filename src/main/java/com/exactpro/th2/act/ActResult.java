@@ -16,62 +16,6 @@
 
 package com.exactpro.th2.act;
 
-import java.util.Map;
+public class ActResult extends Result<String> {
 
-public class ActResult {
-
-	private ActExecutionStatus scriptStatus;
-	private String statusInfo;
-	private String errorInfo;
-	private Map<String, String> data;
-	private Object sessionID;
-
-	public ActExecutionStatus getScriptStatus() {
-		return scriptStatus;
-	}
-
-	public void setScriptStatus(ActExecutionStatus scriptStatus) {
-		this.scriptStatus = scriptStatus;
-	}
-
-	public String getStatusInfo() {
-		return statusInfo;
-	}
-
-	public void setStatusInfo(String statusInfo) {
-		this.statusInfo = statusInfo;
-	}
-
-	public String getErrorInfo() {
-		return errorInfo;
-	}
-
-	public void setErrorInfo(String errorInfo) {
-		this.errorInfo = errorInfo;
-	}
-
-	public Map<String, String> getData() {
-		return data;
-	}
-
-	public void setData(Map<String, String> data) {
-		this.data = data;
-	}
-
-	public Object getSessionID() {
-		return sessionID;
-	}
-
-	public void setSessionID(Object sessionID) {
-		this.sessionID = sessionID;
-	}
-
-	public enum ActExecutionStatus {
-		SUCCESS,
-		COMPILE_ERROR,
-		EXECUTION_ERROR,
-		ACT_ERROR,
-		HAND_INTERNAL_ERROR,
-		UNKNOWN_ERROR
-	}
 }

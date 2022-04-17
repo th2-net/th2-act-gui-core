@@ -28,7 +28,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -82,11 +81,13 @@ public abstract class UIFramework<T extends UIFrameworkContext<?>, K extends UIF
 		}
 	}
 	
-	private void releaseExecution(final K context) {
-		synchronized (context.getContext()) {
-			context.setBusy(false);
+	private void releaseExecution(final K sessionContext) {
+		synchronized (sessionContext.getContext()) {
+			sessionContext.setBusy(false);
 		}
-		context.getContext().setParentEventId(null);
+		T context = sessionContext.getContext();
+		context.setParentEventId(null);
+		context.setExecutionId(null);
 	}
 
 	private boolean invalidate(final K context) {
@@ -129,7 +130,7 @@ public abstract class UIFramework<T extends UIFrameworkContext<?>, K extends UIF
 
 		return sessionContext.getContext();
 	}
-	
+
 	public void onExecutionFinished(T context) {
 		RhSessionID sessionID = context.getSessionID();
 		this.releaseExecution(this.contexts.get(sessionID));
