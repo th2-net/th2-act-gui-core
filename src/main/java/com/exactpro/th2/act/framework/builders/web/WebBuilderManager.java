@@ -149,7 +149,11 @@ public class WebBuilderManager {
 	public ExecuteJSElementBuilder executeJSElement() {
 		return new ExecuteJSElementBuilder(this.context);
 	}
-	
+
+	public SelectFrameBuilder selectFrame() {
+		return new SelectFrameBuilder(this.context);
+	}
+
 	public UIWebFrameworkContext getContext() {
 		return context;
 	}
