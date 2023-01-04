@@ -20,6 +20,13 @@ configurations {
     }
 }
 
+tasks.withType(Jar).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+tasks.withType(Copy).configureEach {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 ext {
     sharedDir = file("${project.rootDir}/shared")
 
