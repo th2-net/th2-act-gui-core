@@ -160,14 +160,18 @@ public class EventStoreHandler
 	{
 		EventID id = eventDetails.getInfo().getEventId();
 		if (id == null) {
-			id = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
+			id = EventID
+					.newBuilder()
+					.setId(UUID.randomUUID().toString())
+					.setBookName(id.getBookName())
+					.setScope(id.getScope())
+					.build();
 		}
 		
 		Event.Builder builder = Event.newBuilder()
 				.setId(id)
 				.setName(eventDetails.getInfo().getEventName())
 				.setStatus(eventDetails.isStatus() ? EventStatus.SUCCESS : EventStatus.FAILED)
-				.setStartTimestamp(this.timestampFromInstant(eventDetails.getInfo().getStartTime()))
 				.setEndTimestamp(this.timestampFromInstant(eventDetails.getInfo().getEndTime()));
 		
 		if (eventDetails.getMessageIDList() != null) {

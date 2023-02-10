@@ -47,14 +47,13 @@ sourceSets {
 }
 
 dependencies {
-    api platform('com.exactpro.th2:bom:3.0.0')
+    api platform('com.exactpro.th2:bom:4.1.0')
 
-    implementation 'com.exactpro.th2:common:3.13.4'
-    implementation 'com.exactpro.th2:grpc-common:3.1.2'
-    implementation "com.exactpro.th2:grpc-hand:2.8.0"
+    implementation 'com.exactpro.th2:common:5.1.0-dev-version-5-4085018593-8adee33-SNAPSHOT'
+    implementation 'com.exactpro.th2:grpc-common:4.1.0-dev-version-4-4105266785-4b72745-SNAPSHOT'
+    implementation "com.exactpro.th2:grpc-hand:2.11.0"
     implementation "org.apache.commons:commons-lang3"
     implementation "com.fasterxml.jackson.core:jackson-databind"
-    implementation "org.slf4j:slf4j-log4j12"
     implementation "org.slf4j:slf4j-api"
     implementation "org.apache.commons:commons-collections4:4.4"
 
