@@ -60,7 +60,11 @@ public class HandExecutor {
 	}
 	
 	public EventID logEvent(EventID parentId, String eventName, AdditionalEventInfo eventInfo) {
-		EventID newEventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
+		EventID newEventId = EventID.newBuilder()
+				.setId(UUID.randomUUID().toString())
+				.setScope(parentId.getScope())
+				.setBookName(parentId.getBookName())
+				.build();
 		EventDetails.EventInfo info = new EventDetails.EventInfo();
 		info.setEventId(newEventId);
 		info.setParentEventId(parentId);
