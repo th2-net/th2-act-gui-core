@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2024 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,15 @@ import com.exactpro.th2.act.events.AdditionalEventInfo;
 import com.exactpro.th2.act.events.EventDetails;
 import com.exactpro.th2.act.events.EventStoreHandler;
 import com.exactpro.th2.act.events.verification.VerificationDetail;
-import com.exactpro.th2.act.grpc.hand.*;
+import com.exactpro.th2.act.grpc.hand.RhActionsBatch;
+import com.exactpro.th2.act.grpc.hand.RhBatchResponse;
+import com.exactpro.th2.act.grpc.hand.RhBatchService;
+import com.exactpro.th2.act.grpc.hand.RhSessionID;
+import com.exactpro.th2.act.grpc.hand.RhTargetServer;
 import com.exactpro.th2.common.grpc.EventID;
 
 import java.time.Instant;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
 
 public class HandExecutor {
 
@@ -60,12 +62,13 @@ public class HandExecutor {
 	}
 	
 	public EventID logEvent(EventID parentId, String eventName, AdditionalEventInfo eventInfo) {
-		EventID newEventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
+		Instant now = Instant.now();
+		EventID newEventId = eventStoreHandler.generateEventId(now);
 		EventDetails.EventInfo info = new EventDetails.EventInfo();
 		info.setEventId(newEventId);
 		info.setParentEventId(parentId);
 		info.setEventName(eventName);
-		info.setStartTime(Instant.now());
+		info.setStartTime(now);
 		eventStoreHandler.storeEvent(info, eventInfo);
 		return newEventId;
 	}
