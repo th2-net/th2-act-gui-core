@@ -42,6 +42,7 @@ public class ActServer {
 
 	/**
 	 * Await termination on the main thread since the grpc library uses daemon threads.
+	 * @throws InterruptedException - if the current thread is interacted
 	 */
 	public void blockUntilShutdown() throws InterruptedException {
 		if (server != null) {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2020 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2024 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,21 @@ import com.exactpro.th2.act.grpc.hand.RhBatchService;
 import com.exactpro.th2.common.schema.factory.CommonFactory;
 
 public abstract class ActConnections<C extends CustomConfiguration> {
-
 	protected final RhBatchService handConnector;
 	protected final EventStoreHandler eventStoreHandler;
 
 	protected final CommonFactory commonFactory;
 	protected final C customConfiguration;
 
-	public ActConnections(CommonFactory commonFactory) throws Exception {
+	public ActConnections(CommonFactory commonFactory, RhBatchServiceProvider provider) throws Exception {
 		this.commonFactory = commonFactory;
-		this.handConnector = commonFactory.getGrpcRouter().getService(RhBatchService.class);
+		this.handConnector = provider.provide();
 		this.eventStoreHandler = new EventStoreHandler(commonFactory);
 		this.customConfiguration = createCustomConfiguration(commonFactory);
+	}
+
+	public ActConnections(CommonFactory commonFactory) throws Exception {
+		this(commonFactory, () -> commonFactory.getGrpcRouter().getService(RhBatchService.class));
 	}
 
 	public RhBatchService getHandConnector() {

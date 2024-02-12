@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2021 Exactpro (Exactpro Systems Limited)
+ * Copyright 2020-2024 Exactpro (Exactpro Systems Limited)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.exactpro.th2.common.grpc.Event;
 import com.exactpro.th2.common.grpc.EventBatch;
 import com.exactpro.th2.common.grpc.EventID;
 import com.exactpro.th2.common.grpc.EventStatus;
+import com.exactpro.th2.common.schema.box.configuration.BoxConfiguration;
 import com.exactpro.th2.common.schema.factory.CommonFactory;
 import com.exactpro.th2.common.schema.message.MessageRouter;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -34,6 +35,7 @@ import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
@@ -44,22 +46,15 @@ public class EventStoreHandler
 	private final Logger logger = LoggerFactory.getLogger(getClass());
 	private static final ObjectMapper mapper = new ObjectMapper();
 	private final MessageRouter<EventBatch> eventBatchRouter;
+	private final String book;
+	private final String scope;
 
 	public EventStoreHandler(CommonFactory commonFactory)
 	{
+		BoxConfiguration boxConfig = commonFactory.getBoxConfiguration();
+		this.book = boxConfig.getBookName();
+		this.scope = boxConfig.getBoxName();
 		this.eventBatchRouter = commonFactory.getEventBatchRouter();
-	}
-
-	private static List<Object> createPayloadFromRequestParams(Map<String, String> requestParams) {
-		if (MapUtils.isNotEmpty(requestParams))
-		{
-			List<Object> payload = new ArrayList<>(2);
-			payload.add(new EventPayloadMessage("Request parameters"));
-			payload.add(new EventPayloadTable(requestParams, false));
-			return payload;
-		} else {
-			return Collections.emptyList();
-		}
 	}
 
 	private void createPayloadFromErrorParams(String text, Throwable t, EventPayloadBuilder builder) {
@@ -127,7 +122,7 @@ public class EventStoreHandler
 		FieldsVerifier verifier = new FieldsVerifier(details);
 		EventPayloadVerification verificationResult = verifier.transform();
 		
-		EventID verificationEventId = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
+		EventID verificationEventId = generateEventId(start);
 
 		EventDetails.EventInfo copiedInfo = new EventDetails.EventInfo(info);
 		copiedInfo.setStartTime(start);
@@ -140,9 +135,18 @@ public class EventStoreHandler
 		eventDetails.setStatus(verifier.isSuccess());
 		
 		this.storeEvent(eventDetails);
-	} 
+	}
 
-	private EventID storeEvent(EventDetails eventDetails)
+	public EventID generateEventId(@Nullable Instant startTimestamp) {
+		return EventID.newBuilder()
+				.setBookName(book)
+				.setScope(scope)
+				.setId(Utils.generateId())
+				.setStartTimestamp(timestampFromInstant(startTimestamp))
+				.build();
+	}
+
+	private void storeEvent(EventDetails eventDetails)
 	{
 		Event event = createEvent(eventDetails);
 		try {
@@ -152,23 +156,20 @@ public class EventStoreHandler
 			logger.warn("Could not store event", e);
 			throw new RuntimeException("Could not store event", e);
 		}
-
-		return event.getId();
 	}
 
 	private Event createEvent(EventDetails eventDetails)
 	{
 		EventID id = eventDetails.getInfo().getEventId();
 		if (id == null) {
-			id = EventID.newBuilder().setId(UUID.randomUUID().toString()).build();
+			id = generateEventId(eventDetails.getInfo().getStartTime());
 		}
 		
 		Event.Builder builder = Event.newBuilder()
 				.setId(id)
 				.setName(eventDetails.getInfo().getEventName())
 				.setStatus(eventDetails.isStatus() ? EventStatus.SUCCESS : EventStatus.FAILED)
-				.setStartTimestamp(this.timestampFromInstant(eventDetails.getInfo().getStartTime()))
-				.setEndTimestamp(this.timestampFromInstant(eventDetails.getInfo().getEndTime()));
+				.setEndTimestamp(timestampFromInstant(eventDetails.getInfo().getEndTime()));
 		
 		if (eventDetails.getMessageIDList() != null) {
 			builder.addAllAttachedMessageIds(eventDetails.getMessageIDList());
