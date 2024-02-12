@@ -26,6 +26,8 @@ This project uses common factories
 
 ### 3.0.0
 
++ Provided ability to use th2-hand component add as embedded entity.
+
 #### Updated lib:
 + bom: `4.5.0`
 + common: `5.8.0-dev`
@@ -34,6 +36,7 @@ This project uses common factories
 
 #### Added lib:
 + common-utils: `2.2.2-dev`
++ hand: `5.0.0-dev`
 
 #### Updated plugin:
 + io.github.gradle-nexus.publish-plugin: `1.3.0`

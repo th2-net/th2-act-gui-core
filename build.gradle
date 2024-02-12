@@ -2,7 +2,6 @@ import com.github.jk1.license.filter.LicenseBundleNormalizer
 import com.github.jk1.license.render.JsonReportRenderer
 
 plugins {
-    id 'java'
     id 'java-library'
     id 'maven-publish'
     id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
@@ -70,6 +69,7 @@ dependencies {
     implementation 'com.exactpro.th2:common:5.8.0-dev'
     implementation 'com.exactpro.th2:grpc-common:4.4.0-dev'
     implementation "com.exactpro.th2:grpc-hand:3.0.0-RM-84612-+"
+    implementation "com.exactpro.th2:hand:5.0.0-RM-84612-+"
     implementation "org.apache.commons:commons-lang3"
     implementation "com.fasterxml.jackson.core:jackson-databind"
     implementation "org.slf4j:slf4j-api"
@@ -82,7 +82,6 @@ jar {
     archivesBaseName = "${archivesBaseName}"
     manifest {
         attributes('Specification-Title': 'TH2 Act GUI template')
-        attributes("Class-Path": configurations.compileClasspath.collect { "lib/" + it.getName() }.join(' '))
         attributes(
                 'Created-By': "${System.getProperty('java.version')} (${System.getProperty('java.vendor')})",
                 'Specification-Title': '',
