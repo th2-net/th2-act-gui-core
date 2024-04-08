@@ -1,17 +1,11 @@
 plugins {
     id("java-library")
     id("maven-publish")
-
-    val th2PluginVersion = "0.0.4"
-    id("com.exactpro.th2.gradle.publish") version th2PluginVersion
+    id("com.exactpro.th2.gradle.publish") version "0.0.4"
 }
 
-allprojects {
-    val version = project.properties["release_version"].toString()
-    val suffix = project.properties["version_suffix"]?.toString() ?: ""
-    this.group = "com.exactpro.th2"
-    this.version = version + if (suffix.isEmpty()) "" else "-$suffix"
-}
+group = "com.exactpro.th2"
+version = project.properties["release_version"].toString()
 
 configurations.all {
     resolutionStrategy.cacheChangingModulesFor(0, "seconds")
