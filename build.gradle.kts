@@ -21,8 +21,8 @@ configurations.all {
 dependencies {
     implementation("com.exactpro.th2:common:5.10.0-dev")
     implementation("com.exactpro.th2:grpc-common:4.4.0-dev")
-    implementation("com.exactpro.th2:grpc-hand:3.0.0-RM-84612-8544324408-SNAPSHOT")
-    implementation("com.exactpro.th2:hand:5.0.0-RM-84612-no-log4j-8545363969-62a26ef-SNAPSHOT")
+    implementation("com.exactpro.th2:grpc-hand:3.0.0-RM-84612-8595680156-664ca73-SNAPSHOT")
+    implementation("com.exactpro.th2:hand:5.0.0-RM-84612-no-log4j-8598121076-be99e54-SNAPSHOT")
     implementation("org.apache.commons:commons-lang3")
     implementation("com.fasterxml.jackson.core:jackson-databind")
     implementation("org.slf4j:slf4j-api")

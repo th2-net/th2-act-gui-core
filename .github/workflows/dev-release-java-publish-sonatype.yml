@@ -1,4 +1,4 @@
-name: Build and publish dev release jar to sonatype repository
+name: Build and publish dev-release Java distributions to sonatype.
 
 on: workflow_dispatch
 
