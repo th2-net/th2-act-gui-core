@@ -33,6 +33,7 @@ This project uses common factories
 + common: `5.8.0-dev`
 + grpc-common `4.4.0-dev`
 + grpc-hand: `3.0.0-dev`
++ hand: `5.0.2-dev`
 
 #### Added lib:
 + common-utils: `2.2.2-dev`
