@@ -1,7 +1,7 @@
 plugins {
     id("java-library")
     id("maven-publish")
-    id("com.exactpro.th2.gradle.publish") version "0.0.4"
+    id("com.exactpro.th2.gradle.publish") version "0.0.5"
 }
 
 group = "com.exactpro.th2"
@@ -14,7 +14,7 @@ configurations.all {
 
 dependencies {
     implementation("com.exactpro.th2:common:5.10.0-dev")
-    implementation("com.exactpro.th2:grpc-common:4.4.0-dev")
+    implementation("com.exactpro.th2:grpc-common:4.5.0-dev")
     implementation("com.exactpro.th2:grpc-hand:3.0.0-dev")
     implementation("com.exactpro.th2:hand:5.0.2-dev")
     implementation("org.apache.commons:commons-lang3")
