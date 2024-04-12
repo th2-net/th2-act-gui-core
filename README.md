@@ -1,4 +1,4 @@
-# TH2-Act template
+# TH2-Act template (3.0.0)
 
 TH2-Act contains a library of functions to be called from a script. 
 TH2-Act calls TH2-Hand to perform corresponding actions in GUI and verifies the results. 
@@ -21,3 +21,29 @@ You cat use Gradle wrapper to build it:
 ### Configuration
 
 This project uses common factories
+
+## Release notes:
+
+### 3.0.0
+
++ Provided ability to use th2-hand component add as embedded entity.
+
+#### Updated lib:
++ bom: `4.5.0`
++ common: `5.8.0-dev`
++ grpc-common `4.4.0-dev`
++ grpc-hand: `3.0.0-dev`
++ hand: `5.0.2-dev`
+
+#### Added lib:
++ common-utils: `2.2.2-dev`
++ hand: `5.0.0-dev`
+
+#### Updated plugin:
++ io.github.gradle-nexus.publish-plugin: `1.3.0`
+
+#### Added plugin:
++ org.owasp.dependencycheck: `9.0.9`
++ com.gorylenko.gradle-git-properties: `2.4.1`
++ com.github.jk1.dependency-license-report: `2.5`
++ de.undercouch.download: `5.4.0`
